@@ -44,7 +44,42 @@
                </div>
              </div>
            </div>
+           <div class="form-group">
+             <label class="form-control-label" for="prependedInput">Tax</label>
+             <div class="controls">
+               <div class="input-prepend input-group">
+                 <input id="tax" value="<?php echo $purchase['tax'] ?>"  class="form-control" size="16" type="number" name="tax">
+               </div>
+             </div>
+           </div>
 
+           <div class="form-group">
+             <label class="form-control-label" for="prependedInput">Paid</label>
+             <div class="controls">
+               <div class="input-prepend input-group">
+                 <input id="paid" value="<?php echo $purchase['paid'] ?>"  class="form-control" size="16" type="number" name="paid">
+               </div>
+             </div>
+           </div>
+
+           <div class="form-group">
+             <label class="form-control-label" for="prependedInput">Remained</label>
+             <div class="controls">
+               <div class="input-prepend input-group">
+                 <input id="Remained" readonly  value="<?php echo $purchase['Remained'] ?>"  class="form-control" size="16" type="number" name="Remained">
+                 <input id="forCulc" value="<?php echo $totalPrice ?>" class="form-control" size="16" type="" name="forCulc">
+                </div>
+             </div>
+           </div>
+
+           <div class="form-group">
+             <label class="form-control-label" for="prependedInput">Cost on purchase</label>
+             <div class="controls">
+               <div class="input-prepend input-group">
+                 <input id="costOnPay" class="form-control" value="<?php echo $purchase['costOnPay'] ?>" size="16" type="number" name="costOnPay">
+               </div>
+             </div>
+           </div>
            <div class="form-group">
              <label class="form-control-label" for="prependedInput">Details</label>
              <div class="controls">

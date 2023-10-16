@@ -64,8 +64,12 @@ if(isset($_POST['updateInvoice'])){
    $invoiceNumber=$_POST['invoiceNumber'];
    $supplierId=$_POST['supplierId'];
    $details=$_POST['details'];
+   $Remained=$_POST['Remained'];
+   $tax=$_POST['tax'];
+   $paid=$_POST['paid'];
+   $costOnPay=$_POST['costOnPay'];
    $purchase = new purchaseController();
-   if($purchase->edit($invoiceNumber,$details,$supplierId,$purchaseId)){
+   if($purchase->edit($invoiceNumber,$details,$supplierId,$purchaseId,$Remained,$tax,$paid,$costOnPay)){
     $_SESSION['flush'] =  'Purchase updated successfully';
    header("location: ../view/purchases/details.php?id=$purchaseId");
     exit;
@@ -91,4 +95,39 @@ if (isset($_POST['query'])) {
       $detail[] = array('warning'=>"Medicine not found");
      echo  json_encode($detail);
    }
+ }
+
+ // Add the accounting 
+
+ if(isset($_POST['addAccounting'])){
+   $paid=$_POST['paid'];
+   $tax=$_POST['tax'];
+   $Remained=$_POST['Remained'];
+   $costOnPay=$_POST['costOnPay'];
+   $purchaseId=$_POST['purchaseId'];
+   $purchase = new purchaseController();
+   if($purchase->addAccounting($paid,$tax,$Remained,$costOnPay,$purchaseId)){
+    $_SESSION['flush'] =  'Accounting updated successfully';
+   header("location: ../view/purchases/details.php?id=$purchaseId");
+    exit;
+   }else{
+      $_SESSION['flush'] =  'Error something wrong try agin';
+      header("location: ../view/purchases/details.php?id=$purchaseId");
+      exit;
+   }
+ }
+
+ if(isset($_GET['approveId'])){
+   $app = new purchaseController();
+   $approve = $app->approved($_GET['approveId']);
+   if($approve === true){
+      $_SESSION['flush'] =  'Purchase approved successfully';
+      header("location: ../view/purchases/purchases.php");
+      exit;
+   }else{
+      $_SESSION['flush'] =  'Error '.$approve;
+      header("location: ../view/purchases/purchases.php");
+      exit;
+   }
+   
  }

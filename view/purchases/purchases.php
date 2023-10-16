@@ -42,8 +42,8 @@ $pur = $purchase->index();
           <?php endif; ?>
           <div class="card">
             <div class="card-header">
-              <a class="btn btn-info float-right" href="addProduct.php">Add Product</a>
-              <h3 class="card-title">Show users</h3>
+              <a class="btn btn-info float-right" href="add.php">Add Purchase</a>
+              <h3 class="card-title">Show Purchase</h3>
             </div>
             <!-- /.card-header -->
             <div class="card-body">
@@ -65,9 +65,11 @@ $pur = $purchase->index();
                       <td><?php echo $row['addedDate']; ?></td>
                       <td><?php echo $row['userName']; ?></td>
                       <td>
+                        <a href="details.php?id=<?php echo $row['purchaseId']; ?>" class="btn btn-info">Purchase details</a>
+                        <?php if($row['approved']!=1):?>
                         <a href="../../includes/productOpration.php?id=<?php echo $row['purchaseId']; ?>" class="btn btn-danger">Delete</a>
-                        <a href="details.php?id=<?php echo $row['purchaseId']; ?>" class="btn btn-info">Edit</a>
-                        <a href="details.php?id=<?php echo $row['purchaseId']; ?>" class="btn btn-info">Add medicine</a>
+                        <a href="../../includes/purchaseOpration.php?approveId=<?php echo $row['purchaseId']; ?>" class="btn btn-success">Approve</a>
+                      <?php endif;?>
                       </td>
                     </tr>
                   <?php endforeach; ?>

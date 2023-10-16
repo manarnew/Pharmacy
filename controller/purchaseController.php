@@ -38,17 +38,28 @@ class purchaseController extends Purchase{
            }
     }
 
-    public function edit($invoiceNumber,$details,$supplierId,$purchaseId){
+    public function edit($invoiceNumber,$details,$supplierId,$purchaseId,$Remained,$tax,$paid,$costOnPay){
         if($invoiceNumber==''||$supplierId==''||$purchaseId==''){
             $_SESSION['flush'] = 'All the filed are required';
-            header("location: ../view/products/addProduct.php");
+            header("location: ../view/products/details.php?id=$purchaseId");
             exit;
         }
-       if($this->update($invoiceNumber,$details,$supplierId,$purchaseId)){
+       if($this->update($invoiceNumber,$details,$supplierId,$purchaseId,$Remained,$tax,$paid,$costOnPay)){
         return true;
        }else{
         $_SESSION['flush'] = 'Something went wrong';
-        header("location: ../view/products/editProduct.php");
+        header("location: ../view/products/details.php?id=$purchaseId");
        }
     }
+
+    public function addAccounting($paid,$tax,$Remained,$costOnPay,$purchaseId){
+       if($this->addAccount($paid,$tax,$Remained,$costOnPay,$purchaseId)){
+        return true;
+       }else{
+        $_SESSION['flush'] = 'Something went wrong';
+        header("location: ../view/products/details.php?id=$purchaseId");
+       }
+    }
+
+
 }

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 15, 2023 at 01:26 PM
+-- Generation Time: Oct 16, 2023 at 07:12 AM
 -- Server version: 10.4.24-MariaDB
 -- PHP Version: 8.1.6
 
@@ -20,6 +20,58 @@ SET time_zone = "+00:00";
 --
 -- Database: `pharmacyapp`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `accounting`
+--
+
+CREATE TABLE `accounting` (
+  `accountId` int(11) NOT NULL,
+  `AccountName` varchar(200) NOT NULL,
+  `debit` decimal(10,2) DEFAULT NULL,
+  `credit` decimal(10,2) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `accounting`
+--
+
+INSERT INTO `accounting` (`accountId`, `AccountName`, `debit`, `credit`) VALUES
+(1, 'Account Purchase cost', '1430.00', NULL),
+(2, 'Account Purchase cost', '12850.00', NULL),
+(3, 'Account Purchase cost', '825.00', NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `batches`
+--
+
+CREATE TABLE `batches` (
+  `batchId` int(11) NOT NULL,
+  `batchNumber` varchar(200) NOT NULL,
+  `productid` int(11) NOT NULL,
+  `expirationDate` date NOT NULL,
+  `qty` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `batches`
+--
+
+INSERT INTO `batches` (`batchId`, `batchNumber`, `productid`, `expirationDate`, `qty`) VALUES
+(33, '455dfs', 14, '2023-10-04', 20),
+(34, '455dfs', 16, '2023-10-09', 44),
+(43, 'sdksld5545', 14, '2023-10-03', 3),
+(44, '455dfs', 15, '2023-10-04', 55),
+(45, 'sdksld5545', 14, '2023-10-03', 3),
+(46, '455dfs', 15, '2023-10-04', 55),
+(47, '455dfs', 14, '2023-10-04', 20),
+(48, '455dfs', 16, '2023-10-09', 44),
+(49, 'sdksld5545', 14, '2023-10-03', 3),
+(50, '455dfs', 15, '2023-10-04', 55);
 
 -- --------------------------------------------------------
 
@@ -86,13 +138,13 @@ CREATE TABLE `purchasedetails` (
   `productId` int(11) NOT NULL,
   `wholesaleUnitId` int(11) NOT NULL,
   `WholesaleQty` int(11) NOT NULL,
-  `WholesalePayPrice` float NOT NULL,
-  `WholesaleSalePrice` float NOT NULL,
+  `WholesalePayPrice` decimal(10,2) NOT NULL,
+  `WholesaleSalePrice` decimal(10,2) NOT NULL,
   `hasChildUnit` tinyint(1) NOT NULL DEFAULT 0,
   `RetailUnitId` int(11) DEFAULT NULL,
   `RetailQty` int(11) DEFAULT NULL,
-  `RetailSalePrice` float DEFAULT NULL,
-  `RetailPayPrice` float DEFAULT NULL,
+  `RetailSalePrice` decimal(10,2) DEFAULT NULL,
+  `RetailPayPrice` decimal(10,2) DEFAULT NULL,
   `TotalRetailQty` int(11) DEFAULT NULL,
   `userId` int(11) NOT NULL,
   `endDate` date NOT NULL,
@@ -104,9 +156,11 @@ CREATE TABLE `purchasedetails` (
 --
 
 INSERT INTO `purchasedetails` (`purchaseDetailId`, `purchaseId`, `productId`, `wholesaleUnitId`, `WholesaleQty`, `WholesalePayPrice`, `WholesaleSalePrice`, `hasChildUnit`, `RetailUnitId`, `RetailQty`, `RetailSalePrice`, `RetailPayPrice`, `TotalRetailQty`, `userId`, `endDate`, `batchNumber`) VALUES
-(53, 1, 14, 3, 20, 200, 30000, 0, 0, 0, 0, 0, 0, 3, '2023-10-04', '455dfs'),
-(58, 2, 14, 3, 3, 200, 4, 0, 0, 0, 0, 0, 0, 3, '2023-10-03', 'sdksld5545'),
-(59, 1, 16, 3, 44, 200, 55, 0, 4, 0, 0, 0, 0, 3, '2023-10-09', '455dfs');
+(53, 1, 14, 3, 20, '200.00', '30000.00', 0, 0, 0, '0.00', '0.00', 0, 3, '2023-10-04', '455dfs'),
+(58, 2, 14, 3, 3, '200.00', '4.00', 0, 0, 0, '0.00', '0.00', 0, 3, '2023-10-03', 'sdksld5545'),
+(59, 1, 16, 3, 44, '200.00', '55.00', 0, 4, 0, '0.00', '0.00', 0, 3, '2023-10-09', '455dfs'),
+(60, 3, 18, 5, 50, '1500.00', '1500.00', 0, 4, 0, '0.00', '0.00', 0, 3, '2023-12-29', '455dfs'),
+(61, 2, 15, 3, 5, '1.00', '275.00', 1, 4, 55, '5.00', '0.02', 275, 3, '2023-10-04', '455dfs');
 
 -- --------------------------------------------------------
 
@@ -120,16 +174,54 @@ CREATE TABLE `purchases` (
   `supplierId` int(11) NOT NULL,
   `addedDate` date NOT NULL,
   `details` varchar(300) DEFAULT NULL,
-  `invoiceNumber` varchar(100) NOT NULL
+  `invoiceNumber` varchar(100) NOT NULL,
+  `tax` decimal(10,2) DEFAULT NULL,
+  `costOnPay` decimal(10,2) DEFAULT NULL,
+  `paid` decimal(10,2) DEFAULT NULL,
+  `Remained` decimal(10,2) DEFAULT NULL,
+  `approved` tinyint(1) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `purchases`
 --
 
-INSERT INTO `purchases` (`purchaseId`, `userId`, `supplierId`, `addedDate`, `details`, `invoiceNumber`) VALUES
-(1, 3, 3, '2023-10-11', 'Manar id ', 'CH120MDF'),
-(2, 3, 3, '2023-10-11', '', '652696b2da519');
+INSERT INTO `purchases` (`purchaseId`, `userId`, `supplierId`, `addedDate`, `details`, `invoiceNumber`, `tax`, `costOnPay`, `paid`, `Remained`, `approved`) VALUES
+(1, 3, 3, '2023-10-11', 'Manar id ', 'CH120MDF', '50.00', '0.00', '0.00', '0.00', 0),
+(2, 3, 3, '2023-10-11', 'new not', '652696b2da519', '500.00', '525.00', '400.00', '200.00', 1),
+(3, 3, 3, '2023-10-15', ',asdfm', 'CH120', '500.00', '500.00', '75000.00', '0.00', 0);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `stores`
+--
+
+CREATE TABLE `stores` (
+  `storeId` int(11) NOT NULL,
+  `productId` int(11) NOT NULL,
+  `qty` int(11) NOT NULL,
+  `qtyRemining` int(11) NOT NULL,
+  `Type` tinyint(1) NOT NULL,
+  `storeDate` date NOT NULL,
+  `userId` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `stores`
+--
+
+INSERT INTO `stores` (`storeId`, `productId`, `qty`, `qtyRemining`, `Type`, `storeDate`, `userId`) VALUES
+(3, 14, 20, 20, 1, '2023-10-15', 3),
+(4, 16, 44, 44, 1, '2023-10-15', 3),
+(37, 14, 3, 23, 1, '2023-10-15', 3),
+(38, 15, 55, 55, 1, '2023-10-15', 3),
+(39, 14, 3, 26, 1, '2023-10-15', 3),
+(40, 15, 55, 110, 1, '2023-10-15', 3),
+(41, 14, 20, 46, 1, '2023-10-15', 3),
+(42, 16, 44, 88, 1, '2023-10-15', 3),
+(43, 14, 3, 49, 1, '2023-10-15', 3),
+(44, 15, 55, 165, 1, '2023-10-15', 3);
 
 -- --------------------------------------------------------
 
@@ -201,6 +293,18 @@ INSERT INTO `users` (`userId`, `userName`, `password`, `email`, `userType`) VALU
 --
 
 --
+-- Indexes for table `accounting`
+--
+ALTER TABLE `accounting`
+  ADD PRIMARY KEY (`accountId`);
+
+--
+-- Indexes for table `batches`
+--
+ALTER TABLE `batches`
+  ADD PRIMARY KEY (`batchId`);
+
+--
 -- Indexes for table `categories`
 --
 ALTER TABLE `categories`
@@ -225,6 +329,12 @@ ALTER TABLE `purchases`
   ADD PRIMARY KEY (`purchaseId`);
 
 --
+-- Indexes for table `stores`
+--
+ALTER TABLE `stores`
+  ADD PRIMARY KEY (`storeId`);
+
+--
 -- Indexes for table `suppliers`
 --
 ALTER TABLE `suppliers`
@@ -247,6 +357,18 @@ ALTER TABLE `users`
 --
 
 --
+-- AUTO_INCREMENT for table `accounting`
+--
+ALTER TABLE `accounting`
+  MODIFY `accountId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT for table `batches`
+--
+ALTER TABLE `batches`
+  MODIFY `batchId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=51;
+
+--
 -- AUTO_INCREMENT for table `categories`
 --
 ALTER TABLE `categories`
@@ -262,13 +384,19 @@ ALTER TABLE `products`
 -- AUTO_INCREMENT for table `purchasedetails`
 --
 ALTER TABLE `purchasedetails`
-  MODIFY `purchaseDetailId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=60;
+  MODIFY `purchaseDetailId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=62;
 
 --
 -- AUTO_INCREMENT for table `purchases`
 --
 ALTER TABLE `purchases`
-  MODIFY `purchaseId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `purchaseId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT for table `stores`
+--
+ALTER TABLE `stores`
+  MODIFY `storeId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=45;
 
 --
 -- AUTO_INCREMENT for table `suppliers`

@@ -70,6 +70,23 @@ $getDetails = $pur->getPurchaseDetail($_GET['id']);
                   <td class="width30">Total price</td>
                   <td class="width30"><?php echo $totalPrice ?> </td>
                 </tr>
+               
+                <tr>
+                  <td class="width30">Paid</td>
+                  <td class="width30"><?php echo $purchase['paid'] ?> </td>
+                </tr>
+                <tr>
+                  <td class="width30">Remained</td>
+                  <td class="width30"><?php echo $purchase['Remained'] ?> </td>
+                </tr>
+                <tr>
+                  <td class="width30">Cost on purchase</td>
+                  <td class="width30"><?php echo $purchase['costOnPay'] ?> </td>
+                </tr>
+                <tr>
+                  <td class="width30">Tax</td>
+                  <td class="width30"><?php echo $purchase['tax'] ?> </td>
+                </tr>
                 <tr>
                   <td class="width30">Supplier Name</td>
                   <td class="width30"><?php echo $purchase['supplierName'] ?> </td>
@@ -88,17 +105,32 @@ $getDetails = $pur->getPurchaseDetail($_GET['id']);
                 </tr>
                 <tr>
                   <td class="width30">Edit invoice</td>
+                  <?php if($purchase['approved']!=1):?>
                   <td class="width30"> <button type="button" style="margin-top: 10px;" class="btn btn-info" data-toggle="modal" data-target="#modal-edit<?php $purchase['purchaseId'] ?>">
                       Edit
                     </button>
+                    <?php endif;?>
                   </td>
-
+                </tr>
+                <tr>
+                  <td class="width30">Edit invoice</td>
+                  <td class="width30">
+                      <?php if($purchase['approved']!=1):?>
+                    <?php if($purchase['tax']==0 && $purchase['paid']==0 && $purchase['costOnPay']==0 && $purchase['Remained']==0):?>
+                     <button type="button" style="margin-top: 10px;" class="btn btn-info" data-toggle="modal" data-target="#modal-account<?php $purchase['purchaseId'] ?>">
+                      Add accounting
+                    </button>
+                    <?php endif;?>
+                    <?php endif;?>
+                  </td>
                 </tr>
               </table>
               <div class="text-center">
+              <?php if($purchase['approved']!=1):?>
                 <button type="button" style="margin-top: 10px;" class="btn btn-info" data-toggle="modal" data-target="#modal-info<?php $purchase['purchaseId'] ?>">
                   Add medicine
                 </button>
+                <?php endif;?>
               </div>
               <div class="card-body table-responsive p-0">
                 <table class="table table-hover text-nowrap">
@@ -121,7 +153,9 @@ $getDetails = $pur->getPurchaseDetail($_GET['id']);
                         <td><?php echo $row['WholesalePayPrice']; ?></td>
                         <td><?php echo ($row['WholesalePayPrice'] * $row['WholesaleQty']); ?></td>
                         <td>
+                        <?php if($purchase['approved']!=1):?>
                           <button class="btn btn-danger btn-sm" onclick="deleteMedicine(<?php echo $row['purchaseDetailId'] ?>)">Delete</button>
+                          <?php endif;?>
                         </td>
                       </tr>
                     <?php endforeach; ?>
@@ -138,8 +172,9 @@ $getDetails = $pur->getPurchaseDetail($_GET['id']);
 </div>
 
 <?php
-include 'addMedicineModal.php';
 include 'editPayInvoiceModel.php';
+include 'addMedicineModal.php';
+include 'accountModal.php';
 include '../include/dashboard/footer.php';
 ?>
 <script>
@@ -278,3 +313,34 @@ include '../include/dashboard/footer.php';
   }
   $('#Edit').click(function() {});
 </script>
+
+
+<script>
+  // for calculate the remained price
+    $(document).on('focusout', '#paid', function() {
+    let paid = document.getElementById('paid').value;
+    let forCulc = document.getElementById('forCulc').value;
+    if(paid>forCulc){
+      toastr.warning('Paid price can not be bigger than the total price');
+      $('#paid').focus();
+      return false;
+    }
+    document.getElementById('Remained').value =  forCulc - paid ;
+    console.log(paid);
+    });
+ </script>
+
+ <script>
+  // for calculate the remained price
+    $(document).on('focusout', '#paid1', function() {
+    let paid = document.getElementById('paid1').value;
+    let forCulc = document.getElementById('forCulc1').value;
+    if(paid>forCulc){
+      toastr.warning('Paid price can not be bigger than the total price');
+      $('#paid1').focus();
+      return false;
+    }
+    document.getElementById('Remained1').value =  forCulc - paid ;
+    console.log(paid);
+    });
+ </script>
