@@ -1,12 +1,12 @@
 <?php
 include '/xampp/htdocs/pharmacyapp/database/connection.php';
 class Unit extends connection{
-  public function add($parentUnit,$childUnit){
-    $query = 'INSERT INTO units (parentName,childName) VALUE (?,?)';
+  public function add($unitName,$isMaster){
+    $query = 'INSERT INTO units (unitName,isMaster) VALUE (?,?)';
 
     $query =  $this->dbConnction()->prepare($query);
      
-    $query->execute([$parentUnit,$childUnit]);
+    $query->execute([$unitName,$isMaster]);
 
     if($query->rowCount()){
       return true;
@@ -38,10 +38,10 @@ class Unit extends connection{
     return $query->fetch();
   }
 
-  public function update($parentUnit,$childUnit,$id){
-     $query = 'UPDATE units SET parentName =? ,childName = ? WHERE unitId=?';
+  public function update($unitName,$isMaster,$id){
+     $query = 'UPDATE units SET unitName =? ,isMaster = ? WHERE unitId=?';
      $query = $this->dbConnction()->prepare($query);
-     $query->execute([$parentUnit,$childUnit,$id]);
+     $query->execute([$unitName,$isMaster,$id]);
      if($query->rowCount()){
       return true;
      }else{

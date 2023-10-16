@@ -76,6 +76,29 @@
               </li>
             </ul>
           </li>
+          <li class="nav-item">
+            <a href="#" class="nav-link">
+              <i class="nav-icon fas fa-user"></i>
+              <p>
+                Purchases
+                <i class="fas fa-angle-left right"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="/pharmacyapp/view/purchases/purchases.php" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Show Purchases</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="/pharmacyapp/view/Purchases/add.php" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Add Purchase</p>
+                </a>
+              </li>
+            </ul>
+          </li>
 
               <li class="nav-item">
                 <a href="/pharmacyapp/view/suppliers/suppliers.php" class="nav-link">

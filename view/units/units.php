@@ -29,19 +29,7 @@ $units =$unit->index();
     <!-- Main content -->
     <section class="content">
       <div class="container-fluid">
-      <form method="post" action="../../includes/unitOpration.php">
-             <div class="d-flex justify-content-center mb-4">
-               <div class="form-outline me-3" style="width: 14rem">
-                    <input type="text"  name="parentUnit"  class="form-control"  placeholder="Parent Unit name" required>
-               </div>
-               <div class="form-outline me-3" style="width: 14rem">
-                    <input type="text"  name="childUnit"  class="form-control"  placeholder="Child Unit  name">
-               </div>
-                  <button type="submit" name="addUnit" class="btn btn-primary sm" style=" margin-left: 10px;">Add category</button>
-              </div>
-              </form>
         <div class="row">
-         
         <div class="col-12">
         <?php if(!empty($_SESSION["flush"])):?>
              <div class="alert alert-success alert-dismissible fade show" role="alert" id="alert-session">
@@ -53,6 +41,7 @@ $units =$unit->index();
               <?php endif ;?>
             <div class="card">
               <div class="card-header">
+                <a class="btn btn-info float-right"data-toggle="modal" data-target="#modal-addUnit">Add Product</a> 
                 <h3 class="card-title">Unit table</h3>
               </div>
               <!-- /.card-header -->
@@ -62,7 +51,7 @@ $units =$unit->index();
                     <tr>
                       <th>ID</th>
                       <th>Parent unit Name</th>
-                      <th>Child unit Name</th>
+                      <th>Is master</th>
                       <th>Action</th>
                     </tr>
                   </thead>
@@ -70,8 +59,8 @@ $units =$unit->index();
                   <?php foreach($units as $row):  ?>
                     <tr>
                       <td><?php echo $row['unitId'] ;?></td>
-                      <td><?php echo $row['parentName'] ;?></td>
-                      <td><?php echo $row['childName'] ;?></td>
+                      <td><?php echo $row['unitName'] ;?></td>
+                      <td><?php ($row['isMaster']==1)?print'Yes':print'No' ;?></td>
                       <td>
                         <a href="../../includes/unitOpration.php?id=<?php echo $row['unitId'] ;?>" class="btn btn-danger">Delete</a>
                         <button type="button" class="btn btn-default" data-toggle="modal" data-target="#modal-default<?php echo $row['unitId'] ;?>">
@@ -95,4 +84,6 @@ $units =$unit->index();
     <!-- /.content -->
   </div>
   <!-- /.content-wrapper -->
-   <?php include '../include/dashboard/footer.php'; ?>
+   <?php include '../include/dashboard/footer.php'; 
+include 'addModal.php';
+   ?>

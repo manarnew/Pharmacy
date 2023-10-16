@@ -5,12 +5,10 @@ include '../controller/productController.php';
 if(isset($_POST['productSubmit'])){
    $productName=$_POST['name'];
    $categoryId=$_POST['categoryId'];
-   $payPrice=$_POST['pay'];
-   $salePrice=$_POST['sale'];
-   $supplierId=$_POST['supplierId'];
-   $endDate=$_POST['endDate'];
-   $details=$_POST['details'];
-   $qty=$_POST['quantity'];
+    $wholesaleUnitId =$_POST['wholesaleUnitId'];
+    $hasChildUnit =$_POST['hasChildUnit'];
+    $RetailUnitId =$_POST['RetailUnitId'];
+    $details =$_POST['details'];
    $barcode=($_POST['barcode']==null)?uniqid():$_POST['barcode'];
    if ($_FILES["image"]["error"] == UPLOAD_ERR_OK){
       $folder = "../view/include/images/";
@@ -21,7 +19,7 @@ if(isset($_POST['productSubmit'])){
       move_uploaded_file($tempName, $folder.$newFileName);
   }
    $product = new productController();
-   if($product->productAdd($productName,$categoryId,$payPrice,$salePrice,$endDate,$supplierId,$details,$qty,$barcode,$newFileName)){
+   if($product->productAdd($productName,$categoryId,$details,$barcode,$newFileName,$wholesaleUnitId,$hasChildUnit,$RetailUnitId)){
     $_SESSION['flush'] =  'Product created successfully';
     header("location: ../view/products/addProduct.php");
     exit;
@@ -52,12 +50,10 @@ if(isset($_POST['updateProduct'])){
    $productName=$_POST['name'];
    $productId=$_POST['productId'];
    $categoryId=$_POST['categoryId'];
-   $payPrice=$_POST['pay'];
-   $salePrice=$_POST['sale'];
-   $supplierId=$_POST['supplierId'];
-   $endDate=$_POST['endDate'];
    $details=$_POST['details'];
-   $qty=$_POST['quantity'];
+    $wholesaleUnitId =$_POST['wholesaleUnitId'];
+    $hasChildUnit =$_POST['hasChildUnit'];
+    $RetailUnitId =$_POST['RetailUnitId'];
    $barcode=$_POST['barcode'];
    $image=$_POST['oldImage'];
       if(isset($_FILES["image"]["name"])){
@@ -72,9 +68,9 @@ if(isset($_POST['updateProduct'])){
       $image = $newFileName;
   }
 }
-   $sup = new productController();
-   if($sup->edit($productName,$categoryId,$payPrice,$salePrice,$endDate,$supplierId,$details,$qty,$barcode,$image,$productId)){
-    $_SESSION['flush'] =  'Suppliers updated successfully';
+   $pro = new productController();
+   if($pro->edit($productName,$categoryId,$details,$barcode,$image,$wholesaleUnitId,$hasChildUnit,$RetailUnitId,$productId)){
+    $_SESSION['flush'] =  'Product updated successfully';
    header("location: ../view/products/products.php");
     exit;
    }else{

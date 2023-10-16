@@ -46,8 +46,34 @@
 <!-- overlayScrollbars -->
 <script src="/pharmacyapp/view/include/assets/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
 <!-- AdminLTE App -->
+<script src="/pharmacyapp/view/include/assets/plugins/toastr/toastr.min.js"></script>>
+<!-- Toastr -->
 <script src="/pharmacyapp/view/include/assets/dist/js/adminlte.js"></script>
 <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
 <script src="/pharmacyapp/view/include/assets/dist/js/pages/dashboard.js"></script>
+<script src="/pharmacyapp/view/include/assets/plugins/select2/js/select2.full.min.js"></script>
+  <!-- Bootstrap4 Duallistbox -->
+  <script>
+  //Initialize Select2 Elements
+    $('.select2').select2()
+
+    //Initialize Select2 Elements
+    $('.select2bs4').select2({
+      theme: 'bootstrap4'
+    });
+    $(function() {
+    var Toast = Swal.mixin({
+      toast: true,
+      position: 'top-end',
+      showConfirmButton: false,
+      timer: 3000
+    });
+
+   
+  });
+    
+    </script>
+    
+
 </body>
 </html>

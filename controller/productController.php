@@ -1,14 +1,20 @@
 <?php
 include '../model/product.php';
 class productController extends Product{
-    public function productAdd($productName,$categoryId,$payPrice,$salePrice,$endDate,$supplierId,$details,$qty,$barcode,$filename){
-        if($productName==null||$categoryId==null||$payPrice==null||$salePrice==null||$endDate==null||$supplierId==null||$details==null||$qty==null||$barcode==null||$filename==null){
-            $_SESSION['flush'] = 'All the filed are required except the barcode';
+    public function productAdd($productName,$categoryId,$details,$barcode,$newFileName,$wholesaleUnitId,$hasChildUnit,$RetailUnitId){
+        if($productName==null||$categoryId==null||$barcode==null||$newFileName==null||$hasChildUnit==null||$wholesaleUnitId==null){
+           $_SESSION['flush'] = 'All the filed are required';
+           header("location: ../view/products/addProduct.php");
+           exit;
+       }
+       if($hasChildUnit==1){
+        if($RetailUnitId==null){
+            $_SESSION['flush'] = 'All the filed are required';
             header("location: ../view/products/addProduct.php");
             exit;
         }
-      
-       if($this->add($productName,$categoryId,$payPrice,$salePrice,$endDate,$supplierId,$details,$qty,$barcode,$filename)){
+    }
+       if($this->add($productName,$categoryId,$details,$barcode,$newFileName,$wholesaleUnitId,$hasChildUnit,$RetailUnitId)){
         return true;
        }else{
         $_SESSION['flush'] = 'Something went wrong';
@@ -25,14 +31,24 @@ class productController extends Product{
            }
     }
 
-    public function edit($productName,$categoryId,$payPrice,$salePrice,$endDate,$supplierId,$details,$qty,$barcode,$image,$productId){
-      
-      
-       if($this->update($productName,$categoryId,$payPrice,$salePrice,$endDate,$supplierId,$details,$qty,$barcode,$image,$productId)){
+    public function edit($productName,$categoryId,$details,$barcode,$image,$wholesaleUnitId,$hasChildUnit,$RetailUnitId,$productId){
+        if($productName==null||$categoryId==null||$barcode==null||$image==null||$hasChildUnit==null||$wholesaleUnitId==null){
+            $_SESSION['flush'] = 'All the filed are required';
+            header("location: ../view/products/editProduct.php?productId=$productId");
+            exit;
+        }
+        if($hasChildUnit==1){
+         if($RetailUnitId==null){
+             $_SESSION['flush'] = 'All the filed are required';
+             header("location: ../view/products/editProduct.php?productId=$productId");
+             exit;
+         }
+        }
+       if($this->update($productName,$categoryId,$details,$barcode,$image,$wholesaleUnitId,$hasChildUnit,$RetailUnitId,$productId)){
         return true;
        }else{
         $_SESSION['flush'] = 'Something went wrong';
-        header("location: ../view/products/editProduct.php");
+        header("location: ../view/products/editProduct.php?productId=$productId");
        }
     }
 }

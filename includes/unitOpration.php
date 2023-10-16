@@ -3,17 +3,17 @@ session_start();
 include '../controller/unitController.php';
 // add Unit
 if(isset($_POST['addUnit'])){
-   $parentUnit=$_POST['parentUnit'];
-   $childUnit=$_POST['childUnit'];
+   $unitName=$_POST['unitName'];
+   $isMaster=$_POST['isMaster'];
    $unit = new unitController();
-   if($unit->unitAdd($parentUnit,$childUnit)){
+   if($unit->unitAdd($unitName,$isMaster)){
     $_SESSION['flush'] =  'Unit created successfully';
     header("location: ../view/units/units.php");
     exit;
    };
 }
 
-   //delete categories
+   //delete unit
  
    if(isset($_GET['id'])){
     $id=$_GET['id'];
@@ -23,13 +23,13 @@ if(isset($_POST['addUnit'])){
     header("location: ../view/units/units.php");
    }
 }
-   // update category
+   // update unit
 if(isset($_POST['updateUnit'])){
-   $parentUnit=$_POST['parentName'];
-   $childUnit=$_POST['childName'];
+   $unitName=$_POST['unitName'];
+   $isMaster=$_POST['isMaster'];
    $id=$_POST['unitId'];
    $cat = new unitController();
-   if($cat->edit($parentUnit,$childUnit,$id)){
+   if($cat->edit($unitName,$isMaster,$id)){
     $_SESSION['flush'] =  'Unit updated successfully';
    header("location: ../view/units/units.php");
     exit;

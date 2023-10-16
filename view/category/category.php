@@ -1,6 +1,6 @@
 <?php 
-include '/xampp/htdocs/pharnacyapp/view/users/session.php';
-include '/xampp/htdocs/pharnacyapp/model/category.php';
+include '/xampp/htdocs/pharmacyapp/view/users/session.php';
+include '/xampp/htdocs/pharmacyapp/model/category.php';
 include '../include/dashboard/header.php' ;
 $cat = new Category;
 $categories =$cat->index();

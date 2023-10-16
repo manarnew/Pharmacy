@@ -16,20 +16,23 @@
             <div class="modal-body">
             <form method="post" action="../../includes/unitOpration.php">
             <div class="form-group">
-            <label class="form-control-label" for="prependedInput">parent Name</label>
+            <label class="form-control-label" for="prependedInput">Uint Name</label>
             <div class="controls">
                 <div class="input-prepend input-group">
-                <input type="text" value=" <?php echo $un['parentName'] ;?>" name="parentName"  class="form-control"  placeholder="Category name">
-                <input type="hidden" value=" <?php echo $un['unitId'] ;?>" name="unitId"  class="form-control"  placeholder="Category name">
+                <input type="text" value="<?php echo $un['unitName'] ;?>" name="unitName"  class="form-control"  placeholder="Unit name">
+                <input type="hidden" value="<?php echo $un['unitId'] ;?>" name="unitId"  class="form-control" >
                 </div>
             </div>
         </div>
 
         <div class="form-group">
-            <label class="form-control-label" for="prependedInput">child Name</label>
+            <label class="form-control-label" for="prependedInput">Is master</label>
             <div class="controls">
                 <div class="input-prepend input-group">
-                <input type="text" value=" <?php echo $un['childName'] ;?>" name="childName"  class="form-control"  placeholder="Category name">
+                <select id="select" name="isMaster" class="form-control" size="1" required>
+                      <option value="<?php ($un['isMaster']==0)?print'0':print'1' ;?>"><?php  ($un['isMaster']==0)?print'No':print'Yes'; ?></option>
+                      <option value="<?php  ($un['isMaster']==0)?print'1':print'0'  ;?>"><?php  ($un['isMaster']==0)?print'Yes':print'No';?></option>
+                   </select>
               </div>
             </div>
           </div>

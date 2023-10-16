@@ -1,13 +1,13 @@
 <?php
 include '../model/unit.php';
 class unitController extends Unit{
-    public function unitAdd($parentUnit,$childUnit){
-        if($parentUnit == ''){
-            $_SESSION['flush'] = 'The unit parent unit name is require';
+    public function unitAdd($unitName,$isMaster){
+        if($unitName == ''){
+            $_SESSION['flush'] = 'The unit name is require';
             header("location: ../view/units/units.php");
             exit;
         }
-       if($this->add($parentUnit,$childUnit)){
+       if($this->add($unitName,$isMaster)){
         return true;
        }else{
         $_SESSION['flush'] = 'Something went wrong';
@@ -23,13 +23,13 @@ class unitController extends Unit{
            }
     }
 
-    public function edit($parentUnit,$childUnit,$id){
-        if($parentUnit == ''||$id == ''){
-            $_SESSION['flush'] = 'The  parent unit name is require';
+    public function edit($unitName,$isMaster,$id){
+        if($unitName == ''||$id == ''){
+            $_SESSION['flush'] = 'The unit name is require';
             header("location: ../view/units/units.php");
             exit;
         }
-       if($this->update($parentUnit,$childUnit,$id)){
+       if($this->update($unitName,$isMaster,$id)){
         return true;
        }else{
         $_SESSION['flush'] = 'Something went wrong';
