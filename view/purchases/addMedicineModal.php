@@ -46,6 +46,19 @@
                  <input type="date" name="endDate" class="form-control float-right" id="endDate">
                </div>
              </div>
+
+             <div class="col-lg-4 showAllMedicineDetails" style="display: none;">
+               <label class="form-control-label" for="appendedInput">Made Date</label>
+               <div class="input-group">
+                 <div class="input-group-prepend">
+                   <span class="input-group-text">
+                     <i class="far fa-calendar-alt"></i>
+                   </span>
+                 </div>
+                 <input type="date" name="madeAt" class="form-control float-right" id="madeAt">
+               </div>
+             </div>
+
              <div class="col-lg-4 showAllMedicineDetails" style="display: none;">
                <div class="form-group">
                  <label class="form-control-label" for="appendedInput">Wholesale unit Name</label>
@@ -137,6 +150,7 @@
                  </div>
                </div>
              </div>
+          
            </div>
            
           </div>
@@ -181,7 +195,7 @@
              document.getElementById('hasChildUnit').value = data[0].hasChildUnit;
              document.getElementById('RetailUnitId').value = data[0].RetailUnitId;
              document.getElementById('RetailUnitName').value = data[0].RetailUnitName;
-             $(document).on('focusout', '#RetailSalePrice,#RetailQty,#WholesaleQty', function() {
+             $(document).on('input', '#RetailSalePrice,#RetailQty,#WholesaleQty', function() {
                // calculate the Wholesale Sale Price
                let WholesaleQty = document.getElementById('WholesaleQty').value;
                let RetailQty = document.getElementById('RetailQty').value;

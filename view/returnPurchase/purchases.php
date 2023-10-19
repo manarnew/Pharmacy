@@ -1,9 +1,9 @@
 <?php
 include '/xampp/htdocs/pharmacyapp/view/users/session.php';
-include '/xampp/htdocs/pharmacyapp/model/supplier.php';
+include '/xampp/htdocs/pharmacyapp/model/returnPurchase.php';
 include '../include/dashboard/dataTableHeader.php';
-$supplier = new Supplier();
-$supp = $supplier->index();
+$purchase = new ReturnPurchase();
+$pur = $purchase->index();
 ?>
 
 <!-- Content Wrapper. Contains page content -->
@@ -13,12 +13,12 @@ $supp = $supplier->index();
     <div class="container-fluid">
       <div class="row mb-2">
         <div class="col-sm-6">
-          <h1 class="m-0">suppliers management</h1>
+          <h1 class="m-0">Show  return Purchases</h1>
         </div><!-- /.col -->
         <div class="col-sm-6">
           <ol class="breadcrumb float-sm-right">
             <li class="breadcrumb-item"><a href="#">Home</a></li>
-            <li class="breadcrumb-item active">suppliers</li>
+            <li class="breadcrumb-item active"> Return Purchases</li>
           </ol>
         </div><!-- /.col -->
       </div><!-- /.row -->
@@ -42,41 +42,36 @@ $supp = $supplier->index();
           <?php endif; ?>
           <div class="card">
             <div class="card-header">
-              <?php include 'addModal.php'; ?>
-              <a class="btn btn-info float-right" data-toggle="modal" data-target="#modal-Add">Add User</a>
-              <h3 class="card-title">Show users</h3>
+              <a class="btn btn-info float-right" href="add.php">Add  return purchases</a>
+              <h3 class="card-title">Show return Purchase</h3>
             </div>
             <!-- /.card-header -->
             <div class="card-body">
-              <table id="suppliers" class="table table-bordered table-striped">
+              <table id="product" class="table table-bordered table-striped">
                 <thead>
                   <tr>
-                    <th>serial</th>
-                    <th>Supplier Name</th>
-                    <th>Supplier phone</th>
-                    <th>Supplier address</th>
+                  <th>serial</th>
+                    <th>Invoice number</th>
+                    <th>Supplier</th>
+                    <th>Added date</th>
+                    <th>Added by</th>
                     <th>Action</th>
                   </tr>
                 </thead>
                 <tbody>
-                  <?php $i = 0;
-                  foreach ($supp as $row) :  ?>
+                  <?php $i = 0; foreach ($pur as $row) :  ?>
                     <tr>
-                      <td><?php $i++;
-                          echo $i; ?></td>
-                      <td> 
-                        <a href="details.php?supplierId=<?php echo $row['supplierId']; ?>">
-                        <?php echo $row['supplierName']; ?>
-                      </a>
-                      </td>
-                      <td><?php echo $row['phone']; ?></td>
-                      <td><?php echo $row['address']; ?></td>
+                    <td><?php $i++;echo $i; ?></td>
+                      <td><?php echo $row['invoiceNumber']; ?></td>
+                      <td><?php echo $row['supplierName']; ?></td>
+                      <td><?php echo $row['addedDate']; ?></td>
+                      <td><?php echo $row['userName']; ?></td>
                       <td>
-                        <a href="../../includes/supplierOpration.php?id=<?php echo $row['supplierId']; ?>" class="btn btn-danger">Delete</a>
-                        <button type="button" class="btn btn-default" data-toggle="modal" data-target="#modal-Edit<?php echo $row['supplierId']; ?>">
-                          Edit
-                        </button>
-                        <?php include 'editModal.php'; ?>
+                        <a href="details.php?id=<?php echo $row['purchaseId']; ?>" class="btn btn-info">Purchase details</a>
+                        <?php if ($row['approved'] != 1) : ?>
+                          <a href="../../includes/returnPurchaseOpration.php?deletePurchaseId=<?php echo $row['purchaseId']; ?>" class="btn btn-danger">Delete</a>
+                          <a href="../../includes/returnPurchaseOpration.php?approveId=<?php echo $row['purchaseId']; ?>" class="btn btn-success">Approve</a>
+                        <?php endif; ?>
                       </td>
                     </tr>
                   <?php endforeach; ?>
@@ -98,12 +93,12 @@ $supp = $supplier->index();
 <!-- dataTable script -->
 <script>
   $(function() {
-    $("#suppliers").DataTable({
+    $("#product").DataTable({
       "responsive": true,
       "lengthChange": false,
       "autoWidth": false,
       "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
-    }).buttons().container().appendTo('#suppliers_wrapper .col-md-6:eq(0)');
+    }).buttons().container().appendTo('#product_wrapper .col-md-6:eq(0)');
 
   });
 </script>

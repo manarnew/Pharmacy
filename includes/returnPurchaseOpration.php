@@ -1,14 +1,14 @@
 <?php
 session_start();
-include '../controller/purchaseController.php';
+include '../controller/returnPurchaseController.php';
 
 // add purchase
 if(isset($_POST['productSubmit'])){
-   $purchase = new purchaseController();
+   $purchase = new ReturnPurchaseController();
    $supplierId=$_POST['supplierId'];
    $details=$_POST['details'];
    // if the invoice number is null well generate random number
-   $invoiceNumber=($_POST['invoiceNumber']==null)?(uniqid().microtime(true)):$_POST['invoiceNumber'];
+   $invoiceNumber=($_POST['invoiceNumber']==null)?uniqid():$_POST['invoiceNumber'];
    if($purchase->purchaseAdd($supplierId,$details,$invoiceNumber)){
     $_SESSION['flush'] =  'Purchase created successfully';
     header("location: ../view/purchases/purchases.php");
@@ -23,26 +23,15 @@ if(isset($_POST['productSubmit'])){
 if(isset($_POST['wholesaleUnitId'])){
    $purchaseId = $_POST['purchaseId'];
    $productId=$_POST['productId'];
-   $endDate=$_POST['endDate'];
-   $madeAt=$_POST['madeAt'];
     $wholesaleUnitId =$_POST['wholesaleUnitId'];
     $WholesaleQty =$_POST['WholesaleQty'];
     $WholesalePayPrice =$_POST['WholesalePayPrice'];
-    $WholesaleSalePrice =$_POST['WholesaleSalePrice'];
-    $hasChildUnit =$_POST['hasChildUnit'];
-    $RetailUnitId =$_POST['RetailUnitId'];
-    $RetailSalePrice =$_POST['RetailSalePrice'];
-    $RetailQty =$_POST['RetailQty'];
-    $RetailPayPrice =$_POST['RetailPayPrice'];
-    $TotalRetailQty =$_POST['TotalRetailQty'];
-   $batchNumber=($_POST['batchNumber']==null)?(uniqid().microtime(true)):$_POST['batchNumber'];
-   $purchase = new purchaseController();
-   $check = $purchase->purchaseDetailsAdd($purchaseId,$productId,$endDate,$wholesaleUnitId,$WholesaleQty,$WholesalePayPrice
-   ,$WholesaleSalePrice,$hasChildUnit,$RetailUnitId,$RetailSalePrice,$RetailPayPrice,$RetailQty,$TotalRetailQty,$batchNumber,$madeAt);
+    $purchase = new ReturnPurchaseController();
+   $check = $purchase->purchaseDetailsReturn($purchaseId,$productId,$wholesaleUnitId,$WholesaleQty,$WholesalePayPrice);
    if($check === -1){
       echo 'the medicine already added';
    }else if($check === true){
-      echo 'Medicine created successfully';
+      echo 'Return done successfully';
    }else{
       echo 'something went wrong';
    }
@@ -52,7 +41,7 @@ if(isset($_POST['wholesaleUnitId'])){
  
    if(isset($_POST['medicineIDForDelete'])){
     $id=$_POST['medicineIDForDelete'];
-    $med = new purchaseController();
+    $med = new ReturnPurchaseController();
    if( $med->deleteMedicine($id)){
    echo 'Medicine deleted successfully';
    }else{
@@ -62,21 +51,17 @@ if(isset($_POST['wholesaleUnitId'])){
    // update product
 if(isset($_POST['updateInvoice'])){
    $purchaseId=$_POST['purchaseId'];
-   $invoiceNumber=$_POST['invoiceNumber'];
-   $supplierId=$_POST['supplierId'];
    $details=$_POST['details'];
    $Remained=$_POST['Remained'];
-   $tax=$_POST['tax'];
    $paid=$_POST['paid'];
-   $costOnPay=$_POST['costOnPay'];
-   $purchase = new purchaseController();
-   if($purchase->edit($invoiceNumber,$details,$supplierId,$purchaseId,$Remained,$tax,$paid,$costOnPay)){
-    $_SESSION['flush'] =  'Purchase updated successfully';
-   header("location: ../view/purchases/details.php?id=$purchaseId");
+   $purchase = new ReturnPurchaseController();
+   if($purchase->edit($details,$purchaseId,$Remained,$paid)){
+    $_SESSION['flush'] =  'Return Purchase updated successfully';
+   header("location: ../view/returnPurchase/details.php?id=$purchaseId");
     exit;
    }else{
       $_SESSION['flush'] =  'Error something wrong try agin';
-      header("location: ../view/purchases/details.php?id=$purchaseId");
+      header("location: ../view/returnPurchase/details.php?id=$purchaseId");
       exit;
    }
 }
@@ -84,13 +69,14 @@ if(isset($_POST['updateInvoice'])){
 
 if (isset($_POST['query'])) {
    $product=$_POST['query'];
-   $pur = new purchaseController();
+   $invoiceNumber=$_POST['invoiceNumber'];
+   $pur = new ReturnPurchaseController();
    $get = $pur->goeProductForAddMedicine($product);
-   $RetailUnitName = $pur->RetailUnitName($product);
+   $WholesalePayPrice = $pur->WholesalePayPrice($product,$invoiceNumber);
    if ($get['productId']>0) {
         
       $detail[] = array('hasChildUnit'=>$get['hasChildUnit'],'productId'=>$get['productId'],'wholesaleUnitName'=>$get['unitName'],
-      'wholesaleUnitId'=>$get['unitId'],'RetailUnitName'=>$RetailUnitName['unitName'],'RetailUnitId'=>$RetailUnitName['RetailUnitId']);
+      'wholesaleUnitId'=>$get['unitId'],'WholesalePayPrice'=>$WholesalePayPrice['WholesalePayPrice']);
       echo  json_encode($detail);
    } else {
       $detail[] = array('warning'=>"Medicine not found");
@@ -98,36 +84,34 @@ if (isset($_POST['query'])) {
    }
  }
 
- // Add the accounting 
+ // Add the accounting for received money
 
- if(isset($_POST['addAccounting'])){
-   $paid=$_POST['paid'];
-   $tax=$_POST['tax'];
-   $Remained=$_POST['Remained'];
-   $costOnPay=$_POST['costOnPay'];
+ if(isset($_POST['receivedAccounting'])){
+   $paid=$_POST['ReceivedForReturn'];
+   $Remained=$_POST['remainedForReturn'];
    $purchaseId=$_POST['purchaseId'];
-   $purchase = new purchaseController();
-   if($purchase->addAccounting($paid,$tax,$Remained,$costOnPay,$purchaseId)){
+   $purchase = new ReturnPurchaseController();
+   if($purchase->ReveivedAccounting($paid,$Remained,$purchaseId)){
     $_SESSION['flush'] =  'Accounting updated successfully';
-   header("location: ../view/purchases/details.php?id=$purchaseId");
+   header("location: ../view/returnPurchase/details.php?id=$purchaseId");
     exit;
    }else{
       $_SESSION['flush'] =  'Error something wrong try agin';
-      header("location: ../view/purchases/details.php?id=$purchaseId");
+      header("location: ../view/returnPurchase/details.php?id=$purchaseId");
       exit;
    }
  }
 
  if(isset($_GET['approveId'])){
-   $app = new purchaseController();
+   $app = new ReturnPurchaseController();
    $approve = $app->approved($_GET['approveId']);
    if($approve === true){
       $_SESSION['flush'] =  'Purchase approved successfully';
-      header("location: ../view/purchases/purchases.php");
+      header("location: ../view/returnPurchase/purchases.php");
       exit;
    }else{
       $_SESSION['flush'] =  'Error '.$approve;
-      header("location: ../view/purchases/purchases.php");
+      header("location: ../view/returnPurchase/purchases.php");
       exit;
    }
    
@@ -137,7 +121,7 @@ if (isset($_POST['query'])) {
  
   if(isset($_GET['deletePurchaseId'])){
    $id=$_GET['deletePurchaseId'];
-   $med = new purchaseController();
+   $med = new ReturnPurchaseController();
    $purh =$med->deletePurchase($id);
   if($purh ===true ){
   $_SESSION['flush'] = 'Purchase deleted successfully '; 
@@ -148,3 +132,4 @@ if (isset($_POST['query'])) {
    header("location: ../view/purchases/purchases.php");
   }
 }
+

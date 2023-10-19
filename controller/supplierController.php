@@ -36,4 +36,12 @@ class supplierController extends Supplier{
         header("location: ../view/suppliers/suppliers.php");
        }
     }
+    public function payForSupplier($id,$remained,$payPrice){
+        if($this->paySupplier($id,$remained,$payPrice)){
+            return true;
+           }else{
+            $_SESSION['flush'] = 'Something went wrong';
+            header("location: ../view/suppliers/details.php?supplierId=$id");
+           }
+    }
 }

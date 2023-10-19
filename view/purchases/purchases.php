@@ -50,6 +50,7 @@ $pur = $purchase->index();
               <table id="product" class="table table-bordered table-striped">
                 <thead>
                   <tr>
+                  <th>serial</th>
                     <th>Invoice number</th>
                     <th>Supplier</th>
                     <th>Added date</th>
@@ -58,18 +59,19 @@ $pur = $purchase->index();
                   </tr>
                 </thead>
                 <tbody>
-                  <?php foreach ($pur as $row) :  ?>
+                  <?php $i = 0; foreach ($pur as $row) :  ?>
                     <tr>
+                    <td><?php $i++;echo $i; ?></td>
                       <td><?php echo $row['invoiceNumber']; ?></td>
                       <td><?php echo $row['supplierName']; ?></td>
                       <td><?php echo $row['addedDate']; ?></td>
                       <td><?php echo $row['userName']; ?></td>
                       <td>
                         <a href="details.php?id=<?php echo $row['purchaseId']; ?>" class="btn btn-info">Purchase details</a>
-                        <?php if($row['approved']!=1):?>
-                        <a href="../../includes/productOpration.php?id=<?php echo $row['purchaseId']; ?>" class="btn btn-danger">Delete</a>
-                        <a href="../../includes/purchaseOpration.php?approveId=<?php echo $row['purchaseId']; ?>" class="btn btn-success">Approve</a>
-                      <?php endif;?>
+                        <?php if ($row['approved'] != 1) : ?>
+                          <a href="../../includes/purchaseOpration.php?deletePurchaseId=<?php echo $row['purchaseId']; ?>" class="btn btn-danger">Delete</a>
+                          <a href="../../includes/purchaseOpration.php?approveId=<?php echo $row['purchaseId']; ?>" class="btn btn-success">Approve</a>
+                        <?php endif; ?>
                       </td>
                     </tr>
                   <?php endforeach; ?>

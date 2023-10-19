@@ -1,7 +1,7 @@
 <?php
 
 include '/xampp/htdocs/pharmacyapp/database/connection.php';
-class Purchase extends connection
+class ReturnPurchase extends connection
 {
   public function add($supplierId, $details, $invoiceNumber)
   {
@@ -13,7 +13,7 @@ class Purchase extends connection
 
     $query =  $this->dbConnction()->prepare($query);
 
-    $query->execute([$supplierId, $details, $invoiceNumber, $userId, $now, 1]);
+    $query->execute([$supplierId, $details, $invoiceNumber, $userId, $now,0]);
 
     if ($query->rowCount()) {
       return true;
@@ -22,23 +22,7 @@ class Purchase extends connection
     }
   }
 
-  public function purchaseDetailsInvoice(
-    $purchaseId,
-    $productId,
-    $endDate,
-    $wholesaleUnitId,
-    $WholesaleQty,
-    $WholesalePayPrice,
-    $WholesaleSalePrice,
-    $hasChildUnit,
-    $RetailUnitId,
-    $RetailSalePrice,
-    $RetailPayPrice,
-    $RetailQty,
-    $TotalRetailQty,
-    $batchNumber,
-    $madeAt
-  ) {
+  public function purchaseDetailsReturnInvoice($purchaseId,$productId,$wholesaleUnitId,$WholesaleQty,$WholesalePayPrice) {
     $check = $this->dbConnction()->prepare('SELECT productId FROM purchasedetails WHERE productId=? AND  purchaseId =? LIMIT 1');
     $check->execute([$productId, $purchaseId]);
     $product = $check->fetchAll();
@@ -47,18 +31,13 @@ class Purchase extends connection
     }
 
     $userId = $_SESSION['id'];
-    $query = 'INSERT INTO purchasedetails (purchaseId,productId,endDate,wholesaleUnitId,WholesaleQty,WholesalePayPrice
-    ,WholesaleSalePrice,hasChildUnit,RetailUnitId,RetailSalePrice,RetailPayPrice,RetailQty,TotalRetailQty,batchNumber,userId,madeAt) 
+    $query = 'INSERT INTO purchasedetails (purchaseId,productId,wholesaleUnitId,WholesaleQty,WholesalePayPrice,userId) 
                     VALUE 
-                    (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)';
+                    (?,?,?,?,?,?)';
 
     $query =  $this->dbConnction()->prepare($query);
 
-    $query->execute([
-      $purchaseId, $productId, $endDate, $wholesaleUnitId, $WholesaleQty, $WholesalePayPrice,
-      $WholesaleSalePrice, $hasChildUnit, $RetailUnitId, $RetailSalePrice, $RetailPayPrice,
-      $RetailQty, $TotalRetailQty, $batchNumber, $userId,$madeAt
-    ]);
+    $query->execute([$purchaseId,$productId,$wholesaleUnitId,$WholesaleQty,$WholesalePayPrice,$userId]);
 
     if ($query->rowCount()) {
       return true;
@@ -72,7 +51,7 @@ class Purchase extends connection
     $query = $this->dbConnction()->prepare("SELECT *  FROM   suppliers  
     INNER JOIN  purchases  ON suppliers.supplierId= purchases.supplierId
     INNER JOIN users  ON users.userId= purchases.userId
-    where type = 1");
+    where type = 0");
     $query->execute();
     return  $query->fetchAll();
   }
@@ -97,13 +76,13 @@ class Purchase extends connection
     return $query->fetch();
   }
 
-  public function update($invoiceNumber, $details, $supplierId, $purchaseId, $Remained, $tax, $paid, $costOnPay)
+  public function update($details,$purchaseId,$Remained,$paid)
   {
 
-    $query = 'UPDATE purchases SET invoiceNumber =?, details = ?,supplierId = ?,Remained = ?
-             ,tax = ?,paid = ?,costOnPay = ? WHERE purchaseId=?';
+    $query = 'UPDATE purchases SET details = ?,Remained = ?
+             ,paid = ? WHERE purchaseId=?';
     $query = $this->dbConnction()->prepare($query);
-    $query->execute([$invoiceNumber, $details, $supplierId, $Remained, $tax, $paid, $costOnPay, $purchaseId]);
+    $query->execute([$details, $Remained,$paid, $purchaseId]);
     if ($query->rowCount()) {
       return true;
     } else {
@@ -149,12 +128,21 @@ class Purchase extends connection
   }
 
 
-  public function goeOneProduct()
+  public function goeOnePurchasedetails($Numbers)
   {
-    $query = $this->dbConnction()->prepare("SELECT productId,productName,barcode,hasChildUnit  FROM products");
-    $query->execute();
+    $invoiceNumber = $this->dbConnction()->prepare("SELECT purchaseId,invoiceNumber FROM purchases where invoiceNumber ='$Numbers' and type = 1");
+    $invoiceNumber->execute();
+    $purchaseId = $invoiceNumber->fetch();
+
+    $query = $this->dbConnction()->prepare("SELECT   purchasedetails.batchNumber,purchases.supplierId,products.productId,products.productName,purchasedetails.TotalRetailQty,purchasedetails.hasChildUnit,batches.qty 
+                                           FROM purchasedetails INNER JOIN products  ON products.productId = purchasedetails.productId
+                                            INNER JOIN batches  ON batches.batchNumber= purchasedetails.batchNumber and batches.productId= purchasedetails.productId
+                                            INNER JOIN purchases  ON purchases.purchaseId= purchasedetails.purchaseId
+                                            where purchases.purchaseId =?");
+    $query->execute([$purchaseId['purchaseId']]);
     return $query->fetchAll();
   }
+  
   public function RetailUnitName($product)
   {
     $query = $this->dbConnction()->prepare("SELECT unitName,RetailUnitId  FROM   units  
@@ -187,11 +175,11 @@ class Purchase extends connection
   }
 
 
-  public function addAccount($paid, $tax, $Remained, $costOnPay, $purchaseId)
+  public function addAReveivedAccounting($paid,$Remained,$purchaseId)
   {
-    $query = 'UPDATE purchases SET paid = ?,tax =?,Remained =?,costOnPay =? WHERE purchaseId = ?';
+    $query = 'UPDATE purchases SET paid = ?,Remained =? WHERE purchaseId = ?';
     $query =  $this->dbConnction()->prepare($query);
-    $query->execute([$paid, $tax, $Remained, $costOnPay, $purchaseId]);
+    $query->execute([$paid,  $Remained,  $purchaseId]);
     if ($query->rowCount()) {
       return true;
     } else {
@@ -205,7 +193,7 @@ class Purchase extends connection
 
       $now = date("Y/m/d");
       $userId = $_SESSION['id'];
-      $query = $this->dbConnction()->prepare("SELECT hasChildUnit,RetailQty,WholesaleQty,endDate,productId,batchNumber  FROM purchasedetails WHERE purchaseId = ?");
+      $query = $this->dbConnction()->prepare("SELECT hasChildUnit,RetailQty,WholesaleQty,productId,batchNumber  FROM purchasedetails WHERE purchaseId = ?");
       $query->execute([$approveId]);
       $pur = $query->fetchAll();
       $qty = 0;
@@ -215,14 +203,18 @@ class Purchase extends connection
         /* 
       store the batches
       */
-        $query = 'INSERT INTO batches (productId,batchNumber,expirationDate,qty) VALUE (?,?,?,?)';
+      $batche = $this->dbConnction()->prepare("SELECT qty  FROM batches WHERE batchNumber = ?");
+      $batche->execute([$pur['batchNumber']]);
+      $batch = $batche->fetch(); 
+      $query = 'UPDATE batches SET productId=?,qty = ? WHERE batchNumber = ?';
         $query =  $this->dbConnction()->prepare($query);
         if ($pur['hasChildUnit'] == 1) {
-          $qty = $pur['RetailQty'];
+           $WholesaleQty= $pur['WholesaleQty'] *$pur['RetailQty'];
+          $qty = $batch['qty'] - $WholesaleQty;
         } else {
-          $qty = $pur['WholesaleQty'];
+          $qty = $batch['qty'] - $pur['WholesaleQty'];
         }
-        $query->execute([$pur['productId'], $pur['batchNumber'], $pur['endDate'], $qty]);
+        $query->execute([$pur['productId'], $qty, $pur['batchNumber']]);
         // end store the batches
 
         /* 
@@ -232,44 +224,41 @@ class Purchase extends connection
         $stor->execute([$pur['productId']]);
         $store = $stor->fetch();
         if ($store['productId'] > 0) {
-          $qtyRemining = $store['qtyRemining'] + $qty;
-        } else {
-          $qtyRemining = $qty;
-        }
+          $qtyRemining = $store['qtyRemining'] - $qty;
+        } 
         $query = 'INSERT INTO stores (productId,Type,qty,qtyRemining,userId,storeDate) VALUE (?,?,?,?,?,?)';
         $query =  $this->dbConnction()->prepare($query);
-        // type 1 means this a purchase
-        $query->execute([$pur['productId'], 1, $qty, $qtyRemining, $userId, $now]);
+        // type 0 means this a Return purchase
+        $query->execute([$pur['productId'], 0, $qty, $qtyRemining, $userId, $now]);
 
         $totalPrice += ($pur['WholesalePayPrice'] * $pur['WholesaleQty']);
         // end store the stock 
       }
       // Insert accounting 
-      $select = $this->dbConnction()->prepare("SELECT tax,costOnPay,Remained,supplierId,invoiceNumber,paid FROM purchases WHERE purchaseId = ?");
+      $select = $this->dbConnction()->prepare("SELECT Remained,supplierId,invoiceNumber,paid FROM purchases WHERE purchaseId = ?");
       $select->execute([$approveId]);
       $select = $select->fetch();
       $totalPrice -= $select['Remained'];
-      $debit  = $totalPrice + $select['tax'] + $select['costOnPay'];
-      $accounting = 'INSERT INTO accounting (AccountName,debit) VALUE (?,?)';
+      $accounting = 'INSERT INTO accounting (AccountName,credit) VALUE (?,?)';
       $accounting =  $this->dbConnction()->prepare($accounting);
-      $accounting->execute(['Account Purchase cost', $debit]);
+      $accounting->execute(['Account Return Purchase', $select['paid']]);
       //insert supplier account 
       $supplieraccounting = $this->dbConnction()->prepare("SELECT remainedBefor  FROM supplieraccounting ORDER BY `supplieraccounting`.`supplierAccountingId` DESC LIMIT 1");
       $supplieraccounting->execute();
       $supplieraccounting = $supplieraccounting->fetch();
       if ($supplieraccounting['remainedBefor'] > 0) {
-        $remainedBefor = $supplieraccounting['remainedBefor'] + $select['Remained'];
+        $remainedBefor = $supplieraccounting['remainedBefor'] - $select['Remained'];
       } else {
         $remainedBefor = $select['Remained'];
       }
 
-      $supplier = 'INSERT INTO supplieraccounting (supplierId,invoiceNumber,paid,remained,remainedBefor,date) VALUE (?,?,?,?,?,?)';
+      $supplier = 'INSERT INTO supplieraccounting (supplierId,invoiceNumber,ReceivedForReturn,remainedForReturn,remainedBefor,date) VALUE (?,?,?,?,?,?)';
       $supplier =  $this->dbConnction()->prepare($supplier);
-      $supplier->execute([$select['supplierId'], $select['invoiceNumber'], $select['paid'], $select['Remained'], $remainedBefor, $now]);
-
+      $supplier->execute([$select['supplierId'],$select['invoiceNumber'],$select['paid'], $select['Remained'], $remainedBefor,$now]);
+      
       //end insert supplier account
 
-      // end Insert accounting 
+      // Insert accounting 
       $update = 'UPDATE purchases SET approved =? WHERE purchaseId=?';
       $update = $this->dbConnction()->prepare($update);
       $update->execute([1, $approveId]);
@@ -281,9 +270,8 @@ class Purchase extends connection
     }
   }
 
-  public function deletePurh($id)
-  {
-    try {
+  public function deletePurh($id){
+    try{
       $purchase = 'DELETE FROM purchases WHERE purchaseId=?';
       $purchase = $this->dbConnction()->prepare($purchase);
       $purchase->execute([$id]);
@@ -292,8 +280,34 @@ class Purchase extends connection
       $query = $this->dbConnction()->prepare($query);
       $query->execute([$id]);
       return true;
-    } catch (Exception $e) {
+    }catch(Exception $e){
       return $e->getMessage();
     }
+  }
+  public function goeInvoicesNumber($id)
+  {
+    try{
+    $query = $this->dbConnction()->prepare("SELECT * FROM purchases where supplierId =?");
+    $query->execute([$id]);
+    return $query->fetchAll();
+    }catch(Exception $e){
+      return $e->getMessage();
+    }
+  }
+
+  public function WholesalePayPrice($productId,$invoiceNum)
+  {
+    try {
+      $invoiceNumber = $this->dbConnction()->prepare("SELECT purchaseId,invoiceNumber FROM purchases where invoiceNumber ='$invoiceNum' and type = 1");
+      $invoiceNumber->execute();
+      $purchaseId = $invoiceNumber->fetch();
+    $query = $this->dbConnction()->prepare("SELECT  WholesalePayPrice FROM purchasedetails
+                                          where productId = ? AND purchaseId = ? ");
+    $query->execute([$productId,$purchaseId['purchaseId']]);
+    return $query->fetch();
+  } catch (Exception $e) {
+    echo $e->getMessage();
+  }
+  
   }
 }

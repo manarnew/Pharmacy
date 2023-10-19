@@ -18,9 +18,9 @@ class purchaseController extends Purchase{
        }
     }
     public function purchaseDetailsAdd($purchaseId,$productId,$endDate,$wholesaleUnitId,$WholesaleQty,$WholesalePayPrice
-    ,$WholesaleSalePrice,$hasChildUnit,$RetailUnitId,$RetailSalePrice,$RetailPayPrice,$RetailQty,$TotalRetailQty,$batchNumber){
+    ,$WholesaleSalePrice,$hasChildUnit,$RetailUnitId,$RetailSalePrice,$RetailPayPrice,$RetailQty,$TotalRetailQty,$batchNumber,$madeAt){
      $check =$this->purchaseDetailsInvoice($purchaseId,$productId,$endDate,$wholesaleUnitId,$WholesaleQty,$WholesalePayPrice
-     ,$WholesaleSalePrice,$hasChildUnit,$RetailUnitId,$RetailSalePrice,$RetailPayPrice,$RetailQty,$TotalRetailQty,$batchNumber);
+     ,$WholesaleSalePrice,$hasChildUnit,$RetailUnitId,$RetailSalePrice,$RetailPayPrice,$RetailQty,$TotalRetailQty,$batchNumber,$madeAt);
         if($check === true){
         return true;
        }else if($check === -1){
@@ -37,18 +37,24 @@ class purchaseController extends Purchase{
             echo 'Something went wrong';
            }
     }
-
+    public function deletePurchase($id){
+        if($this->deletePurh($id)){
+            return true;
+           }else{
+            return false;
+           }
+    }
     public function edit($invoiceNumber,$details,$supplierId,$purchaseId,$Remained,$tax,$paid,$costOnPay){
         if($invoiceNumber==''||$supplierId==''||$purchaseId==''){
             $_SESSION['flush'] = 'All the filed are required';
-            header("location: ../view/products/details.php?id=$purchaseId");
+            header("location: ../view/purchases/details.php?id=$purchaseId");
             exit;
         }
        if($this->update($invoiceNumber,$details,$supplierId,$purchaseId,$Remained,$tax,$paid,$costOnPay)){
         return true;
        }else{
         $_SESSION['flush'] = 'Something went wrong';
-        header("location: ../view/products/details.php?id=$purchaseId");
+        header("location: ../view/purchases/details.php?id=$purchaseId");
        }
     }
 
@@ -57,7 +63,7 @@ class purchaseController extends Purchase{
         return true;
        }else{
         $_SESSION['flush'] = 'Something went wrong';
-        header("location: ../view/products/details.php?id=$purchaseId");
+        header("location: ../view/purchases/details.php?id=$purchaseId");
        }
     }
 

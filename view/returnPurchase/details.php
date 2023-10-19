@@ -1,8 +1,8 @@
 <?php
 include '/xampp/htdocs/pharmacyapp/view/users/session.php';
 include '../include/dashboard/header.php';
-include '/xampp/htdocs/pharmacyapp/model/purchase.php';
-$pur = new Purchase();
+include '/xampp/htdocs/pharmacyapp/model/returnPurchase.php';
+$pur = new ReturnPurchase();
 $purchase = $pur->details($_GET['id']);
 $getDetails = $pur->getPurchaseDetail($_GET['id']);
 ?>
@@ -72,20 +72,12 @@ $getDetails = $pur->getPurchaseDetail($_GET['id']);
                 </tr>
                
                 <tr>
-                  <td class="width30">Paid</td>
+                  <td class="width30">Received</td>
                   <td class="width30"><?php echo $purchase['paid'] ?> </td>
                 </tr>
                 <tr>
                   <td class="width30">Remained</td>
                   <td class="width30"><?php echo $purchase['Remained'] ?> </td>
-                </tr>
-                <tr>
-                  <td class="width30">Cost on purchase</td>
-                  <td class="width30"><?php echo $purchase['costOnPay'] ?> </td>
-                </tr>
-                <tr>
-                  <td class="width30">Tax</td>
-                  <td class="width30"><?php echo $purchase['tax'] ?> </td>
                 </tr>
                 <tr>
                   <td class="width30">Supplier Name</td>
@@ -153,7 +145,7 @@ $getDetails = $pur->getPurchaseDetail($_GET['id']);
                         <td><?php echo $row['WholesalePayPrice']; ?></td>
                         <td><?php echo ($row['WholesalePayPrice'] * $row['WholesaleQty']); ?></td>
                         <td>
-                        <?php if($purchase['approved']!=1):?>
+                        <?php if($purchase['approved']!=1&&$purchase['paid']===0):?>
                           <button class="btn btn-danger btn-sm" onclick="deleteMedicine(<?php echo $row['purchaseDetailId'] ?>)">Delete</button>
                           <?php endif;?>
                         </td>
@@ -178,60 +170,21 @@ include 'accountModal.php';
 include '../include/dashboard/footer.php';
 ?>
 <script>
-  $('#payInvoiceForm').submit(function(event) {
+  $('#returnInvoiceForm').submit(function(event) {
     event.preventDefault();
     // validation the input 
-    let endDate = $('#endDate').val();
-    if (endDate == '') {
-      toastr.warning('Expiration Date can not be empty');
-      $('#endDate').focus();
-      return false;
-    }
-    let madeAt = $('#madeAt').val();
-    if (madeAt == '') {
-      toastr.warning('Made Date can not be empty');
-      $('#madeAt').focus();
-      return false;
-    }
     let WholesaleQty = $('#WholesaleQty').val();
     if (WholesaleQty == '') {
-      toastr.warning('Wholesale Qty can not be empty')
+      toastr.warning('Return  Qty can not be empty')
       $('#WholesaleQty').focus();
       return false;
     }
-    let WholesalePayPrice = $('#WholesalePayPrice').val();
-    if (WholesalePayPrice == '') {
-      toastr.warning('Wholesale pay price can not be empty');
-      $('#WholesalePayPrice').focus();
-      return false;
-    }
+  
 
-    let hasChildUnit = $('#hasChildUnit').val();
-    if (hasChildUnit == 0) {
-      let WholesaleSalePrice = $('#WholesaleSalePrice').val();
-      if (WholesaleSalePrice == '' || WholesaleSalePrice == 0) {
-        toastr.warning('Wholesale sale price can not be empty');
-        $('#WholesaleSalePrice').focus();
-        return false;
-      }
-    } else {
-      let RetailSalePrice = $('#RetailSalePrice').val();
-      if (RetailSalePrice == '' || RetailSalePrice == 0) {
-        toastr.warning('Retail unit sale price can not be empty');
-        $('#RetailSalePrice').focus();
-        return false;
-      }
-      let RetailQty = $('#RetailQty').val();
-      if (RetailQty == '' || RetailQty == 0) {
-        toastr.warning('Retail unit Qty  can not be empty');
-        $('#RetailQty').focus();
-        return false;
-      }
-    }
     // inset data to the purchase details
     let formData = new FormData($(this)[0]);
     $.ajax({
-      url: '/pharmacyapp/includes/purchaseOpration.php',
+      url: '/pharmacyapp/includes/returnPurchaseOpration.php',
       type: 'POST',
       data: formData,
       contentType: false,
@@ -260,7 +213,7 @@ include '../include/dashboard/footer.php';
       "medicineIDForDelete": id
     };
     $.ajax({
-      url: '/pharmacyapp/includes/purchaseOpration.php',
+      url: '/pharmacyapp/includes/returnPurchaseOpration.php',
       type: 'POST',
       data: data,
       success: function(response) {
@@ -300,23 +253,12 @@ include '../include/dashboard/footer.php';
   }
 
   function emptyTheInput() {
-    document.getElementById('WholesaleSalePrice').value = '';
+
     document.getElementById('WholesalePayPrice').value = '';
     document.getElementById('WholesaleQty').value = '';
     document.getElementById('wholesaleUnitName').value = '';
     document.getElementById('wholesaleUnitId').value = '';
 
-    document.getElementById('hasChildUnit').value = 0;
-    document.getElementById('TotalRetailQty').value = '';
-    document.getElementById('RetailUnitId').value = '';
-    document.getElementById('RetailUnitName').value = '';
-    document.getElementById('RetailPayPrice').value = '';
-    document.getElementById('RetailQty').value = '';
-    document.getElementById('RetailSalePrice').value = '';
-
-    document.getElementById('endDate').value = '';
-    document.getElementById('madeAt').value = '';
-    document.getElementById('batchNumber').value = '';
   }
   // $('#Edit').click(function() {});
 </script>
@@ -324,29 +266,29 @@ include '../include/dashboard/footer.php';
 
 <script>
   // for calculate the remained price
-    $(document).on('input', '#paid', function() {
-    let paid = document.getElementById('paid').value;
+    $(document).on('input', '#ReceivedForReturn', function() {
+    let ReceivedForReturn = document.getElementById('ReceivedForReturn').value;
     let forCulc = document.getElementById('forCulc').value;
-    if((forCulc-paid)<0){
-      toastr.warning("Paid price can not be bigger than the total price");
-      $('#paid').focus();
+    if((forCulc-ReceivedForReturn)<0){
+      toastr.warning("Received price can not be bigger than the total price");
+      $('#ReceivedForReturn').focus();
       return false;
     }
-    document.getElementById('Remained').value =  forCulc - paid ;
+    document.getElementById('remainedForReturn').value =  forCulc - ReceivedForReturn ;
     });
  </script>
 
  <script>
   // for calculate the remained price
-    $(document).on('input', '#paid1', function() {
-    let paid = document.getElementById('paid1').value;
+    $(document).on('input', '#paid', function() {
+    let paid = document.getElementById('paid').value;
     let forCulc = document.getElementById('forCulc1').value;
     if((forCulc-paid)<0){
       toastr.warning("Paid price can not be bigger than the total price");
       $('#paid').focus();
       return false;
     }
-    document.getElementById('Remained1').value =  forCulc - paid ;
+    document.getElementById('Remained').value =  forCulc - paid ;
     console.log(paid);
     });
  </script>

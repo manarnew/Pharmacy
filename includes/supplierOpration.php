@@ -50,3 +50,19 @@ if(isset($_POST['updateSup'],$_POST['name'],$_POST['phone'],$_POST['address'],$_
       exit;
    }
 }
+
+if(isset($_POST['PayForSupplier'])){
+   $id=$_POST['supplierId'];
+   $remained=$_POST['remained'];
+   $payPrice=$_POST['payPrice'];
+   $sup = new supplierController();
+   $sup =$sup->payForSupplier($id,$remained,$payPrice);
+  if($sup ===true ){
+  $_SESSION['flush'] = 'Payment completed successfully '; 
+  header("location: ../view/suppliers/details.php?supplierId=$id");
+  exit;
+  }else{
+   $_SESSION['flush'] = "Error  $sup";
+   header("location: ../view/suppliers/details.php?supplierId=$id");
+  }
+}

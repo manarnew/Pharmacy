@@ -50,7 +50,7 @@ $prp = $Product->index();
               <table id="product" class="table table-bordered table-striped">
                 <thead>
                   <tr>
-                    <th>ID</th>
+                   <th>serial</th>
                     <th>Medicine Name</th>
                     <th>Category</th>
                     <th>Added date</th>
@@ -59,9 +59,9 @@ $prp = $Product->index();
                   </tr>
                 </thead>
                 <tbody>
-                  <?php foreach ($prp as $row) :  ?>
+                  <?php $i = 0; foreach ($prp as $row) :  ?>
                     <tr>
-                      <td><?php echo $row['productId']; ?></td>
+                      <td><?php $i++ ;echo $i  ;?></td>
                       <td><?php echo $row['productName']; ?></td>
                       <td><?php echo $row['categoryName']; ?></td>
                       <td><?php echo $row['addedDate']; ?></td>

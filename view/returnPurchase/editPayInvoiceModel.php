@@ -16,43 +16,16 @@
        </div>
        <div class="modal-body" >
 
-         <form method="post" action="/pharmacyapp/includes/purchaseOpration.php">
+         <form method="post" action="/pharmacyapp/includes/returnPurchaseOpration.php">
            <div class="form-group">
              <label class="form-control-label" for="prependedInput">Pay invoice number</label>
              <div class="controls">
                <div class="input-prepend input-group">
-                 <input id="invoiceNumber" value="<?php echo $purs['invoiceNumber'] ?>" class="form-control" size="16" type="text" name="invoiceNumber">
+                 <input id="invoiceNumber" readonly value="<?php echo $purs['invoiceNumber'] ?>" class="form-control" size="16" type="text" name="invoiceNumber">
                  <input id="purchaseId" value="<?php echo $purchase['purchaseId'] ?>" class="form-control" size="16" type="hidden" name="purchaseId">
                </div>
              </div>
            </div>
-
-           <div class="form-group">
-             <label class="form-control-label" for="appendedInput">Suppliers</label>
-             <div class="controls">
-               <div class="input-group">
-                 <select id="supplierId" name="supplierId" class="form-control" size="1" required>
-                   <option value="<?php echo $purs['supplierId']; ?>"><?php echo $purs['supplierName'] ?></option>
-                   <?php foreach ($sup as $supp) :
-                      if ($supp['supplierId'] == $purs['supplierId']) {
-                      } else {
-                    ?>
-                       <option value="<?php echo $supp['supplierId']; ?>"><?php echo $supp['supplierName'] ?></option>
-                   <?php }
-                    endforeach; ?>
-                 </select>
-               </div>
-             </div>
-           </div>
-           <div class="form-group">
-             <label class="form-control-label" for="prependedInput">Tax</label>
-             <div class="controls">
-               <div class="input-prepend input-group">
-                 <input id="tax" value="<?php echo $purchase['tax'] ?>"  class="form-control" size="16" type="number" name="tax">
-               </div>
-             </div>
-           </div>
-
            <div class="form-group">
              <label class="form-control-label" for="prependedInput">Paid</label>
              <div class="controls">
@@ -67,19 +40,11 @@
              <div class="controls">
                <div class="input-prepend input-group">
                  <input id="Remained" readonly  value="<?php echo $purchase['Remained'] ?>"  class="form-control" size="16" type="number" name="Remained">
-                 <input id="forCulc" value="<?php echo $totalPrice ?>" class="form-control" size="16" type="number" name="forCulc">
+                 <input id="forCulc1" value="<?php echo $totalPrice ?>" class="form-control" size="16" type="number" name="forCulc">
                 </div>
              </div>
            </div>
 
-           <div class="form-group">
-             <label class="form-control-label" for="prependedInput">Cost on purchase</label>
-             <div class="controls">
-               <div class="input-prepend input-group">
-                 <input id="costOnPay" class="form-control" value="<?php echo $purchase['costOnPay'] ?>" size="16" type="number" name="costOnPay">
-               </div>
-             </div>
-           </div>
            <div class="form-group">
              <label class="form-control-label" for="prependedInput">Details</label>
              <div class="controls">
