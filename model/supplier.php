@@ -1,6 +1,6 @@
 <?php
 
-include '/xampp/htdocs/pharmacyapp/database/connection.php';
+include $_SERVER['DOCUMENT_ROOT'] .'/pharmacyapp/database/connection.php';
 class Supplier extends connection
 {
   public function add($supplierName, $phone, $address)
@@ -27,6 +27,15 @@ class Supplier extends connection
 
   public function delete($id)
   {
+    $check = $query = $this->dbConnction()->prepare("SELECT supplierId  FROM purchases where supplierId = ?
+    LIMIT 1");
+    $check->execute([$id]);
+    $supplierId = $query->fetch();
+    if($supplierId > 0){
+      $_SESSION['flush'] = 'This supplier related with purchases can not be deleted';
+      header("location: ../view/suppliers/suppliers.php");
+      exit;
+    }
     $query = 'DELETE FROM suppliers WHERE supplierId=?';
     $query = $this->dbConnction()->prepare($query);
     $query->execute([$id]);
@@ -79,9 +88,26 @@ class Supplier extends connection
       $supplier =  $this->dbConnction()->prepare($supplier);
       $supplier->execute([$id,$payPrice, $remained, $remained,$now]);
 
-      $accounting = 'INSERT INTO accounting (AccountName,debit) VALUE (?,?)';
+      $accounting = 'INSERT INTO accounting (AccountName,debit,date) VALUE (?,?)';
       $accounting =  $this->dbConnction()->prepare($accounting);
-      $accounting->execute(['Account pay for suppliers', $payPrice]);
+      $accounting->execute(['Account pay for suppliers', $payPrice,$now]);
+
+      return true;
+    }catch(Exception $e){
+      return $e->getMessage();
+    }
+  }
+  public function receivedSupplier($id,$remainedReceive,$receivedPrice){
+    try
+    {
+      $now = date("Y/m/d");
+      $supplier = 'INSERT INTO supplieraccounting (supplierId,ReceivedForReturn,remainedForReturn,remainedBefor,date) VALUE (?,?,?,?,?)';
+      $supplier =  $this->dbConnction()->prepare($supplier);
+      $supplier->execute([$id,$receivedPrice, $remainedReceive, -$remainedReceive,$now]);
+
+      $accounting = 'INSERT INTO accounting (AccountName,credit,,date) VALUE (?,?)';
+      $accounting =  $this->dbConnction()->prepare($accounting);
+      $accounting->execute(['Account receive for suppliers', $receivedPrice,$now]);
 
       return true;
     }catch(Exception $e){

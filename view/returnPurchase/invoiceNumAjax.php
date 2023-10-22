@@ -1,5 +1,5 @@
 <?php
-include '/xampp/htdocs/pharmacyapp/model/returnPurchase.php';
+include  $_SERVER['DOCUMENT_ROOT'] .'/pharmacyapp/model/returnPurchase.php';
 if(isset($_GET['supplierId'])){
    $id=$_GET['supplierId'];
    $purchase = new ReturnPurchase();

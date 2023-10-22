@@ -146,7 +146,30 @@
             </li>
           </ul>
         </li>
-
+        <li class="nav-item">
+          <a href="/pharmacyapp/view/units/units.php" class="nav-link">
+            <i class="nav-icon fas fa-book"></i>
+            <p>Show units</p>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="/pharmacyapp/view/store/store.php" class="nav-link">
+            <i class="nav-icon fas fa-columns"></i>
+            <p>store movement</p>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="/pharmacyapp/view/batches/batches.php" class="nav-link">
+            <i class="nav-icon far fa-calendar-alt"></i>
+            <p>batches movement</p>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="/pharmacyapp/view/accounting/accounting.php" class="nav-link">
+            <i class="nav-icon far fa-calendar-alt"></i>
+            <p>Accounting movement</p>
+          </a>
+        </li>
       </ul>
     </nav>
     <!-- /.sidebar-menu -->

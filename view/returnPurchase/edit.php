@@ -1,7 +1,7 @@
 <?php
-include '/xampp/htdocs/pharmacyapp/view/users/session.php';
+include  $_SERVER['DOCUMENT_ROOT'] .'/pharmacyapp/view/users/session.php';
 include '../include/dashboard/header.php';
-include '/xampp/htdocs/pharmacyapp/model/product.php';
+include  $_SERVER['DOCUMENT_ROOT'] .'/pharmacyapp/model/product.php';
 $get = new Product();
 $sup = $get->getSuppliers();
 $cat = $get->getCat();

@@ -1,5 +1,5 @@
 <?php
-include '/xampp/htdocs/pharmacyapp/model/purchase.php';
+include  $_SERVER['DOCUMENT_ROOT'] .'/pharmacyapp/model/purchase.php';
 $pur = new Purchase();
 $purchase = $pur->details($_GET['id']);
 $getDetails = $pur->getPurchaseDetail($_GET['id']);

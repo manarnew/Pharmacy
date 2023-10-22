@@ -1,5 +1,5 @@
 <?php
-include '/xampp/htdocs/pharmacyapp/database/connection.php';
+include $_SERVER['DOCUMENT_ROOT'] .'/pharmacyapp/database/connection.php';
 
 class User extends connection{
     // Add user to database
@@ -71,5 +71,26 @@ class User extends connection{
         if($query['userId'] > 0){
           return $query;
         }
+     }
+     public function delete($id)
+     {
+      $auth = $_SESSION['Id'];
+       $check = $query = $this->dbConnction()->prepare("SELECT userId  FROM products where userId = ?
+       LIMIT 1");
+       $check->execute([$id]);
+       $userId = $query->fetch();
+       if($userId > 0 || $auth == $id){
+         $_SESSION['flush'] = 'This user  related with products can not be deleted';
+         header("location: ../view/users/showUser.php");
+         exit;
+       }
+       $query = 'DELETE FROM users WHERE userId=?';
+       $query = $this->dbConnction()->prepare($query);
+       $query->execute([$id]);
+       if ($query->rowCount()) {
+         return true;
+       } else {
+         return false;
+       }
      }
 }

@@ -17,8 +17,8 @@ class ReturnPurchaseController extends ReturnPurchase{
         exit;
        }
     }
-    public function purchaseDetailsReturn($purchaseId,$productId,$wholesaleUnitId,$WholesaleQty,$WholesalePayPrice){
-     $check =$this->purchaseDetailsReturnInvoice($purchaseId,$productId,$wholesaleUnitId,$WholesaleQty,$WholesalePayPrice);
+    public function purchaseDetailsReturn($purchaseId,$productId,$wholesaleUnitId,$WholesaleQty,$WholesalePayPrice,$RetailQty,$hasChildUnit,$batchNumber){
+     $check =$this->purchaseDetailsReturnInvoice($purchaseId,$productId,$wholesaleUnitId,$WholesaleQty,$WholesalePayPrice,$RetailQty,$hasChildUnit,$batchNumber);
         if($check === true){
         return true;
        }else if($check === -1){

@@ -17,7 +17,7 @@
             <form method="post" action="../../includes/categoryOpration.php">
              <div class="d-flex justify-content-center mb-4">
                <div class="form-outline me-3" style="width: 14rem">
-                    <input type="text" value=" <?php echo $cat['categoryName'] ;?>" name="category"  class="form-control"  placeholder="Category name">
+                    <input type="text" value=" <?php echo $cat['categoryName'] ;?>" name="category"  class="form-control" required  placeholder="Category name">
                     <input type="hidden" value=" <?php echo $cat['categoryId'] ;?>" name="categoryId"  class="form-control"  placeholder="Category name">
                </div>
                   <button type="submit" name="updateCat" class="btn btn-primary sm" style=" margin-left: 10px;">Save</button>

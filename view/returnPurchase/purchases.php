@@ -1,6 +1,6 @@
 <?php
-include '/xampp/htdocs/pharmacyapp/view/users/session.php';
-include '/xampp/htdocs/pharmacyapp/model/returnPurchase.php';
+include  $_SERVER['DOCUMENT_ROOT'] .'/pharmacyapp/view/users/session.php';
+include  $_SERVER['DOCUMENT_ROOT'] .'/pharmacyapp/model/returnPurchase.php';
 include '../include/dashboard/dataTableHeader.php';
 $purchase = new ReturnPurchase();
 $pur = $purchase->index();

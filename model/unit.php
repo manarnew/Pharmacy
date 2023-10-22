@@ -1,5 +1,5 @@
 <?php
-include '/xampp/htdocs/pharmacyapp/database/connection.php';
+include $_SERVER['DOCUMENT_ROOT'] .'/pharmacyapp/database/connection.php';
 class Unit extends connection{
   public function add($unitName,$isMaster){
     $query = 'INSERT INTO units (unitName,isMaster) VALUE (?,?)';
@@ -22,6 +22,15 @@ class Unit extends connection{
   }
 
   public function delete($id){
+    $check = $query = $this->dbConnction()->prepare("SELECT productId  FROM products where wholesaleUnitId = ?
+    OR RetailUnitId = ? LIMIT 1");
+    $check->execute([$id,$id]);
+    $productId = $query->fetch();
+    if($productId > 0){
+      $_SESSION['flush'] = 'This unit related with product can not be deleted';
+      header("location: ../view/units/units.php");
+      exit;
+    }
      $query = 'DELETE FROM units WHERE unitId=?';
      $query = $this->dbConnction()->prepare($query);
      $query->execute([$id]);
@@ -39,6 +48,15 @@ class Unit extends connection{
   }
 
   public function update($unitName,$isMaster,$id){
+    $check = $query = $this->dbConnction()->prepare("SELECT productId  FROM products where wholesaleUnitId = ?
+    OR RetailUnitId = ? LIMIT 1");
+    $check->execute([$id,$id]);
+    $productId = $query->fetch();
+    if($productId > 0){
+      $_SESSION['flush'] = 'This unit related with product can not be Updated';
+      header("location: ../view/units/units.php");
+      exit;
+    }
      $query = 'UPDATE units SET unitName =? ,isMaster = ? WHERE unitId=?';
      $query = $this->dbConnction()->prepare($query);
      $query->execute([$unitName,$isMaster,$id]);

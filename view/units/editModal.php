@@ -19,7 +19,7 @@
             <label class="form-control-label" for="prependedInput">Uint Name</label>
             <div class="controls">
                 <div class="input-prepend input-group">
-                <input type="text" value="<?php echo $un['unitName'] ;?>" name="unitName"  class="form-control"  placeholder="Unit name">
+                <input type="text" value="<?php echo $un['unitName'] ;?>" name="unitName"  class="form-control"  placeholder="Unit name" required>
                 <input type="hidden" value="<?php echo $un['unitId'] ;?>" name="unitId"  class="form-control" >
                 </div>
             </div>

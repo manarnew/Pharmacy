@@ -1,7 +1,7 @@
 <?php
-include '/xampp/htdocs/pharmacyapp/view/users/session.php';
+include  $_SERVER['DOCUMENT_ROOT'] . '/pharmacyapp/view/users/session.php';
 include '../include/dashboard/header.php';
-include '/xampp/htdocs/pharmacyapp/model/returnPurchase.php';
+include  $_SERVER['DOCUMENT_ROOT'] . '/pharmacyapp/model/returnPurchase.php';
 $get = new ReturnPurchase();
 $sup = $get->getSuppliers();
 
@@ -49,7 +49,7 @@ $sup = $get->getSuppliers();
                     <select class="form-control select2" name="supplierId" id="supplierId" onchange="supplierChange(this.value);" style="width: 100;">
                       <?php foreach ($sup as $supp) : ?>
                         <option value="<?php echo $supp['supplierId']; ?>"><?php echo $supp['supplierName'] ?></option>
-                      <?php endforeach; ?>
+                      <?php  endforeach; ?>
                     </select>
                   </div>
                 </div>
@@ -58,7 +58,7 @@ $sup = $get->getSuppliers();
                   <div class="controls">
                     <label class="form-control-label" for="appendedInput">Purchase invoices numbers</label>
                     <select class="form-control select2" name="invoiceNumber" id="invoiceNumber" style="width: 100;">
-
+                    
                     </select>
                   </div>
                 </div>

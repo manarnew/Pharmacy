@@ -1,6 +1,6 @@
 <?php 
-include '/xampp/htdocs/pharmacyapp/view/users/session.php';
-include '/xampp/htdocs/pharmacyapp/model/supplier.php';
+include $_SERVER['DOCUMENT_ROOT'] .'/pharmacyapp/view/users/session.php';
+include $_SERVER['DOCUMENT_ROOT'] .'/pharmacyapp/model/supplier.php';
 include '../include/dashboard/dataTableHeader.php' ;
 $supplier = new Supplier();
 $supp = $supplier->supplierAccounting();

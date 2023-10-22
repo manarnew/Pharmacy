@@ -1,6 +1,6 @@
 <?php 
-include '/xampp/htdocs/pharmacyapp/view/users/session.php';
-include '/xampp/htdocs/pharmacyapp/model/category.php';
+include $_SERVER['DOCUMENT_ROOT'] .'/pharmacyapp/view/users/session.php';
+include $_SERVER['DOCUMENT_ROOT'] .'/pharmacyapp/model/category.php';
 include '../include/dashboard/header.php' ;
 $cat = new Category;
 $categories =$cat->index();
@@ -13,12 +13,12 @@ $categories =$cat->index();
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1 class="m-0">Category</h1>
+            <h1 class="m-0">Categories</h1>
           </div><!-- /.col -->
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="#">Home</a></li>
-              <li class="breadcrumb-item active">Category management</li>
+              <li class="breadcrumb-item active">Categories management</li>
             </ol>
           </div><!-- /.col -->
         </div><!-- /.row -->

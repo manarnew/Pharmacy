@@ -2,7 +2,7 @@
 include '../model/product.php';
 class productController extends Product{
     public function productAdd($productName,$categoryId,$details,$barcode,$newFileName,$wholesaleUnitId,$hasChildUnit,$RetailUnitId){
-        if($productName==null||$categoryId==null||$barcode==null||$newFileName==null||$hasChildUnit==null||$wholesaleUnitId==null){
+        if($productName==null||$categoryId==null||$barcode==null||$hasChildUnit==null||$wholesaleUnitId==null){
            $_SESSION['flush'] = 'All the filed are required';
            header("location: ../view/products/addProduct.php");
            exit;
@@ -32,7 +32,7 @@ class productController extends Product{
     }
 
     public function edit($productName,$categoryId,$details,$barcode,$image,$wholesaleUnitId,$hasChildUnit,$RetailUnitId,$productId){
-        if($productName==null||$categoryId==null||$barcode==null||$image==null||$hasChildUnit==null||$wholesaleUnitId==null){
+        if($productName==null||$categoryId==null||$barcode==null||$hasChildUnit==null||$wholesaleUnitId==null){
             $_SESSION['flush'] = 'All the filed are required';
             header("location: ../view/products/editProduct.php?productId=$productId");
             exit;

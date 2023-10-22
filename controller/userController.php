@@ -63,4 +63,13 @@ class userController extends User{
       return false;
     }
   }
+
+  public function deleteUser(){
+    if($this->delete($this->username)){
+        return true;
+       }else{
+        $_SESSION['flush'] = 'Something went wrong';
+        header("location: ../view/users/showUser.php");
+       }
+}
 }

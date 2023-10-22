@@ -1,5 +1,5 @@
 <?php
-include '/xampp/htdocs/pharmacyapp/database/connection.php';
+include $_SERVER['DOCUMENT_ROOT'] .'/pharmacyapp/database/connection.php';
 class Login extends connection{
     protected function getUser($email,$mdPass){
         $check = $query = $this->dbConnction()->prepare("SELECT *  FROM users where password = ?

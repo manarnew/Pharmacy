@@ -9,7 +9,7 @@ if(isset($_POST['productSubmit'])){
     $hasChildUnit =$_POST['hasChildUnit'];
     $RetailUnitId =$_POST['RetailUnitId'];
     $details =$_POST['details'];
-   $barcode=($_POST['barcode']==null)?uniqid():$_POST['barcode'];
+   $barcode=($_POST['barcode']==null)?(uniqid().microtime(true)):$_POST['barcode'];
    if ($_FILES["image"]["error"] == UPLOAD_ERR_OK){
       $folder = "../view/include/images/";
       if(!file_exists($folder))mkdir($folder);
@@ -54,7 +54,7 @@ if(isset($_POST['updateProduct'])){
     $wholesaleUnitId =$_POST['wholesaleUnitId'];
     $hasChildUnit =$_POST['hasChildUnit'];
     $RetailUnitId =$_POST['RetailUnitId'];
-   $barcode=$_POST['barcode'];
+   $barcode=($_POST['barcode']==null)?(uniqid().microtime(true)):$_POST['barcode'];
    $image=$_POST['oldImage'];
       if(isset($_FILES["image"]["name"])){
          unlink("../include/images/$image");

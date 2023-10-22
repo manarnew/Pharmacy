@@ -1,7 +1,7 @@
 <?php
-include '/xampp/htdocs/pharmacyapp/view/users/session.php';
+include $_SERVER['DOCUMENT_ROOT'] .'/pharmacyapp/view/users/session.php';
 include '../include/dashboard/header.php';
-include '/xampp/htdocs/pharmacyapp/model/purchase.php';
+include $_SERVER['DOCUMENT_ROOT'] .'/pharmacyapp/model/purchase.php';
 $pur = new Purchase();
 $purchase = $pur->details($_GET['id']);
 $getDetails = $pur->getPurchaseDetail($_GET['id']);
@@ -34,15 +34,15 @@ $getDetails = $pur->getPurchaseDetail($_GET['id']);
             </div>
             <!-- /.card-header -->
             <div class="card-body">
-            <?php if (!empty($_SESSION["flush"])) : ?>
-            <div class="alert alert-success alert-dismissible fade show" role="alert" id="alert-session">
-              <?php print_r($_SESSION["flush"]);
-              unset($_SESSION["flush"]); ?>
-              <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-          <?php endif; ?>
+              <?php if (!empty($_SESSION["flush"])) : ?>
+                <div class="alert alert-success alert-dismissible fade show" role="alert" id="alert-session">
+                  <?php print_r($_SESSION["flush"]);
+                  unset($_SESSION["flush"]); ?>
+                  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+              <?php endif; ?>
               <table id="detailTable" class="table table-bordered table-hover">
                 <tr>
                   <td class="width30">Invoice number</td>
@@ -70,7 +70,7 @@ $getDetails = $pur->getPurchaseDetail($_GET['id']);
                   <td class="width30">Total price</td>
                   <td class="width30"><?php echo $totalPrice ?> </td>
                 </tr>
-               
+
                 <tr>
                   <td class="width30">Paid</td>
                   <td class="width30"><?php echo $purchase['paid'] ?> </td>
@@ -103,34 +103,24 @@ $getDetails = $pur->getPurchaseDetail($_GET['id']);
                   <td class="width30">Invoice note</td>
                   <td class="width30"> <?php echo $purchase['details'] ?></td>
                 </tr>
-                <tr>
+                <tr class="noPrint">
                   <td class="width30">Edit invoice</td>
-                  <?php if($purchase['approved']!=1):?>
-                  <td class="width30"> <button type="button" style="margin-top: 10px;" class="btn btn-info" data-toggle="modal" data-target="#modal-edit<?php $purchase['purchaseId'] ?>">
-                      Edit
-                    </button>
-                    <?php endif;?>
-                  </td>
-                </tr>
-                <tr>
-                  <td class="width30">Edit invoice</td>
-                  <td class="width30">
-                      <?php if($purchase['approved']!=1):?>
-                    <?php if($purchase['tax']==0 && $purchase['paid']==0 && $purchase['costOnPay']==0 && $purchase['Remained']==0):?>
-                     <button type="button" style="margin-top: 10px;" class="btn btn-info" data-toggle="modal" data-target="#modal-account<?php $purchase['purchaseId'] ?>">
-                      Add accounting
-                    </button>
-                    <?php endif;?>
-                    <?php endif;?>
-                  </td>
+                  <?php if ($purchase['approved'] != 1) : ?>
+                    <td class="width30"> <button type="button" style="margin-top: 10px;" class="btn btn-info" data-toggle="modal" data-target="#modal-edit<?php $purchase['purchaseId'] ?>">
+                        Edit
+                      </button>
+                    <?php endif; ?>
+                    </td>
                 </tr>
               </table>
+              <br>
+              <div class=" text-center" style="font-size:25px;background-color:beige;">Medicines Details</div>
               <div class="text-center">
-              <?php if($purchase['approved']!=1):?>
-                <button type="button" style="margin-top: 10px;" class="btn btn-info" data-toggle="modal" data-target="#modal-info<?php $purchase['purchaseId'] ?>">
-                  Add medicine
-                </button>
-                <?php endif;?>
+                <?php if ($purchase['approved'] != 1) : ?>
+                  <button type="button" style="margin-top: 10px;" class="btn btn-info noPrint" data-toggle="modal" data-target="#modal-info<?php $purchase['purchaseId'] ?>">
+                    Add medicine
+                  </button>
+                <?php endif; ?>
               </div>
               <div class="card-body table-responsive p-0">
                 <table class="table table-hover text-nowrap">
@@ -141,7 +131,7 @@ $getDetails = $pur->getPurchaseDetail($_GET['id']);
                       <th>Quantity</th>
                       <th>Pay price</th>
                       <th>Total price</th>
-                      <th>Action</th>
+                      <th class="noPrint">Action</th>
                     </tr>
                   </thead>
                   <tbody id="tableData">
@@ -152,15 +142,18 @@ $getDetails = $pur->getPurchaseDetail($_GET['id']);
                         <td><?php echo $row['WholesaleQty']; ?></td>
                         <td><?php echo $row['WholesalePayPrice']; ?></td>
                         <td><?php echo ($row['WholesalePayPrice'] * $row['WholesaleQty']); ?></td>
-                        <td>
-                        <?php if($purchase['approved']!=1):?>
-                          <button class="btn btn-danger btn-sm" onclick="deleteMedicine(<?php echo $row['purchaseDetailId'] ?>)">Delete</button>
-                          <?php endif;?>
+                        <td class="noPrint">
+                          <?php if ($purchase['approved'] != 1) : ?>
+                            <button class="btn btn-danger btn-sm " onclick="deleteMedicine(<?php echo $row['purchaseDetailId'] ?>)">Delete</button>
+                          <?php endif; ?>
                         </td>
                       </tr>
                     <?php endforeach; ?>
                   </tbody>
                 </table>
+              </div>
+              <div class="text-center">
+                <button class="btn btn-info noPrint" id="print">Print</button>
               </div>
             </div>
           </div>
@@ -324,29 +317,35 @@ include '../include/dashboard/footer.php';
 
 <script>
   // for calculate the remained price
-    $(document).on('input', '#paid', function() {
+  $(document).on('input', '#paid', function() {
     let paid = document.getElementById('paid').value;
     let forCulc = document.getElementById('forCulc').value;
-    if((forCulc-paid)<0){
+    if ((forCulc - paid) < 0) {
       toastr.warning("Paid price can not be bigger than the total price");
       $('#paid').focus();
       return false;
     }
-    document.getElementById('Remained').value =  forCulc - paid ;
-    });
- </script>
+    document.getElementById('Remained').value = forCulc - paid;
+  });
+</script>
 
- <script>
+<script>
   // for calculate the remained price
-    $(document).on('input', '#paid1', function() {
+  $(document).on('input', '#paid1', function() {
     let paid = document.getElementById('paid1').value;
     let forCulc = document.getElementById('forCulc1').value;
-    if((forCulc-paid)<0){
+    if ((forCulc - paid) < 0) {
       toastr.warning("Paid price can not be bigger than the total price");
       $('#paid').focus();
       return false;
     }
-    document.getElementById('Remained1').value =  forCulc - paid ;
+    document.getElementById('Remained1').value = forCulc - paid;
     console.log(paid);
-    });
- </script>
+  });
+</script>
+<script>
+  // print
+  $(document).on('click', '#print', function() {
+    print();
+  });
+</script>

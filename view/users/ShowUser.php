@@ -1,6 +1,6 @@
 <?php
-include '/xampp/htdocs/pharnacyapp/view/users/session.php';
-include '/xampp/htdocs/pharnacyapp/model/user.php';
+include $_SERVER['DOCUMENT_ROOT'] .'/pharmacyapp/view/users/session.php';
+include $_SERVER['DOCUMENT_ROOT'] .'/pharmacyapp/model/user.php';
 include '../include/dashboard/dataTableHeader.php';
 $users = new User();
 $users = $users->showUser();
@@ -67,7 +67,7 @@ $users = $users->showUser();
                       <td><?php echo $row['email']; ?></td>
                       <td><?php echo $row['userType'] == 1 ? 'Admin' : 'User'; ?></td>
                       <td>
-                        <a href="../../includes/categoryOpration.php?id=<?php echo $row['userId']; ?>" class="btn btn-danger">Delete</a>
+                        <a href="../../includes/userOpeation.php?idForDelete=<?php echo $row['userId']; ?>" class="btn btn-danger">Delete</a>
                         <button type="button" class="btn btn-default" data-toggle="modal" data-target="#modal-default<?php echo $row['userId']; ?>">
                           Edit
                         </button>

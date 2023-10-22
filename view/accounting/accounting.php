@@ -1,9 +1,9 @@
 <?php
 include $_SERVER['DOCUMENT_ROOT'] .'/pharmacyapp/view/users/session.php';
-include $_SERVER['DOCUMENT_ROOT'] .'/pharmacyapp/model/product.php';
+include $_SERVER['DOCUMENT_ROOT'] .'/pharmacyapp/model/accounting.php';
 include '../include/dashboard/dataTableHeader.php';
-$Product = new Product();
-$prp = $Product->index();
+$store = new Accounting();
+$stores = $store->index();
 ?>
 
 <!-- Content Wrapper. Contains page content -->
@@ -13,12 +13,12 @@ $prp = $Product->index();
     <div class="container-fluid">
       <div class="row mb-2">
         <div class="col-sm-6">
-          <h1 class="m-0">Show products</h1>
+          <h1 class="m-0">Show accounting Movement</h1>
         </div><!-- /.col -->
         <div class="col-sm-6">
           <ol class="breadcrumb float-sm-right">
             <li class="breadcrumb-item"><a href="#">Home</a></li>
-            <li class="breadcrumb-item active">products</li>
+            <li class="breadcrumb-item active">Store</li>
           </ol>
         </div><!-- /.col -->
       </div><!-- /.row -->
@@ -31,49 +31,34 @@ $prp = $Product->index();
     <div class="container-fluid">
       <div class="row">
         <div class="col-12">
-          <?php if (!empty($_SESSION["flush"])) : ?>
-            <div class="alert alert-success alert-dismissible fade show" role="alert" id="alert-session">
-              <?php print_r($_SESSION["flush"]);
-              unset($_SESSION["flush"]); ?>
-              <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-          <?php endif; ?>
           <div class="card">
             <div class="card-header">
-              <a class="btn btn-info float-right" href="addProduct.php">Add Product</a>
-              <h3 class="card-title">All products</h3>
+              <h3 class="card-title">All store movement</h3>
             </div>
             <!-- /.card-header -->
             <div class="card-body">
-              <table id="product" class="table table-bordered table-striped">
-                <thead>
+              <table id="product" class="table table-bordered table-striped" style="background-color:darkblue;">
+                <thead style="color:white;">
                   <tr>
                    <th>serial</th>
-                    <th>Medicine Name</th>
-                    <th>Category</th>
+                    <th>Account Name</th>
+                    <th>debit</th>
+                    <th>credit</th>
                     <th>Added date</th>
-                    <th>Image</th>
-                    <th>Action</th>
                   </tr>
                 </thead>
                 <tbody>
-                  <?php $i = 0; foreach ($prp as $row) :  ?>
-                    <tr>
+                  <?php $i = 0; foreach ($stores as $row) :  ?>
+                    <?php if($row['debit']>0): ?> 
+                     <tr style="background-color: azure;">
+                     <?php elseif($row['credit']>0): ?>
+                      <tr style="background-color:beige;">
+                      <?php endif ?>
                       <td><?php $i++ ;echo $i  ;?></td>
-                      <td>
-                      <a href="details.php?id=<?php echo $row['productId']; ?>">
-                        <?php echo $row['productName']; ?>
-                        </a>
-                      </td>
-                      <td><?php echo $row['categoryName']; ?></td>
-                      <td><?php echo $row['addedDate']; ?></td>
-                      <td><img src="../include/images/<?php echo $row['image'] ?>" height="100" width="150" alt="product image"></td>
-                      <td>
-                        <a href="../../includes/productOpration.php?id=<?php echo $row['productId']; ?>" class="btn btn-danger">Delete</a>
-                        <a href="editProduct.php?id=<?php echo $row['productId']; ?>" class="btn btn-info">Edit</a>
-                      </td>
+                      <td><?php echo $row['AccountName']; ?></td>
+                      <td><?php echo $row['debit']; ?></td>
+                      <td><?php echo $row['credit']; ?></td>
+                      <td><?php echo $row['date']; ?></td>
                     </tr>
                   <?php endforeach; ?>
                 </tbody>

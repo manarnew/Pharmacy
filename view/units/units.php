@@ -1,6 +1,6 @@
-<?php
-include '/xampp/htdocs/pharmacyapp/view/users/session.php';
-include '/xampp/htdocs/pharmacyapp/model/unit.php';
+<?php 
+include $_SERVER['DOCUMENT_ROOT'] .'/pharmacyapp/view/users/session.php';
+include $_SERVER['DOCUMENT_ROOT'] .'/pharmacyapp/model/unit.php';
 include '../include/dashboard/header.php';
 $unit = new Unit();
 $units = $unit->index();

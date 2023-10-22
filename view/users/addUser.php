@@ -1,5 +1,5 @@
 <?php 
- include '/xampp/htdocs/pharnacyapp/view/users/session.php';
+ include $_SERVER['DOCUMENT_ROOT'] .'/pharmacyapp/view/users/session.php';
 include '../include/dashboard/header.php' ;
 ?>
  <!-- Content Wrapper. Contains page content -->

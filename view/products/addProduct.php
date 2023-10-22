@@ -1,9 +1,8 @@
 <?php
-include '/xampp/htdocs/pharmacyapp/view/users/session.php';
+include $_SERVER['DOCUMENT_ROOT'] .'/pharmacyapp/view/users/session.php';
 include '../include/dashboard/header.php';
-include '/xampp/htdocs/pharmacyapp/model/product.php';
+include $_SERVER['DOCUMENT_ROOT'] .'/pharmacyapp/model/product.php';
 $get = new Product();
-$sup = $get->getSuppliers();
 $cat = $get->getCat();
 $un = $get->getUnitMaster();
 $unchild = $get->getUnitChild();
@@ -15,12 +14,12 @@ $unchild = $get->getUnitChild();
     <div class="container-fluid">
       <div class="row mb-2">
         <div class="col-sm-6">
-          <h1 class="m-0">User</h1>
+          <h1 class="m-0">Products</h1>
         </div><!-- /.col -->
         <div class="col-sm-6">
           <ol class="breadcrumb float-sm-right">
             <li class="breadcrumb-item"><a href="#">Home</a></li>
-            <li class="breadcrumb-item active">Add product</li>
+            <li class="breadcrumb-item active">Show products</li>
           </ol>
         </div><!-- /.col -->
       </div><!-- /.row -->

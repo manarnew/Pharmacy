@@ -1,5 +1,8 @@
 <?php
 session_start();
+
+require_once "../model/user.php";
+require_once "../controller/userController.php";
 // add users to the database
 if(isset($_POST["submit"])){
 
@@ -9,8 +12,6 @@ if(isset($_POST["submit"])){
   $repetPass=$_POST["repetPass"];
   $email=$_POST["email"];
 
-  require_once "../model/user.php";
-  require_once "../controller/userController.php";
 
   $signup= new userController($username,$type,$pass
   ,$repetPass,$email);
@@ -65,4 +66,20 @@ if(isset($_POST["update_user"])){
 
  
 
+}
+
+   //delete user
+ 
+   if(isset($_GET['idForDelete'])){
+    $id=$_GET['idForDelete'];
+    $sup = new userController($id,null,null,null,null);
+   if( $sup->deleteUser()){
+   $_SESSION['flush'] = 'user deleted successfully';
+    header("location: ../view/users/showUser.php");
+    exit;
+   }else{
+      $_SESSION['flush'] =  'Error something wrong try agin';
+      header("location: ../view/users/showUser.php");
+      exit;
+   }
 }

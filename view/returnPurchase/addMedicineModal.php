@@ -23,7 +23,7 @@
                  <?php 
                  foreach ($product as $product) : 
                   if($product['hasChildUnit']===1){
-                    $qty = $product['TotalRetailQty']/$product['qty'];
+                    $qty = $product['qty']/$product['WholesaleQty'];
                   }else{
                     $qty = $product['qty'];
                   }
@@ -38,6 +38,9 @@
                  <div class="controls">
                    <div class="input-group">
                      <input type="text" readonly style="color:black;" class="form-control" name="wholesaleUnitName" id="wholesaleUnitName">
+                     <input type="hidden"    name="batchNumber" id="batchNumber">
+                     <input type="hidden"    name="RetailQty" id="RetailQty">
+                     <input type="hidden"    name="hasChildUnit" id="hasChildUnit">
                      <input type="hidden" name="wholesaleUnitId" id="wholesaleUnitId">
                    </div>
                  </div>
@@ -67,7 +70,6 @@
                </div>
              </div>
            </div>
-           
           </div>
           <div class="modal-footer justify-content-between">
             <button type="button" class="btn btn-outline-light" data-dismiss="modal">Close</button>
@@ -95,6 +97,9 @@
           success: function(data) {
            if (data[0].productId > 0) {
              $('.showAllMedicineDetails').show();
+             document.getElementById('batchNumber').value = data[0].batchNumber;
+             document.getElementById('hasChildUnit').value = data[0].hasChildUnit;
+             document.getElementById('RetailQty').value = data[0].RetailQty;
              document.getElementById('WholesalePayPrice').value = data[0].WholesalePayPrice;
              document.getElementById('wholesaleUnitName').value = data[0].wholesaleUnitName;
              document.getElementById('wholesaleUnitId').value = data[0].wholesaleUnitId;

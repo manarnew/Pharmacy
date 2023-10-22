@@ -10,24 +10,27 @@ if(isset($_POST['productSubmit'])){
    // if the invoice number is null well generate random number
    $invoiceNumber=($_POST['invoiceNumber']==null)?uniqid():$_POST['invoiceNumber'];
    if($purchase->purchaseAdd($supplierId,$details,$invoiceNumber)){
-    $_SESSION['flush'] =  'Purchase created successfully';
-    header("location: ../view/purchases/purchases.php");
+    $_SESSION['flush'] =  'Return purchase created successfully';
+    header("location: ../view/returnPurchase/purchases.php");
     exit;
    }else{
       $_SESSION['flush'] =  'Error something wrong try agin';
-      header("location: ../view/purchases/add.php");
+      header("location: ../view/returnPurchase/add.php");
       exit;
    }
 }
 // add pay invoice details
 if(isset($_POST['wholesaleUnitId'])){
+   $batchNumber = $_POST['batchNumber'];
    $purchaseId = $_POST['purchaseId'];
+   $hasChildUnit = $_POST['hasChildUnit'];
+   $RetailQty = $_POST['RetailQty'];
    $productId=$_POST['productId'];
     $wholesaleUnitId =$_POST['wholesaleUnitId'];
     $WholesaleQty =$_POST['WholesaleQty'];
     $WholesalePayPrice =$_POST['WholesalePayPrice'];
     $purchase = new ReturnPurchaseController();
-   $check = $purchase->purchaseDetailsReturn($purchaseId,$productId,$wholesaleUnitId,$WholesaleQty,$WholesalePayPrice);
+   $check = $purchase->purchaseDetailsReturn($purchaseId,$productId,$wholesaleUnitId,$WholesaleQty,$WholesalePayPrice,$RetailQty,$hasChildUnit,$batchNumber);
    if($check === -1){
       echo 'the medicine already added';
    }else if($check === true){
@@ -75,8 +78,8 @@ if (isset($_POST['query'])) {
    $WholesalePayPrice = $pur->WholesalePayPrice($product,$invoiceNumber);
    if ($get['productId']>0) {
         
-      $detail[] = array('hasChildUnit'=>$get['hasChildUnit'],'productId'=>$get['productId'],'wholesaleUnitName'=>$get['unitName'],
-      'wholesaleUnitId'=>$get['unitId'],'WholesalePayPrice'=>$WholesalePayPrice['WholesalePayPrice']);
+      $detail[] = array('hasChildUnit'=>$get['hasChildUnit'],'RetailQty'=>$WholesalePayPrice['RetailQty'],'productId'=>$get['productId'],'wholesaleUnitName'=>$get['unitName'],
+      'wholesaleUnitId'=>$get['unitId'],'WholesalePayPrice'=>$WholesalePayPrice['WholesalePayPrice'],'batchNumber'=>$WholesalePayPrice['batchNumber']);
       echo  json_encode($detail);
    } else {
       $detail[] = array('warning'=>"Medicine not found");

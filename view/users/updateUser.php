@@ -1,7 +1,7 @@
 <?php
- include '/xampp/htdocs/pharnacyapp/view/users/session.php';
+ include $_SERVER['DOCUMENT_ROOT'] .'/pharnacyapp/view/users/session.php';
 include '../include/dashboard/header.php';
-include '/xampp/htdocs/pharnacyapp/model/user.php';
+include $_SERVER['DOCUMENT_ROOT'] .'/pharnacyapp/model/user.php';
 $id = $_GET['id'];
 $prof = new User();
 $info = $prof->getUser($id);

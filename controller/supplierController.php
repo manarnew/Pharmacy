@@ -44,4 +44,17 @@ class supplierController extends Supplier{
             header("location: ../view/suppliers/details.php?supplierId=$id");
            }
     }
+
+    public function receivedForSupplier($id,$remainedReceive,$receivedPrice){
+        if($receivedPrice==''){
+            $_SESSION['flush'] = 'Received price can not be empty';
+            header("location: ../view/suppliers/details.php?supplierId=$id");
+        }
+        if($this->receivedSupplier($id,$remainedReceive,$receivedPrice)){
+            return true;
+           }else{
+            $_SESSION['flush'] = 'Something went wrong';
+            header("location: ../view/suppliers/details.php?supplierId=$id");
+           }
+    }
 }

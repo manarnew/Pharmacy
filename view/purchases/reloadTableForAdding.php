@@ -1,4 +1,4 @@
-<?php include '/xampp/htdocs/pharmacyapp/model/purchase.php';
+<?php include $_SERVER['DOCUMENT_ROOT'] .'/pharmacyapp/model/purchase.php';
 $pur = new Purchase();
 $getDetails = $pur->getPurchaseDetail($_GET['id']);
 ?>

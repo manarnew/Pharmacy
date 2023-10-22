@@ -13,7 +13,7 @@
             <label class="form-control-label" for="prependedInput">parent Name</label>
             <div class="controls">
                 <div class="input-prepend input-group">
-                <input type="text"  name="unitName"  class="form-control"  placeholder="Unit name">
+                <input type="text"  name="unitName"  class="form-control"  placeholder="Unit name" required>
                 </div>
             </div>
            </div>
