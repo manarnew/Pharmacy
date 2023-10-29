@@ -57,7 +57,7 @@ if(isset($_POST['updateProduct'])){
    $barcode=($_POST['barcode']==null)?(uniqid().microtime(true)):$_POST['barcode'];
    $image=$_POST['oldImage'];
       if(isset($_FILES["image"]["name"])){
-         unlink("../include/images/$image");
+         unlink("../view/include/images/$image");
    if ($_FILES["image"]["error"] == UPLOAD_ERR_OK){
       $folder = "../view/include/images/";
       if(!file_exists($folder))mkdir($folder);
@@ -76,6 +76,23 @@ if(isset($_POST['updateProduct'])){
    }else{
       $_SESSION['flush'] =  'Error something wrong try agin';
       header("location: ../view/products/products.php");
+      exit;
+   }
+}
+if(isset($_GET['productIdForDelete'])){
+   include '../model/qtyAndExpiration.php';
+   $qtyExpired = new qtyAndExpiration();
+   $expirationDate=$_GET['expirationDate'];
+   $productId=$_GET['productIdForDelete'];
+   $qty=$_GET['qty'];
+   $result = $qtyExpired->deleteExpiredProduct($productId, $expirationDate, $qty);
+   if($result===true){
+    $_SESSION['flush'] =  'Product Deleted successfully';
+   header("location: ../view/products/expiredproducts.php");
+    exit;
+   }else{
+      $_SESSION['flush'] =  'Error '.$result;
+      header("location: ../view/products/expiredproducts.php");
       exit;
    }
 }

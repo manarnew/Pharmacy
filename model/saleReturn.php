@@ -1,22 +1,15 @@
 <?php
 include $_SERVER['DOCUMENT_ROOT'] . '/pharmacyapp/database/connection.php';
-class Sale extends connection
+class SaleReturn extends connection
 {
   public function index($barcode)
   {
     try {
-      $product = $this->dbConnction()->prepare("SELECT productId FROM products where barcode=?");
+      $product = $this->dbConnction()->prepare("SELECT  products.productId,products.productName FROM salesdetails 
+      INNER JOIN products ON products.productId =  salesdetails.productId
+       where products.barcode=? GROUP BY products.productName");
       $product->execute([$barcode]);
-      $productId = $product->fetch();
-
-      $query = $this->dbConnction()->prepare("SELECT products.productName,products.productId,products.hasChildUnit,
-        batches.qty,batches.batchId,batches.expirationDate,purchasedetails.RetailSalePrice,purchasedetails.WholesaleSalePrice FROM products 
-        INNER JOIN  batches ON batches.productId =products.productId 
-        INNER JOIN  purchasedetails ON purchasedetails.productId =batches.productId  AND
-         purchasedetails.batchNumber =batches.batchNumber AND  purchasedetails.madeAt > 0 
-        WHERE products.productId=? ORDER BY expirationDate ASC ");
-      $query->execute([$productId['productId']]);
-      return $query->fetchAll();
+      return $product->fetchAll();
     } catch (Exception $e) {
       return 'Error ' . $e->getMessage();
     }
@@ -24,14 +17,10 @@ class Sale extends connection
   public function getAllProduct()
   {
     try {
-      $query = $this->dbConnction()->prepare("SELECT products.productName,products.productId,products.hasChildUnit,
-        batches.qty,batches.batchId,batches.expirationDate,purchasedetails.RetailSalePrice,purchasedetails.WholesaleSalePrice FROM products 
-        INNER JOIN  batches ON batches.productId =products.productId 
-        INNER JOIN  purchasedetails ON purchasedetails.productId =batches.productId  AND
-         purchasedetails.batchNumber =batches.batchNumber AND  purchasedetails.madeAt > 0 
-         ORDER BY expirationDate ASC ");
-      $query->execute();
-      return $query->fetchAll();
+      $product = $this->dbConnction()->prepare("SELECT  products.productId,products.productName FROM salesdetails 
+      INNER JOIN products ON products.productId =  salesdetails.productId GROUP BY products.productName");
+      $product->execute();
+      return $product->fetchAll();
     } catch (Exception $e) {
       return 'Error ' . $e->getMessage();
     }
@@ -39,15 +28,9 @@ class Sale extends connection
   public function fetchProductDetails($id)
   {
     try {
-      $product = $this->dbConnction()->prepare("SELECT productId,batchNumber FROM batches WHERE batchId=?");
-      $product->execute([$id]);
-      $productId = $product->fetch();
-      $query = $this->dbConnction()->prepare("SELECT purchasedetails.productId,purchasedetails.hasChildUnit,
-        batches.qty,batches.batchNumber,purchasedetails.RetailSalePrice,purchasedetails.WholesaleSalePrice FROM batches 
-        INNER JOIN  purchasedetails ON purchasedetails.productId =batches.productId  AND
-         purchasedetails.batchNumber =batches.batchNumber 
-        WHERE purchasedetails.productId=? AND purchasedetails.batchNumber=? AND  purchasedetails.madeAt > 0  ");
-      $query->execute([$productId['productId'], $productId['batchNumber']]);
+      $query = $this->dbConnction()->prepare("SELECT  salePrice ,productId
+        FROM salesdetails WHERE productId=? ORDER BY `salesdetails`.`saleDetailId` DESC LIMIT 1 ");
+      $query->execute([$id]);
       return $query->fetch();
     } catch (Exception $e) {
       return 'Error ' . $e->getMessage();
@@ -66,7 +49,7 @@ class Sale extends connection
     }
   }
 
-  public function add($productId, $qty, $total, $salePrice, $invoiceNumber, $barcode, $batchNumber)
+  public function add($productId, $qty, $total, $salePrice, $invoiceNumber, $barcode, $expiationDate)
   {
     try {
       $now = date("Y/m/d");
@@ -78,8 +61,8 @@ class Sale extends connection
       if (!$check) {
         $sales = 'INSERT INTO sales (invoiceNumber,TotalPrice,totalQty,date,userId,type) VALUE (?,?,?,?,?,?)';
         $sales =  $this->dbConnction()->prepare($sales);
-        //Type one means it is sales 
-        $sales =  $sales->execute([$invoiceNumber, $total, $qty, $now, $userId,1]);
+         //Type zero  means it is sales return
+        $sales =  $sales->execute([$invoiceNumber, $total, $qty, $now, $userId, 0]);
       } else {
         $TotalPrice = $check['TotalPrice'] + $total;
         $totalQty = $check['totalQty'] + $qty;
@@ -92,9 +75,9 @@ class Sale extends connection
       $checkIfProductExists->execute([$invoiceNumber, $productId]);
       $checkIfProductExists = $checkIfProductExists->fetch();
       if (!$checkIfProductExists) {
-        $salesdetails = 'INSERT INTO salesdetails (invoiceNumber,barcode,productId,qty,salePrice,date,userId,batchNumber) VALUE (?,?,?,?,?,?,?,?)';
+        $salesdetails = 'INSERT INTO salesdetails (invoiceNumber,barcode,productId,qty,salePrice,date,userId,expirationDate) VALUE (?,?,?,?,?,?,?,?)';
         $salesdetails =  $this->dbConnction()->prepare($salesdetails);
-        $salesdetails->execute([$invoiceNumber, $barcode, $productId, $qty, $salePrice, $now, $userId, $batchNumber]);
+        $salesdetails->execute([$invoiceNumber, $barcode, $productId, $qty, $salePrice, $now, $userId, $expiationDate]);
       } else {
         $qtyNew = $checkIfProductExists['qty'] + $qty;
         $sales = 'UPDATE salesdetails SET qty=? WHERE invoiceNumber=? AND productId=?';
@@ -155,38 +138,41 @@ class Sale extends connection
       $salesdetails->execute([$invoiceNumber]);
       $sale = $salesdetails->fetchAll();
       foreach ($sale as $sale) {
-        $batchNumber = $this->dbConnction()->prepare("SELECT  * FROM batches WHERE batchNumber=? 
+        $batchNumber = $this->dbConnction()->prepare("SELECT  * FROM batches WHERE expirationDate=? 
         AND  productId=?");
-        $batchNumber->execute([$sale['batchNumber'], $sale['productId']]);
+        $batchNumber->execute([$sale['expirationDate'], $sale['productId']]);
         $batchNumber = $batchNumber->fetch();
-        $qty =  $batchNumber['qty'] - $sale['qty'];
-        if ($qty == 0) {
-          // Delete when quantity equal to zero from batches table
-          $batches = $this->dbConnction()->prepare('DELETE FROM batches WHERE batchNumber=?  AND  productId=?');
-          $batches->execute([$sale['batchNumber'], $sale['productId']]);
+
+        if (!$batchNumber) {
+          // insert when it empty that means it is last one has been sell in the return inserted again 
+          $sale['qty'];
+          $batches = $this->dbConnction()->prepare('INSERT INTO batches (productId,batchNumber,expirationDate,qty) VALUE (?,?,?,?)');
+          $batchNumber = (uniqid() . microtime(true));
+          $batches->execute([$sale['productId'], $batchNumber, $sale['expirationDate'], $sale['qty']]);
         } else {
           // update the quantity batches table
-          $batches = $this->dbConnction()->prepare('UPDATE batches SET qty=? WHERE batchNumber=?  AND  productId=?');
-          $batches->execute([$qty, $sale['batchNumber'], $sale['productId']]);
+          $qty = $sale['qty'] + $batchNumber['qty'];
+          $batches = $this->dbConnction()->prepare('UPDATE batches SET qty=? WHERE expirationDate=?  AND  productId=?');
+          $batches->execute([$qty, $sale['expirationDate'], $sale['productId']]);
         }
         // store table
         $stores = $this->dbConnction()->prepare("SELECT  * FROM stores WHERE  productId=? ORDER BY 
         `stores`.`storeId` DESC LIMIT 1");
         $stores->execute([$sale['productId']]);
         $stores = $stores->fetch();
-        $qty =  $stores['qtyRemining'] - $sale['qty'];
+        $qty =  $stores['qtyRemining'] + $sale['qty'];
         $store = $this->dbConnction()->prepare('INSERT INTO stores (qtyRemining ,qty,storeDate,productId,userId,Type)
          VALUE (?,?,?,?,?,?)');
-        // type 2 means it is coming from sales
-        $store->execute([$qty, $sale['qty'], $now, $sale['productId'], $userId,2]);
+        // type 3 means it is coming from sales return
+        $store->execute([$qty, $sale['qty'], $now, $sale['productId'], $userId, 3]);
 
 
         $totalPrice += $sale['qty'] * $sale['salePrice'];
       }
       // insert into accounting table
-      $accounting = 'INSERT INTO accounting (AccountName,credit,date) VALUE (?,?,?)';
+      $accounting = 'INSERT INTO accounting (AccountName,debit,date) VALUE (?,?,?)';
       $accounting =  $this->dbConnction()->prepare($accounting);
-      $accounting->execute(['Account Sales', $totalPrice, $now]);
+      $accounting->execute(['Account Sales Return', $totalPrice, $now]);
 
       return true;
     } catch (Exception $e) {
@@ -213,9 +199,8 @@ class Sale extends connection
   {
     try {
       $sale = $this->dbConnction()->prepare('SELECT invoiceNumber,TotalPrice,totalQty,date,users.userName FROM 
-      sales INNER JOIN users ON users.userId = sales.userId
-      WHERE type = 1;
-       ORDER BY `sales`.`saleId` DESC ');
+      sales INNER JOIN users ON users.userId = sales.userId WHERE type = 0 ORDER BY `sales`.`saleId` DESC 
+      ');
       $sale->execute();
       return $sale->fetchAll();
     } catch (Exception $e) {

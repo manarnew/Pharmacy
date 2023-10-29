@@ -19,12 +19,12 @@ if (isset($_GET['id'])) {
     <div class="container-fluid">
       <div class="row mb-2">
         <div class="col-sm-6">
-          <h1 class="m-0">User</h1>
+          <h1 class="m-0">Medicines</h1>
         </div><!-- /.col -->
         <div class="col-sm-6">
           <ol class="breadcrumb float-sm-right">
             <li class="breadcrumb-item"><a href="#">Home</a></li>
-            <li class="breadcrumb-item active">Add product</li>
+            <li class="breadcrumb-item active">Edit Medicine</li>
           </ol>
         </div><!-- /.col -->
       </div><!-- /.row -->

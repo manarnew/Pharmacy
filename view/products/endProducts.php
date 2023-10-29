@@ -1,9 +1,9 @@
 <?php
-include $_SERVER['DOCUMENT_ROOT'] .'/pharmacyapp/view/users/session.php';
-include $_SERVER['DOCUMENT_ROOT'] .'/pharmacyapp/model/purchase.php';
+include $_SERVER['DOCUMENT_ROOT'] . '/pharmacyapp/view/users/session.php';
 include '../include/dashboard/dataTableHeader.php';
-$purchase = new Purchase();
-$pur = $purchase->index();
+$Product = new qtyAndExpiration();
+$prp = $Product->AddEnddedQty();
+$setting = $Product->setting();
 ?>
 
 <!-- Content Wrapper. Contains page content -->
@@ -13,12 +13,12 @@ $pur = $purchase->index();
     <div class="container-fluid">
       <div class="row mb-2">
         <div class="col-sm-6">
-          <h1 class="m-0">Show purchases</h1>
+          <h1 class="m-0">Show Medicines About to finish</h1>
         </div><!-- /.col -->
         <div class="col-sm-6">
           <ol class="breadcrumb float-sm-right">
             <li class="breadcrumb-item"><a href="#">Home</a></li>
-            <li class="breadcrumb-item active">Purchases</li>
+            <li class="breadcrumb-item active">Medicines About to finish</li>
           </ol>
         </div><!-- /.col -->
       </div><!-- /.row -->
@@ -42,39 +42,35 @@ $pur = $purchase->index();
           <?php endif; ?>
           <div class="card">
             <div class="card-header">
-              <a class="btn btn-info float-right" href="add.php">Add Purchase</a>
-              <h3 class="card-title">Show Purchase</h3>
+              <h3 class="card-title">All Medicines About to finish</h3>
             </div>
             <!-- /.card-header -->
             <div class="card-body">
               <table id="product" class="table table-bordered table-striped">
                 <thead>
                   <tr>
-                  <th>serial</th>
-                    <th>Invoice number</th>
-                    <th>Supplier</th>
-                    <th>Added date</th>
-                    <th>Added by</th>
-                    <th>Action</th>
+                    <th>serial</th>
+                    <th>Medicine Name</th>
+                    <th>Quantity</th>
                   </tr>
                 </thead>
                 <tbody>
-                  <?php $i = 0; foreach ($pur as $row) :  ?>
-                    <tr>
-                    <td><?php $i++;echo $i; ?></td>
-                      <td><?php echo $row['invoiceNumber']; ?></td>
-                      <td><?php echo $row['supplierName']; ?></td>
-                      <td><?php echo $row['addedDate']; ?></td>
-                      <td><?php echo $row['userName']; ?></td>
-                      <td>
-                        <a href="details.php?id=<?php echo $row['purchaseId']; ?>" class="btn btn-info">Purchase details</a>
-                        <?php if ($row['approved'] != 1) : ?>
-                          <a href="../../includes/purchaseOpration.php?deletePurchaseId=<?php echo $row['purchaseId']; ?>" class="btn btn-danger">Delete</a>
-                          <a href="../../includes/purchaseOpration.php?approveId=<?php echo $row['purchaseId']; ?>" class="btn btn-success">Approve</a>
-                        <?php endif; ?>
-                      </td>
-                    </tr>
-                  <?php endforeach; ?>
+                  <?php $i = 0;
+                  foreach ($prp as $row) :
+                    if (($row['quantity'] - $setting['qtyNumber']) <= 0) :
+                  ?>
+                      <tr>
+                        <td><?php $i++;
+                            echo $i; ?></td>
+                        <td>
+                          <?php echo $row['productName']; ?>
+                        </td>
+                        <td><?php echo $row['quantity']; ?></td>
+                      </tr>
+                  <?php
+                    endif;
+                  endforeach;
+                  ?>
                 </tbody>
               </table>
             </div>
@@ -95,7 +91,7 @@ $pur = $purchase->index();
   $(function() {
     $("#product").DataTable({
       "responsive": true,
-      "lengthChange": false,
+      "lengthChange": true,
       "autoWidth": false,
       "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
     }).buttons().container().appendTo('#product_wrapper .col-md-6:eq(0)');

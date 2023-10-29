@@ -55,13 +55,28 @@ $stores = $store->index();
                      <tr style="background-color: azure;">
                      <?php elseif($row['Type']==0): ?>
                       <tr style="background-color:beige;">
+                      <?php elseif($row['Type']==2): ?>
+                      <tr style="background-color:aliceblue;">
+                      <?php elseif($row['Type']==3): ?>
+                      <tr style="background-color:bisque;">
+                      <?php elseif($row['Type']==4): ?>
+                      <tr style="background-color:cornsilk;">
                       <?php endif ?>
                       <td><?php $i++ ;echo $i  ;?></td>
                       <td><?php echo $row['productName']; ?></td>
                       <td><?php echo $row['qty']; ?></td>
                       <td><?php echo $row['qtyRemining']; ?></td>
                       <td>
-                        <?php ($row['Type']==1)?print('Purchase'):print('Return purchase'); ?>
+                        <?php if($row['Type']==1){
+                          print('Purchase');
+                        }elseif($row['Type']==0){
+                          print('Return purchase');
+                        }elseif($row['Type']==2){
+                          print('Sales');
+                        }elseif($row['Type']==3){
+                          print('Sales return');
+                        }elseif($row['Type']==4){
+                          print('Delete expired medicines');} ?>
                       </td>
                       <td><?php echo $row['userName']; ?></td>
                       <td><?php echo $row['storeDate']; ?></td>

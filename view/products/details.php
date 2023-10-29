@@ -13,12 +13,12 @@ $RetailUnit = $pro->RetailUnitId($_GET['id']);
     <div class="container-fluid">
       <div class="row mb-2">
         <div class="col-sm-6">
-          <h1 class="m-0">Product</h1>
+          <h1 class="m-0">Medicines</h1>
         </div><!-- /.col -->
         <div class="col-sm-6">
           <ol class="breadcrumb float-sm-right">
             <li class="breadcrumb-item"><a href="#">Home</a></li>
-            <li class="breadcrumb-item active">Product details</li>
+            <li class="breadcrumb-item active">Medicines details</li>
           </ol>
         </div><!-- /.col -->
       </div><!-- /.row -->
@@ -38,7 +38,7 @@ $RetailUnit = $pro->RetailUnitId($_GET['id']);
                   <div class="card card-default">
                     <div class="card-header"  style="background-color: darkblue;">
                       <h3 class="card-title" style=" color: white;">
-                        Product details
+                      Medicines details
                       </h3>
                     </div>
                     <!-- /.card-header -->
@@ -46,7 +46,7 @@ $RetailUnit = $pro->RetailUnitId($_GET['id']);
 
                       <table id="example2" class="table table-bordered table-hover">
                       <tr>
-                          <td class="width30">Product name</td>
+                          <td class="width30">Medicines name</td>
                           <td class="width30"><?php echo $product['productName'] ?></td>
                         </tr> 
                       <tr>

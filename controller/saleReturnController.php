@@ -1,10 +1,10 @@
 <?php
-include '../model/sale.php';
-class SaleController extends Sale
+include '../model/saleReturn.php';
+class SaleReturnController extends SaleReturn
 {
-    public function addSale( $productId, $qty, $total, $salePrice, $invoiceNumber, $barcode,$batchNumber)
+    public function addSale( $productId, $qty, $total, $salePrice, $invoiceNumber, $barcode,$expiationDate)
     {
-        $add =  $this->add( $productId, $qty, $total, $salePrice, $invoiceNumber, $barcode,$batchNumber);
+        $add =  $this->add( $productId, $qty, $total, $salePrice, $invoiceNumber, $barcode,$expiationDate);
         if ($add === true) {
             return true;
         } else {

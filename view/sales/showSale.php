@@ -1,9 +1,9 @@
 <?php
 include $_SERVER['DOCUMENT_ROOT'] .'/pharmacyapp/view/users/session.php';
-include $_SERVER['DOCUMENT_ROOT'] .'/pharmacyapp/model/purchase.php';
+include $_SERVER['DOCUMENT_ROOT'] .'/pharmacyapp/model/sale.php';
 include '../include/dashboard/dataTableHeader.php';
-$purchase = new Purchase();
-$pur = $purchase->index();
+$showSale = new Sale();
+$sales = $showSale->showSale();
 ?>
 
 <!-- Content Wrapper. Contains page content -->
@@ -13,12 +13,12 @@ $pur = $purchase->index();
     <div class="container-fluid">
       <div class="row mb-2">
         <div class="col-sm-6">
-          <h1 class="m-0">Show purchases</h1>
+          <h1 class="m-0">Show sales</h1>
         </div><!-- /.col -->
-        <div class="col-sm-6">
+        <div class="col-sm-6" >
           <ol class="breadcrumb float-sm-right">
             <li class="breadcrumb-item"><a href="#">Home</a></li>
-            <li class="breadcrumb-item active">Purchases</li>
+            <li class="breadcrumb-item active">Sales</li>
           </ol>
         </div><!-- /.col -->
       </div><!-- /.row -->
@@ -31,51 +31,43 @@ $pur = $purchase->index();
     <div class="container-fluid">
       <div class="row">
         <div class="col-12">
-          <?php if (!empty($_SESSION["flush"])) : ?>
-            <div class="alert alert-success alert-dismissible fade show" role="alert" id="alert-session">
-              <?php print_r($_SESSION["flush"]);
-              unset($_SESSION["flush"]); ?>
-              <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-          <?php endif; ?>
           <div class="card">
             <div class="card-header">
-              <a class="btn btn-info float-right" href="add.php">Add Purchase</a>
-              <h3 class="card-title">Show Purchase</h3>
+              <a class="btn btn-info float-right" href="sales.php">Add sale</a>
+              <h3 class="card-title">Show sales</h3>
             </div>
             <!-- /.card-header -->
             <div class="card-body">
-              <table id="product" class="table table-bordered table-striped">
+            <table id="product" class="table table-bordered table-striped">
                 <thead>
                   <tr>
                   <th>serial</th>
                     <th>Invoice number</th>
-                    <th>Supplier</th>
+                    <th>Total price</th>
+                    <th>Total quantity</th>
                     <th>Added date</th>
                     <th>Added by</th>
-                    <th>Action</th>
                   </tr>
                 </thead>
                 <tbody>
-                  <?php $i = 0; foreach ($pur as $row) :  ?>
+                  <?php $totalPrice=$i = 0; foreach ($sales as $row) :  
+                    $totalPrice += $row['totalQty'] * $row['TotalPrice'];
+                    ?>
                     <tr>
                     <td><?php $i++;echo $i; ?></td>
-                      <td><?php echo $row['invoiceNumber']; ?></td>
-                      <td><?php echo $row['supplierName']; ?></td>
-                      <td><?php echo $row['addedDate']; ?></td>
-                      <td><?php echo $row['userName']; ?></td>
                       <td>
-                        <a href="details.php?id=<?php echo $row['purchaseId']; ?>" class="btn btn-info">Purchase details</a>
-                        <?php if ($row['approved'] != 1) : ?>
-                          <a href="../../includes/purchaseOpration.php?deletePurchaseId=<?php echo $row['purchaseId']; ?>" class="btn btn-danger">Delete</a>
-                          <a href="../../includes/purchaseOpration.php?approveId=<?php echo $row['purchaseId']; ?>" class="btn btn-success">Approve</a>
-                        <?php endif; ?>
+                        <a href="showSaleDetails.php?invoiceNumber=<?php echo $row['invoiceNumber']?>">
+                        <?php echo $row['invoiceNumber']; ?>
+                        </a>
                       </td>
+                      <td><?php echo $row['TotalPrice']; ?></td>
+                      <td><?php echo $row['totalQty']; ?></td>
+                      <td><?php echo $row['date']; ?></td>
+                      <td><?php echo $row['userName']; ?></td>
                     </tr>
                   <?php endforeach; ?>
                 </tbody>
+<tr><td style="color: red;">Total Price</td><td></td><td style="color: red;"><?php echo $totalPrice; ?></td></tr>
               </table>
             </div>
             <!-- /.card-body -->
@@ -88,7 +80,6 @@ $pur = $purchase->index();
   </section>
   <!-- /.content -->
 </div>
-<!-- /.content-wrapper -->
 <?php include '../include/dashboard/dataTableFooter.php'; ?>
 <!-- dataTable script -->
 <script>
@@ -97,8 +88,8 @@ $pur = $purchase->index();
       "responsive": true,
       "lengthChange": false,
       "autoWidth": false,
-      "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+      "buttons": [ "excel", "pdf", "print"]
+      
     }).buttons().container().appendTo('#product_wrapper .col-md-6:eq(0)');
-
   });
 </script>

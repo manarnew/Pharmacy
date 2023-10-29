@@ -48,7 +48,7 @@ $stores = $store->index();
                   </tr>
                 </thead>
                 <tbody>
-                  <?php $i = 0; foreach ($stores as $row) :  ?>
+                  <?php $debitTotal=$creditTotal=$i = 0; foreach ($stores as $row) :  ?>
                     <?php if($row['debit']>0): ?> 
                      <tr style="background-color: azure;">
                      <?php elseif($row['credit']>0): ?>
@@ -56,12 +56,13 @@ $stores = $store->index();
                       <?php endif ?>
                       <td><?php $i++ ;echo $i  ;?></td>
                       <td><?php echo $row['AccountName']; ?></td>
-                      <td><?php echo $row['debit']; ?></td>
-                      <td><?php echo $row['credit']; ?></td>
+                      <td><?php echo $row['debit'];$debitTotal+=$row['debit']; ?></td>
+                      <td><?php echo $row['credit'];$creditTotal+=$row['credit'];?></td>
                       <td><?php echo $row['date']; ?></td>
                     </tr>
                   <?php endforeach; ?>
                 </tbody>
+<tr><td style="color: red;">Total Price</td><td></td><td style="color: red;"><?php echo $creditTotal - $debitTotal ; ?></td></tr>
               </table>
             </div>
             <!-- /.card-body -->

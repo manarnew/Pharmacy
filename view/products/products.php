@@ -13,12 +13,12 @@ $prp = $Product->index();
     <div class="container-fluid">
       <div class="row mb-2">
         <div class="col-sm-6">
-          <h1 class="m-0">Show products</h1>
+          <h1 class="m-0">Show Medicines</h1>
         </div><!-- /.col -->
         <div class="col-sm-6">
           <ol class="breadcrumb float-sm-right">
             <li class="breadcrumb-item"><a href="#">Home</a></li>
-            <li class="breadcrumb-item active">products</li>
+            <li class="breadcrumb-item active">Medicines</li>
           </ol>
         </div><!-- /.col -->
       </div><!-- /.row -->
@@ -42,8 +42,8 @@ $prp = $Product->index();
           <?php endif; ?>
           <div class="card">
             <div class="card-header">
-              <a class="btn btn-info float-right" href="addProduct.php">Add Product</a>
-              <h3 class="card-title">All products</h3>
+              <a class="btn btn-info float-right" href="addProduct.php">Add Medicine</a>
+              <h3 class="card-title">All Medicines</h3>
             </div>
             <!-- /.card-header -->
             <div class="card-body">

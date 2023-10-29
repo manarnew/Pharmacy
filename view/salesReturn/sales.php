@@ -1,8 +1,8 @@
 <?php
 include $_SERVER['DOCUMENT_ROOT'] . '/pharmacyapp/view/users/session.php';
-include $_SERVER['DOCUMENT_ROOT'] . '/pharmacyapp/model/sale.php';
+include $_SERVER['DOCUMENT_ROOT'] . '/pharmacyapp/model/saleReturn.php';
 include '../include/dashboard/header.php';
-$sale = new Sale();
+$sale = new SaleReturn();
 $sales = $sale->getAllProduct();
 ?>
 
@@ -13,12 +13,12 @@ $sales = $sale->getAllProduct();
     <div class="container-fluid">
       <div class="row mb-2">
         <div class="col-sm-6">
-          <h1 class="m-0">Sales</h1>
+          <h1 class="m-0">Sales Return</h1>
         </div><!-- /.col -->
         <div class="col-sm-6">
           <ol class="breadcrumb float-sm-right">
             <li class="breadcrumb-item"><a href="#">Home</a></li>
-            <li class="breadcrumb-item active">Sales</li>
+            <li class="breadcrumb-item active">Sales Return</li>
           </ol>
         </div><!-- /.col -->
       </div><!-- /.row -->
@@ -42,7 +42,7 @@ $sales = $sale->getAllProduct();
           <?php endif; ?>
           <div class="card">
             <div class="card-header" style="background-color:blueviolet;">
-              <h3 class="card-title">Sales</h3>
+              <h3 class="card-title">Sales return</h3>
             </div>
             <!-- /.card-header -->
             <div class="card-body">
@@ -64,10 +64,8 @@ $sales = $sale->getAllProduct();
                     <select class="form-control select2" onchange="fetchProduct(this.value);" name="productId" id="productId" style="width: 100;">
                       <option></option>
                       <?php foreach ($sales as $row) : ?>
-                        <option value="<?php echo $row['batchId'] ?>">
-                          <?php echo $row['productName'] ?>&nbsp; &nbsp;&nbsp;
-                          Expiration date: <?php echo $row['expirationDate'] ?>
-                          Price: <?php ($row['hasChildUnit'] == 1) ? print $row['RetailSalePrice'] : print $row['WholesaleSalePrice']; ?>
+                        <option value="<?php echo $row['productId'] ?>">
+                          <?php echo $row['productName'] ?>
                         </option>
                       <?php endforeach; ?>
                     </select>
@@ -82,12 +80,13 @@ $sales = $sale->getAllProduct();
                       </div>
                     </div>
                   </div>
+
                   <div class="col-lg-4">
                     <div class="form-group">
-                      <label class="form-control-label" for="prependedInput">Quantity remaining</label>
+                      <label class="form-control-label" for="prependedInput">Expiation date</label>
                       <div class="controls">
                         <div class="input-prepend input-group">
-                          <input id="qtyRemaining" readonly class="form-control" size="16" type="number" name="qtyRemaining">
+                          <input id="expiationDate"  class="form-control" size="16" type="date" name="expiationDate">
                         </div>
                       </div>
                     </div>
@@ -122,8 +121,6 @@ $sales = $sale->getAllProduct();
                       <div class="controls">
                         <div class="input-prepend input-group">
                           <input id="total" readonly class="form-control" size="16" type="number" name="total">
-                          <input id="product" class="form-control" size="16" type="hidden" name="product">
-                          <input id="batchNumber" class="form-control" size="16" type="hidden" name="batchNumber">
                         </div>
                       </div>
                     </div>
@@ -149,7 +146,7 @@ $sales = $sale->getAllProduct();
                 </table>
               </div>
               <br>
-              <button type="submit" style="display: none;"  id="saveAndPrint" class="btn btn-info noPrint">Save and Print</button>
+              <button type="submit" style="display: none;"  id="saveAndPrint" class="btn btn-info noPrint">Save</button>
               <button type="submit"   class="btn btn-info float-right noPrint" id="btnCancel">Cancel</button>
             </div>
             <!-- /.card-body -->
@@ -187,27 +184,18 @@ $sales = $sale->getAllProduct();
 
 
   function fetchProduct(val) {
-    document.getElementById('qty').value = '';
     document.getElementById('total').value = '';
     if (val != "") {
       $.ajax({
         type: 'post',
-        url: '/pharmacyapp/includes/saleOpration.php',
+        url: '/pharmacyapp/includes/saleReturnOpration.php',
         dataType: 'json',
         data: {
           query: val,
         },
         success: function(data) {
-          if (data.productId > 0) {
-            document.getElementById('qtyRemaining').value = data.qty;
-            document.getElementById('product').value = data.productId;
-            document.getElementById('batchNumber').value = data.batchNumber;
-            if (data.hasChildUnit == 1) {
-              document.getElementById('SalePrice').value = data.RetailSalePrice;
-            } else {
-              document.getElementById('SalePrice').value = data.WholesaleSalePrice;
-            }
-
+          if (data.salePrice > 0) {
+              document.getElementById('SalePrice').value = data.salePrice;
             $("#qty").on('input', function() {
               let qty = $('#qty').val();
               let SalePrice = document.getElementById('SalePrice').value;
@@ -238,22 +226,10 @@ $sales = $sale->getAllProduct();
     let total = $('#total').val();
     let qty = $('#qty').val();
     let SalePrice = $('#SalePrice').val();
-    let productId = $('#product').val();
     let productName = $('#productId').val();
-    let qtyRemaining = document.getElementById('qtyRemaining').value;
-    if((qtyRemaining-qty)<0){
-        toastr.error('Quantity can not be bigger then remaining quantity');
-        $(this).focus();
-        return false;
-      }
     if (productName == null) {
       toastr.warning('Product name can not be empty');
       $('#productId').focus();
-      return false;
-    }
-    if (productId == null) {
-      toastr.warning('Product name can not be empty');
-      productName.focus();
       return false;
     }
     if (qty == '') {
@@ -266,11 +242,17 @@ $sales = $sale->getAllProduct();
       $('#SalePrice').focus();
       return false;
     }
-
+let expiationDate= $('#expiationDate').val();
+    if (expiationDate == '') {
+      toastr.warning('Expiration date can not be empty');
+      $('#expiationDate').focus();
+      return false;
+    }
+    
     // inset data to the purchase details
     let formData = new FormData($('#submitSale')[0]);
     $.ajax({
-      url: '/pharmacyapp/includes/saleOpration.php',
+      url: '/pharmacyapp/includes/saleReturnOpration.php',
       type: 'POST',
       data: formData,
       contentType: false,
@@ -296,7 +278,7 @@ $sales = $sale->getAllProduct();
       "qty": qty,
     };
     $.ajax({
-      url: '/pharmacyapp/includes/saleOpration.php',
+      url: '/pharmacyapp/includes/saleReturnOpration.php',
       type: 'POST',
       data: data,
       success: function(response) {
@@ -327,11 +309,11 @@ $sales = $sale->getAllProduct();
     };
     console.log(data);
     $.ajax({
-      url: '/pharmacyapp/includes/saleOpration.php',
+      url: '/pharmacyapp/includes/saleReturnOpration.php',
       type: 'POST',
       data: data,
       success: function(response) {
-        print();
+        toastr.error('Return sale saved successfully');
         location.replace(location.href);
       },
     });
@@ -344,7 +326,7 @@ $sales = $sale->getAllProduct();
     };
     console.log(data);
     $.ajax({
-      url: '/pharmacyapp/includes/saleOpration.php',
+      url: '/pharmacyapp/includes/saleReturnOpration.php',
       type: 'POST',
       data: data,
       success: function(response) {

@@ -1,31 +1,72 @@
+<?php
+$store = new qtyAndExpiration();
+$setting = $store->setting();
+?>
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
   <!-- Brand Logo -->
-  <a href="index3.html" class="brand-link">
-    <img src="/pharmacyapp/view/include/assets/dist/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
-    <span class="brand-text font-weight-light">AdminLTE 3</span>
+  <a href="/pharmacyapp/view/dashboard/dashboard.php" class="brand-link">
+    <img src="/pharmacyapp/view/include/images/<?php echo $setting['logo'] ?>" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
+    <span class="brand-text font-weight-light"><?php echo $setting['appName'] ?></span>
   </a>
   <!-- Sidebar -->
   <div class="sidebar">
-    <!-- Sidebar user panel (optional) -->
-    <div class="user-panel mt-3 pb-3 mb-3 d-flex">
-      <div class="info">
-        <?php if (isset($_SESSION["id"])) { ?>
-          <a href="#" class="d-block"><?php echo $_SESSION["name"]; ?></a>
-        <?php } ?>
-      </div>
-    </div>
-    <!-- Sidebar Menu -->
     <nav class="mt-2">
       <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
         <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
+        <li class="nav-item">
+          <a href="#" class="nav-link">
+            <i class="nav-icon fas fa-user"></i>
+            <p>
+              Sales
+              <i class="fas fa-angle-left right"></i>
+            </p>
+          </a>
+          <ul class="nav nav-treeview">
+            <li class="nav-item">
+              <a href="/pharmacyapp/view/sales/showSale.php" class="nav-link">
+                <i class="far fa-circle nav-icon"></i>
+                <p>Show sales</p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="/pharmacyapp/view/sales/sales.php" class="nav-link">
+                <i class="far fa-circle nav-icon"></i>
+                <p>Add sales</p>
+              </a>
+            </li>
+          </ul>
+        </li>
+        <li class="nav-item">
+          <a href="#" class="nav-link">
+            <i class="nav-icon fas fa-user"></i>
+            <p>
+              Sales return
+              <i class="fas fa-angle-left right"></i>
+            </p>
+          </a>
+          <ul class="nav nav-treeview">
+            <li class="nav-item">
+              <a href="/pharmacyapp/view/salesReturn/showSale.php" class="nav-link">
+                <i class="far fa-circle nav-icon"></i>
+                <p>Show sales return</p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="/pharmacyapp/view/salesReturn/sales.php" class="nav-link">
+                <i class="far fa-circle nav-icon"></i>
+                <p>Add sale return</p>
+              </a>
+            </li>
+          </ul>
+        </li>
         <li class="nav-item">
           <a href="/pharmacyapp/view/category/category.php" class="nav-link">
             <i class="nav-icon fas fa-th"></i>
             <p>Categories</p>
           </a>
         </li>
-        </li>
+
 
 
         <li class="nav-item">
@@ -57,7 +98,7 @@
           <a href="#" class="nav-link">
             <i class="nav-icon fas fa-table"></i>
             <p>
-              Products
+            Medicines
               <i class="fas fa-angle-left right"></i>
             </p>
           </a>
@@ -65,13 +106,25 @@
             <li class="nav-item">
               <a href="/pharmacyapp/view/products/products.php" class="nav-link">
                 <i class="far fa-circle nav-icon"></i>
-                <p>Show Products</p>
+                <p>Show Medicines</p>
               </a>
             </li>
             <li class="nav-item">
               <a href="/pharmacyapp/view/products/addProduct.php" class="nav-link">
                 <i class="far fa-circle nav-icon"></i>
-                <p>Add Product</p>
+                <p>Add Medicines</p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="/pharmacyapp/view/products/endProducts.php" class="nav-link">
+                <i class="far fa-circle nav-icon"></i>
+                <p>finished Medicines</p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="/pharmacyapp/view/products/expiredproducts.php" class="nav-link">
+                <i class="far fa-circle nav-icon"></i>
+                <p>Expired Medicines</p>
               </a>
             </li>
           </ul>
@@ -168,6 +221,18 @@
           <a href="/pharmacyapp/view/accounting/accounting.php" class="nav-link">
             <i class="nav-icon far fa-calendar-alt"></i>
             <p>Accounting movement</p>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="/pharmacyapp/view/expenses/expenses.php" class="nav-link">
+            <i class="nav-icon far fa-calendar-alt"></i>
+            <p>Expenses</p>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="/pharmacyapp/view/settings/details.php" class="nav-link">
+            <i class="nav-icon far fa-calendar-alt"></i>
+            <p>Settings</p>
           </a>
         </li>
       </ul>

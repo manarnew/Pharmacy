@@ -290,7 +290,7 @@ class ReturnPurchase extends connection
       $select = $this->dbConnction()->prepare("SELECT Remained,supplierId,invoiceNumber,paid FROM purchases WHERE purchaseId = ?");
       $select->execute([$approveId]);
       $select = $select->fetch();
-      $accounting = 'INSERT INTO accounting (AccountName,credit,date) VALUE (?,?)';
+      $accounting = 'INSERT INTO accounting (AccountName,credit,date) VALUE (?,?,?)';
       $accounting =  $this->dbConnction()->prepare($accounting);
       $accounting->execute(['Account Return Purchase', $select['paid'],$now]);
       //insert supplier account 
