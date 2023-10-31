@@ -16,7 +16,7 @@ $setting = $store->setting();
                with font-awesome or any other icon font library -->
         <li class="nav-item">
           <a href="#" class="nav-link">
-            <i class="nav-icon fas fa-user"></i>
+            <i class="fas fa-shopping-cart"></i>
             <p>
               Sales
               <i class="fas fa-angle-left right"></i>
@@ -39,7 +39,7 @@ $setting = $store->setting();
         </li>
         <li class="nav-item">
           <a href="#" class="nav-link">
-            <i class="nav-icon fas fa-user"></i>
+            <i class="fas fa-undo"></i>
             <p>
               Sales return
               <i class="fas fa-angle-left right"></i>
@@ -60,15 +60,10 @@ $setting = $store->setting();
             </li>
           </ul>
         </li>
-        <li class="nav-item">
-          <a href="/pharmacyapp/view/category/category.php" class="nav-link">
-            <i class="nav-icon fas fa-th"></i>
-            <p>Categories</p>
-          </a>
-        </li>
+      
 
 
-
+        <?php if($_SESSION["type"]==1):?>
         <li class="nav-item">
           <a href="#" class="nav-link">
             <i class="nav-icon fas fa-user"></i>
@@ -92,17 +87,30 @@ $setting = $store->setting();
             </li>
           </ul>
         </li>
+        <?php endif;?>
 
 
         <li class="nav-item">
           <a href="#" class="nav-link">
-            <i class="nav-icon fas fa-table"></i>
+            <i class="fas fa-user-md"></i>
             <p>
             Medicines
               <i class="fas fa-angle-left right"></i>
             </p>
           </a>
           <ul class="nav nav-treeview">
+          <li class="nav-item">
+          <a href="/pharmacyapp/view/category/category.php" class="nav-link">
+            <i class="far fa-circle nav-icon"></i>
+            <p>Categories</p>
+          </a>
+          </li>
+          <li class="nav-item">
+          <a href="/pharmacyapp/view/units/units.php" class="nav-link">
+            <i class="far fa-circle nav-icon"></i>
+            <p>Show units</p>
+          </a>
+        </li>
             <li class="nav-item">
               <a href="/pharmacyapp/view/products/products.php" class="nav-link">
                 <i class="far fa-circle nav-icon"></i>
@@ -127,11 +135,12 @@ $setting = $store->setting();
                 <p>Expired Medicines</p>
               </a>
             </li>
+           
           </ul>
         </li>
         <li class="nav-item">
           <a href="#" class="nav-link">
-            <i class="nav-icon fas fa-user"></i>
+            <i class="fas fa-shopping-cart"></i>
             <p>
               Purchases
               <i class="fas fa-angle-left right"></i>
@@ -154,7 +163,7 @@ $setting = $store->setting();
         </li>
         <li class="nav-item">
           <a href="#" class="nav-link">
-            <i class="nav-icon fas fa-user"></i>
+            <i class="fas fa-undo"></i>
             <p>
               Return Purchases
               <i class="fas fa-angle-left right"></i>
@@ -178,7 +187,7 @@ $setting = $store->setting();
 
         <li class="nav-item">
           <a href="#" class="nav-link">
-            <i class="nav-icon far fa-plus-square"></i>
+            <i class="fas fa-truck"></i>
             <p>
               Supplier
               <i class="fas fa-angle-left right"></i>
@@ -200,39 +209,45 @@ $setting = $store->setting();
           </ul>
         </li>
         <li class="nav-item">
-          <a href="/pharmacyapp/view/units/units.php" class="nav-link">
-            <i class="nav-icon fas fa-book"></i>
-            <p>Show units</p>
+          <a href="#" class="nav-link">
+            <i class="fas fa-car"></i>
+            <p>
+            Movement
+              <i class="fas fa-angle-left right"></i>
+            </p>
           </a>
-        </li>
+          <ul class="nav nav-treeview">
         <li class="nav-item">
           <a href="/pharmacyapp/view/store/store.php" class="nav-link">
-            <i class="nav-icon fas fa-columns"></i>
+            <i class="far fa-circle nav-icon"></i>
             <p>store movement</p>
           </a>
         </li>
         <li class="nav-item">
           <a href="/pharmacyapp/view/batches/batches.php" class="nav-link">
-            <i class="nav-icon far fa-calendar-alt"></i>
+            <i class="far fa-circle nav-icon"></i>
             <p>batches movement</p>
           </a>
         </li>
         <li class="nav-item">
           <a href="/pharmacyapp/view/accounting/accounting.php" class="nav-link">
-            <i class="nav-icon far fa-calendar-alt"></i>
+            <i class="far fa-circle nav-icon"></i>
             <p>Accounting movement</p>
           </a>
         </li>
+        </ul>
+        </li>
+
         <li class="nav-item">
           <a href="/pharmacyapp/view/expenses/expenses.php" class="nav-link">
-            <i class="nav-icon far fa-calendar-alt"></i>
+            <i class="fas fa-money-bill"></i>
             <p>Expenses</p>
           </a>
         </li>
         <li class="nav-item">
           <a href="/pharmacyapp/view/settings/details.php" class="nav-link">
-            <i class="nav-icon far fa-calendar-alt"></i>
-            <p>Settings</p>
+            <i class="fas fa-cog"></i>
+            <p>App settings</p>
           </a>
         </li>
       </ul>

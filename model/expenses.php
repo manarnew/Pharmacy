@@ -77,4 +77,17 @@ class Expenses extends connection
       return false;
     }
   }
+  public function dateSearch($startDate,$endDate)
+  {
+    if (empty($endDate)) $endDate = date("Y/m/d");
+    $temp = '';
+   if($startDate > $endDate){
+    $temp = $startDate;
+    $startDate = $endDate;
+    $endDate = $temp;
+   }
+    $query = $this->dbConnction()->prepare("SELECT * FROM expenses WHERE  date BETWEEN ? AND  ? ORDER BY expenseId DESC");
+    $query->execute([$startDate,$endDate]);
+    return $query->fetchAll();
+  }
 }

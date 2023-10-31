@@ -138,8 +138,8 @@ $getDetails = $pur->getPurchaseDetail($_GET['id']);
                         <td><?php echo $row['WholesalePayPrice']; ?></td>
                         <td><?php echo ($row['WholesalePayPrice'] * $row['WholesaleQty']); ?></td>
                         <td class="noPrint">
-                        <?php if($purchase['approved']!=1&&$purchase['paid']===0):?>
-                          <button class="btn btn-danger btn-sm" onclick="deleteMedicine(<?php echo $row['purchaseDetailId'] ?>)">Delete</button>
+                        <?php if($purchase['approved']!=1):?>
+                          <button class="btn btn-danger" onclick="deleteMedicine(<?php echo $row['purchaseDetailId'] ?>)"><i class="fas fa-trash-alt"></i></button>
                           <?php endif;?>
                         </td>
                       </tr>

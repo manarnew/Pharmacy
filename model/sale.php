@@ -79,7 +79,7 @@ class Sale extends connection
         $sales = 'INSERT INTO sales (invoiceNumber,TotalPrice,totalQty,date,userId,type) VALUE (?,?,?,?,?,?)';
         $sales =  $this->dbConnction()->prepare($sales);
         //Type one means it is sales 
-        $sales =  $sales->execute([$invoiceNumber, $total, $qty, $now, $userId,1]);
+        $sales =  $sales->execute([$invoiceNumber, $total, $qty, $now, $userId, 1]);
       } else {
         $TotalPrice = $check['TotalPrice'] + $total;
         $totalQty = $check['totalQty'] + $qty;
@@ -178,7 +178,7 @@ class Sale extends connection
         $store = $this->dbConnction()->prepare('INSERT INTO stores (qtyRemining ,qty,storeDate,productId,userId,Type)
          VALUE (?,?,?,?,?,?)');
         // type 2 means it is coming from sales
-        $store->execute([$qty, $sale['qty'], $now, $sale['productId'], $userId,2]);
+        $store->execute([$qty, $sale['qty'], $now, $sale['productId'], $userId, 2]);
 
 
         $totalPrice += $sale['qty'] * $sale['salePrice'];
@@ -221,5 +221,20 @@ class Sale extends connection
     } catch (Exception $e) {
       return 'error ' . $e->getMessage();
     }
+  }
+
+  public function dateSearch($startDate, $endDate)
+  {
+    if (empty($endDate)) $endDate = date("Y/m/d");
+    $temp = '';
+    if ($startDate > $endDate) {
+      $temp = $startDate;
+      $startDate = $endDate;
+      $endDate = $temp;
+    }
+    $query = $this->dbConnction()->prepare("SELECT invoiceNumber,TotalPrice,totalQty,date,users.userName FROM 
+    sales INNER JOIN users ON users.userId = sales.userId WHERE type = 1 AND date BETWEEN ? AND  ? ORDER BY `sales`.`saleId` DESC");
+    $query->execute([$startDate, $endDate]);
+    return $query->fetchAll();
   }
 }

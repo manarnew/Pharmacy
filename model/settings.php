@@ -6,11 +6,11 @@ class Settings extends connection
 
 
 
-  public function update($appName,$logo,$notifyDate,$qtyNumber)
+  public function update($appName,$logo,$notifyDate,$qtyNumber,$address,$phone,$email)
   {
-    $query = 'UPDATE settings SET appName = ?,logo = ?,notifyDate = ?,qtyNumber = ?';
+    $query = 'UPDATE settings SET appName = ?,logo = ?,notifyDate = ?,qtyNumber = ?,address = ?,phone = ?,email = ?';
     $query = $this->dbConnction()->prepare($query);
-    $query->execute([$appName,$logo,$notifyDate,$qtyNumber]);
+    $query->execute([$appName,$logo,$notifyDate,$qtyNumber,$address,$phone,$email]);
     if ($query) {
       return true;
     } else {

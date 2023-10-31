@@ -1,6 +1,6 @@
 <?php
 
-include $_SERVER['DOCUMENT_ROOT'] .'/pharmacyapp/database/connection.php';
+include $_SERVER['DOCUMENT_ROOT'] . '/pharmacyapp/database/connection.php';
 class Purchase extends connection
 {
   public function add($supplierId, $details, $invoiceNumber)
@@ -45,7 +45,13 @@ class Purchase extends connection
     if (count($product) > 0) {
       return -1;
     }
-
+    $batches = $this->dbConnction()->prepare("SELECT expirationDate  FROM batches WHERE batchNumber = ?
+    AND productId = ?");
+    $batches->execute([$batchNumber, $productId]);
+    $batch = $batches->fetchAll();
+    if (count($batch) > 0) {
+      return 0;
+    }
     $userId = $_SESSION['id'];
     $query = 'INSERT INTO purchasedetails (purchaseId,productId,endDate,wholesaleUnitId,WholesaleQty,WholesalePayPrice
     ,WholesaleSalePrice,hasChildUnit,RetailUnitId,RetailSalePrice,RetailPayPrice,RetailQty,TotalRetailQty,batchNumber,userId,madeAt) 
@@ -57,7 +63,7 @@ class Purchase extends connection
     $query->execute([
       $purchaseId, $productId, $endDate, $wholesaleUnitId, $WholesaleQty, $WholesalePayPrice,
       $WholesaleSalePrice, $hasChildUnit, $RetailUnitId, $RetailSalePrice, $RetailPayPrice,
-      $RetailQty, $TotalRetailQty, $batchNumber, $userId,$madeAt
+      $RetailQty, $TotalRetailQty, $batchNumber, $userId, $madeAt
     ]);
 
     if ($query->rowCount()) {
@@ -257,7 +263,7 @@ class Purchase extends connection
       $debit  = $select['paid'] + $select['tax'] + $select['costOnPay'];
       $accounting = 'INSERT INTO accounting (AccountName,debit,date) VALUE (?,?,?)';
       $accounting =  $this->dbConnction()->prepare($accounting);
-      $accounting->execute(['Account Purchase cost', $debit,$now]);
+      $accounting->execute(['Account Purchase cost', $debit, $now]);
       //insert supplier account 
       $supplieraccounting = $this->dbConnction()->prepare("SELECT remainedBefor  FROM supplieraccounting ORDER BY `supplieraccounting`.`supplierAccountingId` DESC LIMIT 1");
       $supplieraccounting->execute();
@@ -266,8 +272,8 @@ class Purchase extends connection
         $remainedBefor = $supplieraccounting['remainedBefor'] + $select['Remained'];
       } else if ($supplieraccounting['remainedBefor'] < 0) {
         $remainedBefor = $supplieraccounting['remainedBefor'] + $select['Remained'];
-      }else{
-        $remainedBefor =$select['Remained'];
+      } else {
+        $remainedBefor = $select['Remained'];
       }
 
       $supplier = 'INSERT INTO supplieraccounting (supplierId,invoiceNumber,paid,remained,remainedBefor,date) VALUE (?,?,?,?,?,?)';
@@ -302,5 +308,21 @@ class Purchase extends connection
     } catch (Exception $e) {
       return $e->getMessage();
     }
+  }
+  public function dateSearch($startDate, $endDate)
+  {
+    if (empty($endDate)) $endDate = date("Y/m/d");
+    $temp = '';
+    if ($startDate > $endDate) {
+      $temp = $startDate;
+      $startDate = $endDate;
+      $endDate = $temp;
+    }
+    $query = $this->dbConnction()->prepare("SELECT *  FROM   suppliers  
+    INNER JOIN  purchases  ON suppliers.supplierId= purchases.supplierId
+    INNER JOIN users  ON users.userId= purchases.userId
+    where type = 1 AND addedDate BETWEEN ? AND  ? ORDER BY `purchases`.`purchaseId` DESC");
+    $query->execute([$startDate, $endDate]);
+    return $query->fetchAll();
   }
 }

@@ -7,6 +7,9 @@ if(isset($_POST['updateSetting'])){
    $appName=$_POST['appName'];
    $qtyNumber=$_POST['qtyNumber'];
    $notifyDate=$_POST['notifyDate'];
+   $address=$_POST['address'];
+   $phone=$_POST['phone'];
+   $email=$_POST['email'];
    $image=$_POST['oldImage'];
       if(isset($_FILES["image"]["name"])){
          unlink("../view/include/images/$image");
@@ -20,13 +23,13 @@ if(isset($_POST['updateSetting'])){
       $image = $newFileName;
   }
 }
-if($appName==''||$image==''||$notifyDate==''||$qtyNumber==''){
+if($appName==''||$image==''||$notifyDate==''||$qtyNumber==''||$address==''||$phone==''||$email==''){
    $_SESSION['flush'] =  'All the filed are required';
    header("location: ../view/settings/details.php");
     exit;
 }
    $pro = new Settings();
-   if($pro->update($appName,$image,$notifyDate,$qtyNumber)){
+   if($pro->update($appName,$image,$notifyDate,$qtyNumber,$address,$phone,$email)){
     $_SESSION['flush'] =  'Settings updated successfully';
    header("location: ../view/settings/details.php");
     exit;

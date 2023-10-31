@@ -318,4 +318,20 @@ class ReturnPurchase extends connection
       return $e->getMessage();
     }
   }
+  public function dateSearch($startDate, $endDate)
+  {
+    if (empty($endDate)) $endDate = date("Y/m/d");
+    $temp = '';
+    if ($startDate > $endDate) {
+      $temp = $startDate;
+      $startDate = $endDate;
+      $endDate = $temp;
+    }
+    $query = $this->dbConnction()->prepare("SELECT *  FROM   suppliers  
+    INNER JOIN  purchases  ON suppliers.supplierId= purchases.supplierId
+    INNER JOIN users  ON users.userId= purchases.userId
+    where type = 0 AND addedDate BETWEEN ? AND  ? ORDER BY `purchases`.`purchaseId` DESC");
+    $query->execute([$startDate, $endDate]);
+    return $query->fetchAll();
+  }
 }

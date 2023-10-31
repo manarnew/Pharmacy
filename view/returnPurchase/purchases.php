@@ -42,13 +42,39 @@ $pur = $purchase->index();
           <?php endif; ?>
           <div class="card">
             <div class="card-header">
-              <a class="btn btn-info float-right" href="add.php">Add  return purchases</a>
+              <a class="btn btn-info float-right" href="add.php"><i class="fas fa-plus"></i> Add return purchases</a>
               <h3 class="card-title">Show return Purchase</h3>
             </div>
             <!-- /.card-header -->
             <div class="card-body">
-              <table id="product" class="table table-bordered table-striped">
-                <thead>
+            <div class="row">
+                <div class="col-4">
+                  <div class="form-group">
+                    <label>Start date:</label>
+                    <div class="input-group date">
+                      <input type="date" id="startDate" name="startDate" class="form-control">
+                    </div>
+                  </div>
+                </div>
+                <div class="col-4">
+                  <div class="form-group">
+                    <label>End date:</label>
+                    <div class="input-group date" >
+                      <input type="date" id="endDate" name="endDate" class="form-control">
+                    </div>
+                  </div>
+                </div>
+                <div class="col-4">
+                  <div class="form-group">
+                    <label>search</label>
+                    <div class="input-group date">
+                      <button type="submit" onclick="submitDate()" id="submitDate" class="btn btn-info">Search</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <table id="purchase" class="table table-bordered table-striped">
+                <thead class="bg-info">
                   <tr>
                   <th>serial</th>
                     <th>Invoice number</th>
@@ -62,16 +88,19 @@ $pur = $purchase->index();
                   <?php $i = 0; foreach ($pur as $row) :  ?>
                     <tr>
                     <td><?php $i++;echo $i; ?></td>
-                      <td><?php echo $row['invoiceNumber']; ?></td>
+                      <td>
+                      <a href="details.php?id=<?php echo $row['purchaseId']; ?>">
+                        <?php echo $row['invoiceNumber']; ?>
+                        </a>
+                      </td>
                       <td><?php echo $row['supplierName']; ?></td>
                       <td><?php echo $row['addedDate']; ?></td>
                       <td><?php echo $row['userName']; ?></td>
                       <td>
-                        <a href="details.php?id=<?php echo $row['purchaseId']; ?>" class="btn btn-info">Purchase details</a>
                         <?php if ($row['approved'] != 1) : ?>
-                          <a href="../../includes/returnPurchaseOpration.php?deletePurchaseId=<?php echo $row['purchaseId']; ?>" class="btn btn-danger">Delete</a>
-                          <a href="../../includes/returnPurchaseOpration.php?approveId=<?php echo $row['purchaseId']; ?>" class="btn btn-success">Approve</a>
-                        <?php endif; ?>
+                          <a href="../../includes/returnPurchaseOpration.php?deletePurchaseId=<?php echo $row['purchaseId']; ?>" class="btn btn-danger"><i class="fas fa-trash-alt"></i></a>
+                          <a href="../../includes/returnPurchaseOpration.php?approveId=<?php echo $row['purchaseId']; ?>" class="btn btn-success"><i class="fas fa-check-circle"></i> Approve</a>
+                        <?php else: echo '<div class="text-center" style="color:blue">Approved</div>'; endif; ?>
                       </td>
                     </tr>
                   <?php endforeach; ?>
@@ -93,12 +122,37 @@ $pur = $purchase->index();
 <!-- dataTable script -->
 <script>
   $(function() {
-    $("#product").DataTable({
+    $("#purchase").DataTable({
       "responsive": true,
       "lengthChange": false,
       "autoWidth": false,
-      "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
-    }).buttons().container().appendTo('#product_wrapper .col-md-6:eq(0)');
+      "buttons": ["excel", "pdf", "print"]
+    }).buttons().container().appendTo('#purchase_wrapper .col-md-6:eq(0)');
 
   });
+  
+  function submitDate() {
+    let startDate = $('#startDate').val();
+    let endDate = $('#endDate').val();
+    if (startDate == '') {
+      toastr.warning('Start date can not be empty');
+      $('#startDate').focus();
+      return false;
+    }
+    $.ajax({
+      url: 'dateSearch.php',
+      type: 'get',
+      data: {
+        endDate: endDate,
+        startDate: startDate,
+      },
+      success: function(response) {
+        $('#purchase').html(response);
+      },
+      error: function(xhr, status, error) {
+        toastr.warning(xhr.responseText)
+      }
+
+    });
+  };
 </script>

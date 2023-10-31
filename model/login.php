@@ -9,13 +9,13 @@ class Login extends connection{
        if(count($query) == 0){
              session_start();
              $_SESSION['flush'] = 'This user does not exist';
-             header("location: /pharnacyapp/index.php");
+             header("location: /pharmacyapp/index.php");
              exit;
        }
       
             session_start();
             $_SESSION["id"]=$query[0]['userId'];
-            $_SESSION["type"]=$query[0]['usertype'];
+            $_SESSION["type"]=$query[0]['userType'];
             $_SESSION["name"]=$query[0]['userName'];
         
      }

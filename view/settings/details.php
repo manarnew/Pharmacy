@@ -65,13 +65,26 @@ $app = $settings->details();
                           <td class="width30"><?php echo $app['qtyNumber'] ?></td>
                         </tr>
                         <tr>
+                          <td class="width30">Address</td>
+                          <td class="width30"><?php echo $app['address'] ?></td>
+                        </tr>
+                        <tr>
+                          <td class="width30">Phone</td>
+                          <td class="width30"><?php echo $app['phone'] ?></td>
+                        </tr>
+                        <tr>
+                          <td class="width30">Email</td>
+                          <td class="width30"><?php echo $app['email'] ?></td>
+                        </tr>
+                        <tr>
                           <td class="width30">App logo</td>
                           <td class="width30"><img src="../include/images/<?php echo $app['logo'] ?>" width="150" height="150" alt="App logo"></td>
                         </tr>
                         <tr>
                           <td class="width30">Edit</td>
                           <td class="width30">
-                            <button type="button" class="btn btn-default" data-toggle="modal" data-target="#modal-default">
+                            <button type="button" class="btn btn-info" data-toggle="modal" data-target="#modal-default">
+                              <i class="fas fa-edit"></i>
                               Edit
                             </button>
                             <?php include 'editModal.php'; ?>

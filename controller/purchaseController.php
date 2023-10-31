@@ -25,6 +25,8 @@ class purchaseController extends Purchase{
         return true;
        }else if($check === -1){
         return -1;
+       }else if($check === 0){
+        return 0;
        }
        else{
         return false;

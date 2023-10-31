@@ -1,5 +1,9 @@
 <?php
 include $_SERVER['DOCUMENT_ROOT'] .'/pharmacyapp/view/users/session.php';
+if($_SESSION["type"]==2){
+  header("location: /pharmacyapp/view/dashboard/dashboard.php");
+  exit;
+}
 include $_SERVER['DOCUMENT_ROOT'] .'/pharmacyapp/model/user.php';
 include '../include/dashboard/dataTableHeader.php';
 $users = new User();
@@ -42,7 +46,7 @@ $users = $users->showUser();
           <?php endif; ?>
           <div class="card">
             <div class="card-header">
-              <a class="btn btn-info float-right" href="addUser.php">Add User</a>
+              <a class="btn btn-info float-right" href="addUser.php"><i class="fas fa-plus"></i> Add User</a>
               <h3 class="card-title">Show users</h3>
             </div>
             <!-- /.card-header -->
@@ -67,9 +71,9 @@ $users = $users->showUser();
                       <td><?php echo $row['email']; ?></td>
                       <td><?php echo $row['userType'] == 1 ? 'Admin' : 'User'; ?></td>
                       <td>
-                        <a href="../../includes/userOpeation.php?idForDelete=<?php echo $row['userId']; ?>" class="btn btn-danger">Delete</a>
+                        <a href="../../includes/userOpeation.php?idForDelete=<?php echo $row['userId']; ?>" class="btn btn-danger"><i class="fas fa-trash-alt"></i></a>
                         <button type="button" class="btn btn-default" data-toggle="modal" data-target="#modal-default<?php echo $row['userId']; ?>">
-                          Edit
+                        <i class="fas fa-edit"></i>
                         </button>
                         <?php include 'editUserModal.php'; ?>
                       </td>
@@ -95,7 +99,7 @@ $users = $users->showUser();
       "responsive": true,
       "lengthChange": false,
       "autoWidth": false,
-      "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+      "buttons": ["excel", "pdf", "print"]
     }).buttons().container().appendTo('#user_wrapper .col-md-6:eq(0)');
 
   });

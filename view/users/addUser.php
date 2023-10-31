@@ -1,5 +1,9 @@
 <?php 
- include $_SERVER['DOCUMENT_ROOT'] .'/pharmacyapp/view/users/session.php';
+  include $_SERVER['DOCUMENT_ROOT'] .'/pharmacyapp/view/users/session.php';
+if($_SESSION["type"]==2){
+  header("location: /pharmacyapp/view/dashboard/dashboard.php");
+  exit;
+}
 include '../include/dashboard/header.php' ;
 ?>
  <!-- Content Wrapper. Contains page content -->

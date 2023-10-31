@@ -6,7 +6,7 @@
    <div class="modal-dialog modal-lg">
      <div class="modal-content bg-info">
        <div class="modal-header">
-         <h4 class="modal-title">Info Modal</h4>
+         <h4 class="modal-title">Add medicine</h4>
          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
            <span aria-hidden="true">&times;</span>
          </button>

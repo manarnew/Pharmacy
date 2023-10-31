@@ -42,13 +42,13 @@ $prp = $Product->index();
           <?php endif; ?>
           <div class="card">
             <div class="card-header">
-              <a class="btn btn-info float-right" href="addProduct.php">Add Medicine</a>
+              <a class="btn btn-info float-right" href="addProduct.php"><i class="fas fa-plus"></i> Add Medicine</a>
               <h3 class="card-title">All Medicines</h3>
             </div>
             <!-- /.card-header -->
-            <div class="card-body">
+            <div class="card-body ">
               <table id="product" class="table table-bordered table-striped">
-                <thead>
+                <thead class=" bg-info">
                   <tr>
                    <th>serial</th>
                     <th>Medicine Name</th>
@@ -71,8 +71,10 @@ $prp = $Product->index();
                       <td><?php echo $row['addedDate']; ?></td>
                       <td><img src="../include/images/<?php echo $row['image'] ?>" height="100" width="150" alt="product image"></td>
                       <td>
-                        <a href="../../includes/productOpration.php?id=<?php echo $row['productId']; ?>" class="btn btn-danger">Delete</a>
-                        <a href="editProduct.php?id=<?php echo $row['productId']; ?>" class="btn btn-info">Edit</a>
+                        <a href="../../includes/productOpration.php?id=<?php echo $row['productId']; ?>" class="btn btn-danger">
+                        <i class="fas fa-trash-alt"></i>
+                      </a>
+                        <a href="editProduct.php?id=<?php echo $row['productId']; ?>" class="btn btn-info"><i class="fas fa-edit"></i></a>
                       </td>
                     </tr>
                   <?php endforeach; ?>
@@ -98,7 +100,7 @@ $prp = $Product->index();
       "responsive": true,
       "lengthChange": true,
       "autoWidth": false,
-      "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+      "buttons": [ "excel", "pdf", "print"]
     }).buttons().container().appendTo('#product_wrapper .col-md-6:eq(0)');
 
   });

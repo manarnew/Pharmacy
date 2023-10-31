@@ -34,7 +34,7 @@
                                         <label class="form-control-label" for="appendedInput">User Type </label>
                                         <div class="controls">
                                             <div class="input-group">
-                                            <select id="select" name="type" class="form-control" size="1" required>
+                                            <select id="select" name="type" class="form-control" size="1" >
                                                   <option value="<?php $info['userType'];?>"><?php ($info['userType']==1) ? print"Admin" : print"User"; ?></option>
                                                   <option value="<?php ($info['userType']==1)?print 2: print 1;?>"><?php ($info['userType']==1) ? print"User" :print"Admin" ; ?></option>
                                             </select>

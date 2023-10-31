@@ -42,13 +42,13 @@ $units = $unit->index();
           <?php endif; ?>
           <div class="card">
             <div class="card-header">
-              <a class="btn btn-info float-right" data-toggle="modal" data-target="#modal-addUnit">Add Product</a>
+              <a class="btn btn-info float-right" data-toggle="modal" data-target="#modal-addUnit"><i class="fas fa-plus"></i> Add unit</a>
               <h3 class="card-title">Unit table</h3>
             </div>
             <!-- /.card-header -->
             <div class="card-body table-responsive p-0">
-              <table class="table table-hover text-nowrap">
-                <thead>
+              <table class="table table-bordered table-striped">
+                <thead class="bg-info">
                   <tr>
                     <th>serial</th>
                     <th>Parent unit Name</th>
@@ -64,9 +64,9 @@ $units = $unit->index();
                       <td><?php echo $row['unitName']; ?></td>
                       <td><?php ($row['isMaster'] == 1) ? print 'Yes' : print 'No'; ?></td>
                       <td>
-                        <a href="../../includes/unitOpration.php?id=<?php echo $row['unitId']; ?>" class="btn btn-danger">Delete</a>
+                        <a href="../../includes/unitOpration.php?id=<?php echo $row['unitId']; ?>" class="btn btn-danger"><i class="fas fa-trash-alt"></i></a>
                         <button type="button" class="btn btn-default" data-toggle="modal" data-target="#modal-default<?php echo $row['unitId']; ?>">
-                          Edit
+                          <i class="fas fa-edit"></i>
                         </button>
                         <?php include 'editModal.php'; ?>
                       </td>

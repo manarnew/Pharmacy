@@ -46,7 +46,7 @@
 <!-- overlayScrollbars -->
 <script src="/pharmacyapp/view/include/assets/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
 <!-- AdminLTE App -->
-<script src="/pharmacyapp/view/include/assets/plugins/toastr/toastr.min.js"></script>>
+<script src="/pharmacyapp/view/include/assets/plugins/toastr/toastr.min.js"></script>
 <!-- Toastr -->
 <script src="/pharmacyapp/view/include/assets/dist/js/adminlte.js"></script>
 <!-- AdminLTE dashboard demo (This is only for demo purposes) -->

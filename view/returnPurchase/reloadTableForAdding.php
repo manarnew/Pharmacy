@@ -10,7 +10,7 @@ $getDetails = $pur->getPurchaseDetail($_GET['id']);
         <td><?php echo $row['WholesalePayPrice']; ?></td>
         <td><?php echo ($row['WholesalePayPrice'] * $row['WholesaleQty']); ?></td>
         <td>
-            <button class="btn btn-danger btn-sm" onclick="deleteMedicine(<?php echo $row['purchaseDetailId'] ?>)">Delete</button>
+            <button class="btn btn-danger" onclick="deleteMedicine(<?php echo $row['purchaseDetailId'] ?>)"><i class="fas fa-trash-alt"></i></button>
         </td>
     </tr>
 <?php endforeach; ?>

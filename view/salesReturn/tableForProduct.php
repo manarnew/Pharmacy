@@ -18,9 +18,9 @@ $totalPrice = 0;
     <td>
         <button type="submit" onclick="deleteMedicine('<?php echo $row['productId']; ?>'
         ,'<?php echo $row['invoiceNumber']; ?>','<?php echo $row['qty']*$row['salePrice']; ?>','<?php echo $row['qty']; ?>')" 
-         class="btn btn-danger">Delete</button>
+         class="btn btn-danger"><i class="fas fa-trash-alt"></i></button>
     </td>
 
 </tr>
 <?php endforeach;?>
-<tr><td style="color: red;">Total Price</td><td></td><td></td><td></td><td style="color: red;"><?php echo $totalPrice; ?></td></tr>
+<tr><td style="color: red;" colspan="3">Total Price</td><td style="color: red;" colspan="2"><?php echo $totalPrice; ?></td></tr>

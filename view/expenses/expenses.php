@@ -2,8 +2,8 @@
 include $_SERVER['DOCUMENT_ROOT'] . '/pharmacyapp/view/users/session.php';
 include $_SERVER['DOCUMENT_ROOT'] . '/pharmacyapp/model/expenses.php';
 include '../include/dashboard/dataTableHeader.php';
-$supplier = new Expenses();
-$supp = $supplier->index();
+$Expenses = new Expenses();
+$Expense = $Expenses->index();
 ?>
 
 <!-- Content Wrapper. Contains page content -->
@@ -48,7 +48,34 @@ $supp = $supplier->index();
             </div>
             <!-- /.card-header -->
             <div class="card-body">
-              <table id="suppliers" class="table table-bordered table-striped">
+
+              <div class="row">
+                <div class="col-4">
+                  <div class="form-group">
+                    <label>Start date:</label>
+                    <div class="input-group date">
+                      <input type="date" id="startDate" name="startDate" class="form-control">
+                    </div>
+                  </div>
+                </div>
+                <div class="col-4">
+                  <div class="form-group">
+                    <label>End date:</label>
+                    <div class="input-group date">
+                      <input type="date" id="endDate" name="endDate" class="form-control">
+                    </div>
+                  </div>
+                </div>
+                <div class="col-4">
+                  <div class="form-group">
+                    <label>search</label>
+                    <div class="input-group date">
+                      <button type="submit" onclick="submitDate()" id="submitDate" class="btn btn-info">Search</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <table id="expense" class="table table-bordered table-striped">
                 <thead>
                   <tr>
                     <th>serial</th>
@@ -60,7 +87,7 @@ $supp = $supplier->index();
                 </thead>
                 <tbody>
                   <?php $totalPrice = $i = 0;
-                  foreach ($supp as $row) :  ?>
+                  foreach ($Expense as $row) :  ?>
                     <tr>
                       <td><?php $i++;
                           echo $i; ?></td>
@@ -68,7 +95,8 @@ $supp = $supplier->index();
                         <?php echo $row['expenseNote']; ?>
                         </a>
                       </td>
-                      <td><?php echo $row['expensePrice'];$totalPrice+=$row['expensePrice']; ?></td>
+                      <td><?php echo $row['expensePrice'];
+                          $totalPrice += $row['expensePrice']; ?></td>
                       <td><?php echo $row['date']; ?></td>
                       <td>
                         <a href="../../includes/expenseOpration.php?id=<?php echo $row['expenseId']; ?>" class="btn btn-danger">Delete</a>
@@ -80,7 +108,11 @@ $supp = $supplier->index();
                     </tr>
                   <?php endforeach; ?>
                 </tbody>
-<tr><td style="color: red;">Total Price</td><td></td><td style="color: red;"><?php echo $totalPrice; ?></td></tr>
+                <tr>
+                  <td style="color: red;">Total Price</td>
+                  <td></td>
+                  <td style="color: red;"><?php echo $totalPrice; ?></td>
+                </tr>
 
               </table>
             </div>
@@ -99,12 +131,38 @@ $supp = $supplier->index();
 <!-- dataTable script -->
 <script>
   $(function() {
-    $("#suppliers").DataTable({
+    $("#expense").DataTable({
       "responsive": true,
       "lengthChange": false,
       "autoWidth": false,
-      "buttons": [ "excel", "pdf", "print"]
-    }).buttons().container().appendTo('#suppliers_wrapper .col-md-6:eq(0)');
+      "buttons": ["excel", "pdf", "print"]
+    }).buttons().container().appendTo('#expense_wrapper .col-md-6:eq(0)');
 
   });
+
+
+  function submitDate() {
+    let startDate = $('#startDate').val();
+    let endDate = $('#endDate').val();
+    if (startDate == '') {
+      toastr.warning('Start date can not be empty');
+      $('#startDate').focus();
+      return false;
+    }
+    $.ajax({
+      url: 'dateSearch.php',
+      type: 'get',
+      data: {
+        endDate: endDate,
+        startDate: startDate,
+      },
+      success: function(response) {
+        $('#expense').html(response);
+      },
+      error: function(xhr, status, error) {
+        toastr.warning(xhr.responseText)
+      }
+
+    });
+  };
 </script>

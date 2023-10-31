@@ -33,8 +33,22 @@
 <script src="/pharmacyapp/view/include/assets/plugins/datatables-buttons/js/buttons.print.min.js"></script>
 <script src="/pharmacyapp/view/include/assets/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
 <!-- AdminLTE App -->
+<script src="/pharmacyapp/view/include/assets/plugins/toastr/toastr.min.js"></script>
+
 <script src="/pharmacyapp/view/include/assets/dist/js/adminlte.min.js"></script>
 <!-- Page specific script -->
+<script>
+    $(function() {
+    var Toast = Swal.mixin({
+      toast: true,
+      position: 'top-end',
+      showConfirmButton: false,
+      timer: 3000
+    });
 
+   
+  });
+ 
+    </script>
 </body>
 </html>

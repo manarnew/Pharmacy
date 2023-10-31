@@ -41,9 +41,12 @@ if(isset($_POST['wholesaleUnitId'])){
    ,$WholesaleSalePrice,$hasChildUnit,$RetailUnitId,$RetailSalePrice,$RetailPayPrice,$RetailQty,$TotalRetailQty,$batchNumber,$madeAt);
    if($check === -1){
       echo 'the medicine already added';
+   }else if($check === 0){
+      echo 'the batch number already exist change it or let it empty';
    }else if($check === true){
       echo 'Medicine created successfully';
-   }else{
+   }
+   else{
       echo 'something went wrong';
    }
 }

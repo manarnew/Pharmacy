@@ -4,6 +4,9 @@ include $_SERVER['DOCUMENT_ROOT'] . '/pharmacyapp/model/sale.php';
 include '../include/dashboard/header.php';
 $sale = new Sale();
 $sales = $sale->getAllProduct();
+$store = new qtyAndExpiration();
+$setting = $store->setting();
+
 ?>
 
 <!-- Content Wrapper. Contains page content -->
@@ -29,6 +32,7 @@ $sales = $sale->getAllProduct();
   <!-- Main content -->
   <section class="content">
     <div class="container-fluid">
+      
       <div class="row">
         <div class="col-12">
           <?php if (!empty($_SESSION["flush"])) : ?>
@@ -46,6 +50,25 @@ $sales = $sale->getAllProduct();
             </div>
             <!-- /.card-header -->
             <div class="card-body">
+            <div class="row">
+                <div class="col-12">
+                  <h4>
+                    <i class="fas fa-globe "></i> <?php echo $setting["appName"] ?>.
+                    <b class="float-right">Date</b><br>
+                    <b class="float-right"><?php echo date('Y/m/d') ?></b>
+                  </h4>
+                </div>
+                <!-- /.col -->
+              </div>
+              <div class="col-sm-4 invoice-col">
+                  From
+                  <address>
+                    <strong>Dr, <?php echo $_SESSION["name"] ?>.</strong><br>
+                    Address, <?php echo $setting["address"] ?><br>
+                    Phone: <?php echo $setting["phone"] ?><br>
+                    Email: <?php echo $setting["email"] ?>
+                  </address>
+                </div>
               <form id="submitSale" class="noPrint">
                 <div class="row">
                   <div class="col-lg-6">

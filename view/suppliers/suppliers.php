@@ -43,13 +43,13 @@ $supp = $supplier->index();
           <div class="card">
             <div class="card-header">
               <?php include 'addModal.php'; ?>
-              <a class="btn btn-info float-right" data-toggle="modal" data-target="#modal-Add">Add User</a>
+              <a class="btn btn-info float-right" data-toggle="modal" data-target="#modal-Add"><i class="fas fa-plus"></i> Add User</a>
               <h3 class="card-title">Show users</h3>
             </div>
             <!-- /.card-header -->
             <div class="card-body">
               <table id="suppliers" class="table table-bordered table-striped">
-                <thead>
+                <thead  class=" bg-info">
                   <tr>
                     <th>serial</th>
                     <th>Supplier Name</th>
@@ -72,9 +72,9 @@ $supp = $supplier->index();
                       <td><?php echo $row['phone']; ?></td>
                       <td><?php echo $row['address']; ?></td>
                       <td>
-                        <a href="../../includes/supplierOpration.php?id=<?php echo $row['supplierId']; ?>" class="btn btn-danger">Delete</a>
+                        <a href="../../includes/supplierOpration.php?id=<?php echo $row['supplierId']; ?>" class="btn btn-danger"><i class="fas fa-trash-alt"></i></a>
                         <button type="button" class="btn btn-default" data-toggle="modal" data-target="#modal-Edit<?php echo $row['supplierId']; ?>">
-                          Edit
+                          <i class="fas fa-edit"></i>
                         </button>
                         <?php include 'editModal.php'; ?>
                       </td>

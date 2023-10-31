@@ -144,7 +144,7 @@ $getDetails = $pur->getPurchaseDetail($_GET['id']);
                         <td><?php echo ($row['WholesalePayPrice'] * $row['WholesaleQty']); ?></td>
                         <td class="noPrint">
                           <?php if ($purchase['approved'] != 1) : ?>
-                            <button class="btn btn-danger btn-sm " onclick="deleteMedicine(<?php echo $row['purchaseDetailId'] ?>)">Delete</button>
+                            <button class="btn btn-danger" onclick="deleteMedicine(<?php echo $row['purchaseDetailId'] ?>)"><i class="fas fa-trash-alt"></i></button>
                           <?php endif; ?>
                         </td>
                       </tr>
@@ -232,7 +232,10 @@ include '../include/dashboard/footer.php';
       success: function(response) {
         if (response == "the product already added") {
           toastr.info(response);
-        } else {
+        }else if (response == "the batch number already exist change it or let it empty") {
+          toastr.warning(response);
+        }
+        else {
           toastr.success(response);
         }
         //make all input empty

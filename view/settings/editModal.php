@@ -13,7 +13,7 @@
             <label class="form-control-label" for="prependedInput">App Name</label>
             <div class="controls">
               <div class="input-prepend input-group">
-                <input type="text" value="<?php echo $app['appName'] ?>" name="appName" class="form-control" placeholder="Unit name" required>
+                <input type="text" value="<?php echo $app['appName'] ?>" name="appName" class="form-control" placeholder="App Name" required>
               </div>
             </div>
           </div>
@@ -21,7 +21,7 @@
             <label class="form-control-label" for="prependedInput">notify date for the expiration</label>
             <div class="controls">
               <div class="input-prepend input-group">
-                <input type="text" value="<?php echo $app['notifyDate'] ?>" name="notifyDate" class="form-control" placeholder="Unit name" required>
+                <input type="text" value="<?php echo $app['notifyDate'] ?>" name="notifyDate" class="form-control" placeholder="notify date for the expiration" required>
               </div>
             </div>
           </div>
@@ -29,7 +29,31 @@
             <label class="form-control-label" for="prependedInput">notify for quantity end</label>
             <div class="controls">
               <div class="input-prepend input-group">
-                <input type="text" value="<?php echo $app['qtyNumber'] ?>" name="qtyNumber" class="form-control" placeholder="Unit name" required>
+                <input type="text" value="<?php echo $app['qtyNumber'] ?>" name="qtyNumber" class="form-control" placeholder="notify for quantity end" required>
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-control-label" for="prependedInput">Address</label>
+            <div class="controls">
+              <div class="input-prepend input-group">
+                <input type="text" value="<?php echo $app['address'] ?>" name="address" class="form-control" placeholder="Address ...." required>
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-control-label" for="prependedInput">Phone</label>
+            <div class="controls">
+              <div class="input-prepend input-group">
+                <input type="text" value="<?php echo $app['phone'] ?>" name="phone" class="form-control" placeholder="phone ..." required>
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-control-label" for="prependedInput">Email</label>
+            <div class="controls">
+              <div class="input-prepend input-group">
+                <input type="text" value="<?php echo $app['email'] ?>" name="email" class="form-control" placeholder="Email ..." required>
               </div>
             </div>
           </div>
@@ -37,7 +61,7 @@
                   <h4><img src="../include/images/<?php echo $app['logo'] ?>" width="200" alt="logo"></h4>
                   <div class="custom-file">
                     <input type="file" name="image" class="custom-file-input" id="customFile">
-                    <input type="" name="oldImage" value="<?php echo $app['logo'] ?>">
+                    <input type="hidden" name="oldImage" value="<?php echo $app['logo'] ?>">
                     <label class="custom-file-label" for="customFile">Choose image</label>
                   </div>
                 </div>

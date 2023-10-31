@@ -207,4 +207,18 @@ class SaleReturn extends connection
       return 'error ' . $e->getMessage();
     }
   }
+  public function dateSearch($startDate, $endDate)
+  {
+    if (empty($endDate)) $endDate = date("Y/m/d");
+    $temp = '';
+    if ($startDate > $endDate) {
+      $temp = $startDate;
+      $startDate = $endDate;
+      $endDate = $temp;
+    }
+    $query = $this->dbConnction()->prepare("SELECT invoiceNumber,TotalPrice,totalQty,date,users.userName FROM 
+    sales INNER JOIN users ON users.userId = sales.userId WHERE type = 0 AND date BETWEEN ? AND  ? ORDER BY `sales`.`saleId` DESC");
+    $query->execute([$startDate, $endDate]);
+    return $query->fetchAll();
+  }
 }

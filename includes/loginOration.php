@@ -11,7 +11,7 @@ if(isset($_POST["submit"])){
 
   $login->loginUser();
 
-  header("location: ../view/category/category.php");
+  header("location: /pharmacyapp/view/dashboard/dashboard.php");
   exit;
 
 
