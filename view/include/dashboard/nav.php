@@ -139,7 +139,7 @@
       <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
 
         <span class="dropdown-item dropdown-header"><?php echo ($countQty+$countexpirationDate); ?> Notifications</span>
-        <?php foreach ($qty as $qty) :
+        <?php  $x = 0; foreach ($qty as $qty) :
           if (($qty['quantity'] - $setting['qtyNumber']) <= 0) :
         ?>
             <a  class="dropdown-item">
@@ -148,42 +148,39 @@
               <br>
               <span class="float-right text-muted text-sm">Quantity: <?php echo $qty['quantity']; ?></span>
             </a>
-        <?php endif;
+        <?php $x++; endif; 
         endforeach; ?>
+        <?php if($x>=1):?>
          <div class="dropdown-divider"></div>
           <a href="/pharmacyapp/view/products/endProducts.php" class="dropdown-item dropdown-footer">See All Notifications</a>
         <hr>
-           <?php foreach ($batches as $batches) :
-           $now = date("Y/m/d") ;
-           $now = new DateTime($now);
-           
-           $expirationDate = new DateTime($batches['expirationDate']);
-           
-           $diff = $now->diff($expirationDate);
-           
-           $daysDiff = $diff->d;
-          //  
-          if ($now >= $expirationDate) :
-        ?>
+        <?php endif;?>
+           <?php 
+           $j = 0;
+           foreach ($batches as $batches) :
+                  $now = new DateTime();
+
+                  $expirationDate = new DateTime($batches['expirationDate']);
+                  $diff = $now->diff($expirationDate);
+
+                  $daysDiff = $diff->d;
+                  $settingDate = $setting['notifyDate'];
+                  $now->modify("+$settingDate days");
+                  $newdate = $now->format('Y-m-d');
+                  if ($newdate >= $expirationDate->format('Y-m-d') || $now >= $expirationDate) 
+                  {?>
             <a  class="dropdown-item">
               <i class="fas fa-file mr-2"></i>
               Product Name: <?php echo $batches['productName']; ?>
               <br>
-              <span class="float-right text-muted text-sm bg-danger">This product has expired before: <?php echo $daysDiff.' days'; ?></span>
+              <span class="float-right text-muted text-sm bg-danger">Expiration date: <?php echo $expirationDate->format('Y-m-d'); ?></span>
             </a>
-        <?php elseif($now < $expirationDate):
-          if (($daysDiff - $setting['notifyDate']) <= 0):
-          ?>
-           <a  class="dropdown-item">
-              <i class="fas fa-file mr-2"></i>
-              Product Name: <?php echo $batches['productName']; ?>
-              <br>
-              <span class="float-right text-muted text-sm bg-danger">This product will be expired after: <?php echo $daysDiff.' days'; ?></span>
-            </a>
-            <?php endif;endif;endforeach;?>
+            <?php $j++; } endforeach;?>
+        <?php if($j>=1):?>
             <div class="dropdown-divider"></div>
           <a href="/pharmacyapp/view/products/expiredproducts.php" class="dropdown-item dropdown-footer">See All Notifications</a>
-      </div>
+          <?php endif;?>
+        </div>
     </li>
     <li class="nav-item">
       <a class="nav-link" data-widget="fullscreen" href="#" role="button">

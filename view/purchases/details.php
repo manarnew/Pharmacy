@@ -112,6 +112,15 @@ $getDetails = $pur->getPurchaseDetail($_GET['id']);
                     <?php endif; ?>
                     </td>
                 </tr>
+                <tr>
+                  <td class="width30">Add account</td>
+                  <?php if($purchase['tax']==0 && $purchase['paid']==0 && $purchase['costOnPay']==0 && $purchase['Remained']==0):?>
+                  <td class="width30"> <button type="button" style="margin-top: 10px;" class="btn btn-info" data-toggle="modal" data-target="#modal-account<?php $purchase['purchaseId'] ?>">
+                      Add accounting
+                    </button>
+                    <?php endif;?>
+                  </td>
+                </tr>
               </table>
               <br>
               <div class=" text-center" style="font-size:25px;background-color:beige;">Medicines Details</div>

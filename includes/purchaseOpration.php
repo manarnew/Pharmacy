@@ -8,7 +8,7 @@ if(isset($_POST['productSubmit'])){
    $supplierId=$_POST['supplierId'];
    $details=$_POST['details'];
    // if the invoice number is null well generate random number
-   $invoiceNumber=($_POST['invoiceNumber']==null)?(uniqid().microtime(true)):$_POST['invoiceNumber'];
+   $invoiceNumber=($_POST['invoiceNumber']==null)?('#'.$purchase->invoiceNum()):$_POST['invoiceNumber'];
    if($purchase->purchaseAdd($supplierId,$details,$invoiceNumber)){
     $_SESSION['flush'] =  'Purchase created successfully';
     header("location: ../view/purchases/purchases.php");
@@ -21,6 +21,7 @@ if(isset($_POST['productSubmit'])){
 }
 // add pay invoice details
 if(isset($_POST['wholesaleUnitId'])){
+   $purchase = new purchaseController();
    $purchaseId = $_POST['purchaseId'];
    $productId=$_POST['productId'];
    $endDate=$_POST['endDate'];
@@ -35,7 +36,7 @@ if(isset($_POST['wholesaleUnitId'])){
     $RetailQty =$_POST['RetailQty'];
     $RetailPayPrice =$_POST['RetailPayPrice'];
     $TotalRetailQty =$_POST['TotalRetailQty'];
-   $batchNumber=($_POST['batchNumber']==null)?(uniqid().microtime(true)):$_POST['batchNumber'];
+   $batchNumber=($_POST['batchNumber']==null)?('#BH'.$purchase->invoiceNum()):$_POST['batchNumber'];
    $purchase = new purchaseController();
    $check = $purchase->purchaseDetailsAdd($purchaseId,$productId,$endDate,$wholesaleUnitId,$WholesaleQty,$WholesalePayPrice
    ,$WholesaleSalePrice,$hasChildUnit,$RetailUnitId,$RetailSalePrice,$RetailPayPrice,$RetailQty,$TotalRetailQty,$batchNumber,$madeAt);

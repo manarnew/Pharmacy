@@ -11,7 +11,7 @@ if(isset($_POST['updateSetting'])){
    $phone=$_POST['phone'];
    $email=$_POST['email'];
    $image=$_POST['oldImage'];
-      if(isset($_FILES["image"]["name"])){
+      if($_FILES["image"]["name"]){
          unlink("../view/include/images/$image");
    if ($_FILES["image"]["error"] == UPLOAD_ERR_OK){
       $folder = "../view/include/images/";

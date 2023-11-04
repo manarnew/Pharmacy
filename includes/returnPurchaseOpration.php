@@ -8,7 +8,7 @@ if(isset($_POST['productSubmit'])){
    $supplierId=$_POST['supplierId'];
    $details=$_POST['details'];
    // if the invoice number is null well generate random number
-   $invoiceNumber=($_POST['invoiceNumber']==null)?uniqid():$_POST['invoiceNumber'];
+   $invoiceNumber=($_POST['invoiceNumber']==null)?('#'.$purchase->invoiceNum()):$_POST['invoiceNumber'];
    if($purchase->purchaseAdd($supplierId,$details,$invoiceNumber)){
     $_SESSION['flush'] =  'Return purchase created successfully';
     header("location: ../view/returnPurchase/purchases.php");

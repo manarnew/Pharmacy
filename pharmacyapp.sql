@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 29, 2023 at 08:08 AM
+-- Generation Time: Nov 01, 2023 at 08:04 AM
 -- Server version: 10.4.24-MariaDB
 -- PHP Version: 8.1.6
 
@@ -41,10 +41,14 @@ CREATE TABLE `accounting` (
 --
 
 INSERT INTO `accounting` (`accountId`, `AccountName`, `debit`, `credit`, `date`, `expenseId`) VALUES
-(64, 'Account Sales', NULL, '4500.00', '2023-10-24', NULL),
-(65, 'Account expense', '20.00', NULL, '2023-10-24', 3),
+(64, 'Account Sales', NULL, '4500.00', '2023-09-01', NULL),
+(65, 'Account expense', '20.00', NULL, '2023-10-01', 3),
 (66, 'Account expense', '25.00', NULL, '2023-10-24', 0),
-(67, 'Account expense', '60.00', NULL, '2023-10-24', 7);
+(67, 'Account expense', '60.00', NULL, '2023-11-01', 7),
+(69, 'Account Sales', NULL, '6000.00', '2023-10-29', NULL),
+(70, 'Account Sales', NULL, '1500.00', '2023-10-30', NULL),
+(71, 'Account Sales', NULL, '300.00', '2023-10-30', NULL),
+(72, 'Account Sales', NULL, '300.00', '2023-10-30', NULL);
 
 -- --------------------------------------------------------
 
@@ -69,7 +73,7 @@ INSERT INTO `batches` (`batchId`, `batchNumber`, `productid`, `expirationDate`, 
 (95, '6532290fcff8f1697786127.8519', 19, '2023-11-10', 1),
 (96, '6532c8ac101401697826988.0659', 19, '2023-10-04', 5),
 (97, '6532c8c9bb7d61697827017.768', 17, '2023-10-10', 225),
-(102, '653505a84164b1697973672.2679', 15, '2023-10-02', 145),
+(102, '653505a84164b1697973672.2679', 15, '2023-10-02', 118),
 (106, '653746169c1181698121238.6393', 15, '2023-10-04', 1);
 
 -- --------------------------------------------------------
@@ -143,7 +147,8 @@ INSERT INTO `products` (`productId`, `productName`, `categoryId`, `wholesaleUnit
 (15, 'LL15', 83, 6, 1, 7, 3, '2023-10-10', 'All rights reserved.', '1696960620.jpg', '6525906b8fa5c'),
 (16, 'DCCDD', 82, 6, 0, 0, 3, '2023-10-10', 'All rights reserved.', '1696960620.jpg', '6525906b8fa5cdd'),
 (17, 'MAD', 82, 6, 1, 7, 3, '2023-10-14', 'details details details', '1697315929.jpg', 'LKLK5454'),
-(19, 'FSPFR', 82, 6, 0, 0, 3, '2023-10-20', 'reserved reserved reserved', NULL, '6531fff960f431697775609.3971');
+(19, 'FSPFR', 82, 6, 0, 0, 3, '2023-10-20', 'reserved reserved reserved', NULL, '6531fff960f431697775609.3971'),
+(20, 'online', 83, 6, 0, 0, 3, '2023-11-01', '', '1698819295.jpg', '6541ecde83fe61698819294.5407');
 
 -- --------------------------------------------------------
 
@@ -177,7 +182,9 @@ CREATE TABLE `purchasedetails` (
 
 INSERT INTO `purchasedetails` (`purchaseDetailId`, `purchaseId`, `productId`, `wholesaleUnitId`, `WholesaleQty`, `WholesalePayPrice`, `WholesaleSalePrice`, `hasChildUnit`, `RetailUnitId`, `RetailQty`, `RetailSalePrice`, `RetailPayPrice`, `TotalRetailQty`, `userId`, `endDate`, `batchNumber`, `madeAt`) VALUES
 (91, 23, 15, 6, 20, '200.00', '3000.00', 1, 7, 10, '300.00', '20.00', 200, 3, '2023-10-02', '653505a84164b1697973672.2679', '2023-09-30'),
-(92, 23, 16, 6, 5, '15.00', '1000.00', 0, 0, 0, '0.00', '0.00', 0, 3, '2023-10-09', '653505bcc937d1697973692.8242', '2023-10-03');
+(92, 23, 16, 6, 5, '15.00', '1000.00', 0, 0, 0, '0.00', '0.00', 0, 3, '2023-10-09', '653505bcc937d1697973692.8242', '2023-10-03'),
+(94, 27, 16, 6, 2, '5.00', '10.00', 0, 7, 0, '0.00', '0.00', 0, 1, '2023-10-02', '6540929cb7c221698730652.7527', '2023-10-10'),
+(95, 29, 15, 6, 2, '200.00', '0.00', 1, NULL, 10, NULL, NULL, NULL, 1, '0000-00-00', '653505a84164b1697973672.2679', '0000-00-00');
 
 -- --------------------------------------------------------
 
@@ -206,7 +213,10 @@ CREATE TABLE `purchases` (
 
 INSERT INTO `purchases` (`purchaseId`, `userId`, `supplierId`, `addedDate`, `details`, `invoiceNumber`, `tax`, `costOnPay`, `paid`, `Remained`, `type`, `approved`) VALUES
 (23, 3, 5, '2023-10-22', '', '653505869ffa51697973638.6553', '10.00', '500.00', '1000.00', '6000.00', 1, 1),
-(25, 3, 5, '2023-10-22', '', '653505869ffa51697973638.6553', '0.00', '0.00', '100.00', '200.00', 0, 1);
+(25, 3, 5, '2023-10-22', '', '653505869ffa51697973638.6553', '0.00', '0.00', '100.00', '200.00', 0, 1),
+(27, 3, 5, '2023-10-29', '', '653e6cea7f62d1698589930.5218', NULL, NULL, NULL, NULL, 1, 0),
+(28, 3, 5, '2023-11-01', '', '653e6cf48f0011698589940.5857', NULL, NULL, NULL, NULL, 1, 0),
+(29, 1, 5, '2023-10-31', '', '653505869ffa51697973638.6553', NULL, NULL, NULL, NULL, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -232,11 +242,15 @@ INSERT INTO `sales` (`saleId`, `invoiceNumber`, `TotalPrice`, `totalQty`, `date`
 (70, '6536099ad71151698040218.8809', '1500.00', 5, '2023-10-23', 3, 1),
 (72, '65360a16958b31698040342.6125', '10000.00', 10, '2023-09-06', 3, 1),
 (73, '65360bcf3d0201698040783.2499', '1500.00', 5, '2023-10-23', 3, 1),
-(74, '65367502cc5d61698067714.8371', '2400.00', 8, '1899-11-01', 3, 0),
+(74, '65367502cc5d61698067714.8371', '2400.00', 8, '2023-11-01', 3, 0),
 (75, '653676b4403611698068148.263', '600.00', 2, '2023-10-23', 3, 0),
 (81, '6536790fc3b821698068751.8018', '300.00', 1, '2023-10-23', 3, 1),
 (88, '65374d07879d31698123015.5555', '300.00', 1, '2023-10-24', 3, 0),
-(92, '653759f3ad92e1698126323.711', '4500.00', 15, '2023-10-24', 3, 1);
+(92, '653759f3ad92e1698126323.711', '4500.00', 15, '2023-10-24', 3, 1),
+(93, '653e9d786dace1698602360.4492', '6000.00', 20, '2023-10-29', 1, 1),
+(94, '653f2d2ec9a641698639150.826', '1500.00', 5, '2023-10-30', 1, 1),
+(95, '653f2de18fcf41698639329.5891', '300.00', 1, '2023-10-30', 1, 1),
+(96, '653f4f5fa40881698647903.6719', '300.00', 1, '2023-10-30', 1, 1);
 
 -- --------------------------------------------------------
 
@@ -279,7 +293,11 @@ INSERT INTO `salesdetails` (`saleDetailId`, `invoiceNumber`, `barcode`, `product
 (122, '653757a83f7791698125736.26', '', 16, NULL, 5, '1000.00', '2023-10-24', 3, '2023-10-03'),
 (123, '65375825683281698125861.4268', '', 16, NULL, 5, '1000.00', '2023-10-24', 3, '2023-10-10'),
 (124, '653759d527bfc1698126293.1628', '', 15, NULL, 10, '300.00', '2023-10-24', 3, '2023-10-03'),
-(125, '653759f3ad92e1698126323.711', '', 15, '653505a84164b1697973672.2679', 15, '300.00', '2023-10-24', 3, '0000-00-00');
+(125, '653759f3ad92e1698126323.711', '', 15, '653505a84164b1697973672.2679', 15, '300.00', '2023-10-24', 3, '0000-00-00'),
+(126, '653e9d786dace1698602360.4492', '', 15, '653505a84164b1697973672.2679', 20, '300.00', '2023-10-29', 1, '0000-00-00'),
+(127, '653f2d2ec9a641698639150.826', '', 15, '653505a84164b1697973672.2679', 5, '300.00', '2023-10-30', 1, '0000-00-00'),
+(128, '653f2de18fcf41698639329.5891', '', 15, '653505a84164b1697973672.2679', 1, '300.00', '2023-10-30', 1, '0000-00-00'),
+(129, '653f4f5fa40881698647903.6719', '', 15, '653505a84164b1697973672.2679', 1, '300.00', '2023-10-30', 1, '0000-00-00');
 
 -- --------------------------------------------------------
 
@@ -292,15 +310,18 @@ CREATE TABLE `settings` (
   `appName` varchar(100) NOT NULL,
   `logo` varchar(200) NOT NULL,
   `notifyDate` int(11) NOT NULL,
-  `qtyNumber` int(11) NOT NULL
+  `qtyNumber` int(11) NOT NULL,
+  `phone` varchar(200) NOT NULL,
+  `email` varchar(200) NOT NULL,
+  `address` varchar(200) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `settings`
 --
 
-INSERT INTO `settings` (`settingId`, `appName`, `logo`, `notifyDate`, `qtyNumber`) VALUES
-(1, 'PharmacySyS', '1698302984.jpg', 5, 20);
+INSERT INTO `settings` (`settingId`, `appName`, `logo`, `notifyDate`, `qtyNumber`, `phone`, `email`, `address`) VALUES
+(1, 'PharmacySyS', '1698693012.jpg', 10, 20, '0993199616', 'manar@manar.sd', 'Omdaman');
 
 -- --------------------------------------------------------
 
@@ -338,7 +359,11 @@ INSERT INTO `stores` (`storeId`, `productId`, `qty`, `qtyRemining`, `Type`, `sto
 (130, 15, 10, 181, 3, '2023-10-24', 3),
 (131, 15, 15, 166, 2, '2023-10-24', 3),
 (132, 15, 1, 165, 4, '2023-10-26', 3),
-(133, 16, 5, 5, 4, '2023-10-26', 3);
+(133, 16, 5, 5, 4, '2023-10-26', 3),
+(134, 15, 20, 145, 2, '2023-10-29', 1),
+(135, 15, 5, 140, 2, '2023-10-30', 1),
+(136, 15, 1, 139, 2, '2023-10-30', 1),
+(137, 15, 1, 138, 2, '2023-10-30', 1);
 
 -- --------------------------------------------------------
 
@@ -430,7 +455,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`userId`, `userName`, `password`, `email`, `userType`) VALUES
-(1, 'manar Ali Omer', '58b64460faadcca8406bcc6dc97320d0', 'manar@manar.sd', 2),
+(1, 'manar Ali Omer', 'd9b1d7db4cd6e70935368a1efb10e377', 'manar@manar.sd', 2),
 (3, 'Ali', '202cb962ac59075b964b07152d234b70', 'ali@ali', 1);
 
 --
@@ -535,7 +560,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `accounting`
 --
 ALTER TABLE `accounting`
-  MODIFY `accountId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=69;
+  MODIFY `accountId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=73;
 
 --
 -- AUTO_INCREMENT for table `batches`
@@ -559,31 +584,31 @@ ALTER TABLE `expenses`
 -- AUTO_INCREMENT for table `products`
 --
 ALTER TABLE `products`
-  MODIFY `productId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+  MODIFY `productId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- AUTO_INCREMENT for table `purchasedetails`
 --
 ALTER TABLE `purchasedetails`
-  MODIFY `purchaseDetailId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=93;
+  MODIFY `purchaseDetailId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=96;
 
 --
 -- AUTO_INCREMENT for table `purchases`
 --
 ALTER TABLE `purchases`
-  MODIFY `purchaseId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
+  MODIFY `purchaseId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
 
 --
 -- AUTO_INCREMENT for table `sales`
 --
 ALTER TABLE `sales`
-  MODIFY `saleId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=93;
+  MODIFY `saleId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=99;
 
 --
 -- AUTO_INCREMENT for table `salesdetails`
 --
 ALTER TABLE `salesdetails`
-  MODIFY `saleDetailId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=126;
+  MODIFY `saleDetailId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=132;
 
 --
 -- AUTO_INCREMENT for table `settings`
@@ -595,7 +620,7 @@ ALTER TABLE `settings`
 -- AUTO_INCREMENT for table `stores`
 --
 ALTER TABLE `stores`
-  MODIFY `storeId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=134;
+  MODIFY `storeId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=138;
 
 --
 -- AUTO_INCREMENT for table `supplieraccounting`

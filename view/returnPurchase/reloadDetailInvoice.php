@@ -79,3 +79,43 @@ $countProduct = count($getDetails);
                   </td>
                 </tr>
               </table>
+
+              
+<?php
+include 'editPayInvoiceModel.php';
+include 'accountModal.php';
+?>
+<script>
+  // for calculate the remained price
+    $(document).on('input', '#ReceivedForReturn', function() {
+    let ReceivedForReturn = document.getElementById('ReceivedForReturn').value;
+    let forCulc = document.getElementById('forCulc').value;
+    if((forCulc-ReceivedForReturn)<0){
+      toastr.warning("Received price can not be bigger than the total price");
+      $('#ReceivedForReturn').focus();
+      return false;
+    }
+    document.getElementById('remainedForReturn').value =  forCulc - ReceivedForReturn ;
+    });
+ </script>
+
+ <script>
+  // for calculate the remained price
+    $(document).on('input', '#paid', function() {
+    let paid = document.getElementById('paid').value;
+    let forCulc = document.getElementById('forCulc1').value;
+    if((forCulc-paid)<0){
+      toastr.warning("Paid price can not be bigger than the total price");
+      $('#paid').focus();
+      return false;
+    }
+    document.getElementById('Remained').value =  forCulc - paid ;
+    console.log(paid);
+    });
+ </script>
+ <script>
+  // print
+  $(document).on('click', '#print', function() {
+    print();
+  });
+</script>

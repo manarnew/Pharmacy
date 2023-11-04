@@ -75,7 +75,7 @@ $sales = $sale->getAllProduct();
                       <label class="form-control-label" for="prependedInput">Invoice number</label>
                       <div class="controls">
                         <div class="input-prepend input-group">
-                          <input id="invoiceNumber" readonly class="form-control" value="<?php echo uniqid() . microtime(true) ?>" size="16" type="text" name="invoiceNumber">
+                          <input id="invoiceNumber" readonly class="form-control" value="<?php echo '#'.$sale->invoiceNum(); ?>" size="16" type="text" name="invoiceNumber">
                         </div>
                       </div>
                     </div>

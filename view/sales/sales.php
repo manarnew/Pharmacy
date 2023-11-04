@@ -32,7 +32,7 @@ $setting = $store->setting();
   <!-- Main content -->
   <section class="content">
     <div class="container-fluid">
-      
+
       <div class="row">
         <div class="col-12">
           <?php if (!empty($_SESSION["flush"])) : ?>
@@ -50,25 +50,29 @@ $setting = $store->setting();
             </div>
             <!-- /.card-header -->
             <div class="card-body">
-            <div class="row">
+              <div class="row">
                 <div class="col-12">
                   <h4>
                     <i class="fas fa-globe "></i> <?php echo $setting["appName"] ?>.
-                    <b class="float-right">Date</b><br>
-                    <b class="float-right"><?php echo date('Y/m/d') ?></b>
+                    <b class="float-right"><?php echo '#' . $sale->invoiceNum(); ?></b>
+                    <b class="float-right">Invoice number &nbsp;&nbsp;</b>
                   </h4>
                 </div>
                 <!-- /.col -->
               </div>
+              <h5>
+                <b class="float-right"> <?php echo date('Y/m/d') ?> </b>
+                <b class="float-right">Date &nbsp;&nbsp;</b>
+              </h5>
               <div class="col-sm-4 invoice-col">
-                  From
-                  <address>
-                    <strong>Dr, <?php echo $_SESSION["name"] ?>.</strong><br>
-                    Address, <?php echo $setting["address"] ?><br>
-                    Phone: <?php echo $setting["phone"] ?><br>
-                    Email: <?php echo $setting["email"] ?>
-                  </address>
-                </div>
+                From
+                <address>
+                  <strong>Dr, <?php echo $_SESSION["name"] ?>.</strong><br>
+                  Address, <?php echo $setting["address"] ?><br>
+                  Phone: <?php echo $setting["phone"] ?><br>
+                  Email: <?php echo $setting["email"] ?>
+                </address>
+              </div>
               <form id="submitSale" class="noPrint">
                 <div class="row">
                   <div class="col-lg-6">
@@ -100,7 +104,7 @@ $setting = $store->setting();
                       <label class="form-control-label" for="prependedInput">Invoice number</label>
                       <div class="controls">
                         <div class="input-prepend input-group">
-                          <input id="invoiceNumber" readonly class="form-control" value="<?php echo uniqid() . microtime(true) ?>" size="16" type="text" name="invoiceNumber">
+                          <input id="invoiceNumber" readonly class="form-control" value="<?php echo  '#' . $sale->invoiceNum(); ?>" size="16" type="text" name="invoiceNumber">
                         </div>
                       </div>
                     </div>
@@ -172,8 +176,8 @@ $setting = $store->setting();
                 </table>
               </div>
               <br>
-              <button type="submit" style="display: none;"  id="saveAndPrint" class="btn btn-info noPrint">Save and Print</button>
-              <button type="submit"   class="btn btn-info float-right noPrint" id="btnCancel">Cancel</button>
+              <button type="submit" style="display: none;" id="saveAndPrint" class="btn btn-info noPrint">Save and Print</button>
+              <button type="submit" class="btn btn-info float-right noPrint" id="btnCancel">Cancel</button>
             </div>
             <!-- /.card-body -->
           </div>
@@ -247,7 +251,7 @@ $setting = $store->setting();
       let SalePrice = document.getElementById('SalePrice').value;
       let total = document.getElementById('total').value = qty * SalePrice;
       let qtyRemaining = document.getElementById('qtyRemaining').value;
-      if((qtyRemaining-qty)<0){
+      if ((qtyRemaining - qty) < 0) {
         toastr.error('Quantity can not be bigger then remaining quantity');
         $(this).focus();
         return false;
@@ -255,7 +259,7 @@ $setting = $store->setting();
     });
   }
 
- 
+
   $("#salebtn").on('click', function(e) {
     e.preventDefault();
     let total = $('#total').val();
@@ -264,11 +268,11 @@ $setting = $store->setting();
     let productId = $('#product').val();
     let productName = $('#productId').val();
     let qtyRemaining = document.getElementById('qtyRemaining').value;
-    if((qtyRemaining-qty)<0){
-        toastr.error('Quantity can not be bigger then remaining quantity');
-        $(this).focus();
-        return false;
-      }
+    if ((qtyRemaining - qty) < 0) {
+      toastr.error('Quantity can not be bigger then remaining quantity');
+      $(this).focus();
+      return false;
+    }
     if (productName == null) {
       toastr.warning('Product name can not be empty');
       $('#productId').focus();
@@ -344,9 +348,9 @@ $setting = $store->setting();
   }
   $("#saveAndPrint").on('click', function(e) {
 
-      let invoiceNumber = $('#invoiceNumber').val();
-      let data = {
-      'invoiceNumberForSaveAndPrint':invoiceNumber
+    let invoiceNumber = $('#invoiceNumber').val();
+    let data = {
+      'invoiceNumberForSaveAndPrint': invoiceNumber
     };
     console.log(data);
     $.ajax({
@@ -362,8 +366,8 @@ $setting = $store->setting();
 
   $("#btnCancel").on('click', function(e) {
     let invoiceNumber = $('#invoiceNumber').val();
-      let data = {
-      'invoiceNumberForCancel':invoiceNumber
+    let data = {
+      'invoiceNumberForCancel': invoiceNumber
     };
     console.log(data);
     $.ajax({
@@ -374,5 +378,5 @@ $setting = $store->setting();
         location.replace(location.href);
       },
     });
-});
+  });
 </script>

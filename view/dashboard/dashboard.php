@@ -150,7 +150,7 @@ $totalProfit = json_encode($totalProfit);
               </div>
               <div class="row">
               
-                <div class="col-6">
+                <div class="col-md-6">
                   <div class="card-body">
                     <div class="card card-success">
                       <div class="card-header">
@@ -174,7 +174,7 @@ $totalProfit = json_encode($totalProfit);
                     </div>
                   </div>
                 </div>
-                <div class="col-6">
+                <div class="col-md-6">
                   <div class="card-body">
                     <div class="card card-success">
                       <div class="card-header">
@@ -199,7 +199,7 @@ $totalProfit = json_encode($totalProfit);
                   </div>
                 </div>
 
-                <div class="col-6">
+                <div class="col-md-6">
                   <div class="card-body">
                     <div class="card card-info">
                       <div class="card-header">

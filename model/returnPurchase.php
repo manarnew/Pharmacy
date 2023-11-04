@@ -334,4 +334,14 @@ class ReturnPurchase extends connection
     $query->execute([$startDate, $endDate]);
     return $query->fetchAll();
   }
+  public function invoiceNum(){
+    $query = $this->dbConnction()->prepare("SELECT purchaseId FROM purchases ORDER BY `purchases`.`purchaseId` DESC");
+    $query->execute();
+    $number = $query->fetch();
+    if($query->rowCount()>0){
+      return $number['purchaseId']+1;
+    }else{
+      return 1;
+    }
+  }
 }

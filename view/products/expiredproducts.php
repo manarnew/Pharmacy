@@ -62,31 +62,14 @@ $setting = $Product->setting();
                     $now = new DateTime();
 
                     $expirationDate = new DateTime($row['expirationDate']);
-
                     $diff = $now->diff($expirationDate);
 
                     $daysDiff = $diff->d;
-                    if($now >= $expirationDate){
-                        ?>
-                          <tr>
-                        <td><?php $i++;
-                            echo $i; ?></td>
-                        <td>
-                          <?php echo $row['productName']; ?>
-                        </td>
-                        <td><?php echo $row['expirationDate']; ?></td>
-                        <td><?php echo $row['qty']; ?></td>
-                        <td>
-                          <a href="../../includes/productOpration.php?productIdForDelete=<?php echo $row['productId']; ?>&
-                          expirationDate=<?php echo $row['expirationDate']; ?>&qty=<?php echo $row['qty']; ?>"
-                           class="btn btn-danger">Delete</a>
-                        </td>
-                      </tr>
-                       <?php 
-                       }
-                      elseif($now < $expirationDate){
-                        if (($daysDiff - $setting['notifyDate']) <= 0) {
-                          ?>
+                    $settingDate = $setting['notifyDate'];
+                    $now->modify("+$settingDate days");
+                    $newdate = $now->format('Y-m-d');
+                    if ($newdate >= $expirationDate->format('Y-m-d') || $now >= $expirationDate) {
+                  ?>
                       <tr>
                         <td><?php $i++;
                             echo $i; ?></td>
@@ -97,11 +80,10 @@ $setting = $Product->setting();
                         <td><?php echo $row['qty']; ?></td>
                         <td>
                           <a href="../../includes/productOpration.php?productIdForDelete=<?php echo $row['productId']; ?>&
-                          expirationDate=<?php echo $row['expirationDate']; ?>&qty=<?php echo $row['qty']; ?>"
-                           class="btn btn-danger">Delete</a>
+                          expirationDate=<?php echo $row['expirationDate']; ?>&qty=<?php echo $row['qty']; ?>" class="btn btn-danger">Delete</a>
                         </td>
                       </tr>
-                  <?php }}
+                  <?php }
                   endforeach; ?>
                 </tbody>
               </table>
