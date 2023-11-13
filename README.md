@@ -1,12 +1,22 @@
 # Pharmacy
 
 Version: 1.0
+![addSales](https://github.com/manarnew/Pharmacy/assets/74496683/7ca84208-11f7-410b-b197-d8be82c67d1b)
+![addMedicine](https://github.com/manarnew/Pharmacy/assets/74496683/705b25db-80b7-46ff-a8b8-05339c8aa7ba)
+![purchaseModal](https://github.com/manarnew/Pharmacy/assets/74496683/05e93081-c37f-48cd-a7b3-c357fd2b64c8)
+![purchase](https://github.com/manarnew/Pharmacy/assets/74496683/18fc96af-d33b-45e3-b035-4063f917b4b0)
+![paid](https://github.com/manarnew/Pharmacy/assets/74496683/3b3bb9bd-6d23-4e24-8279-b1d33b63af99)
+![medicine](https://github.com/manarnew/Pharmacy/assets/74496683/e339b472-8604-46ef-9c01-d5652bc52fa5)
+![expenses](https://github.com/manarnew/Pharmacy/assets/74496683/3de9759e-9286-4270-a1c9-2b9099813c6d)
+![dashboard](https://github.com/manarnew/Pharmacy/assets/74496683/c188b251-2603-47b2-9d73-81cf90af2855)
+![chart](https://github.com/manarnew/Pharmacy/assets/74496683/c9275c2f-949a-4dda-be87-0f0590ed6ee4)
 
 
 Introduction:
 Pharmacy Management System is a software application designed to streamline the operations of a pharmacy. 
 It provides a comprehensive solution for managing various aspects of a pharmacy, including inventory management, sales and billing, customer management, and reporting.
 This README file provides an overview of the system and instructions for installation and usage.
+The system is built using PHP MVC (Model-View-Controller) architecture and incorporates Ajax and Bootstrap
 
 Features:
 
