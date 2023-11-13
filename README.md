@@ -69,3 +69,7 @@ Access:
 To access the Pharmacy Management System through a web browser using the URL "http://localhost/pharmacyapp,"
 
 email: ali@ali pasword is 123
+
+Contact with me 
+Email: manaronew@gmail.com
+Whatsapp: 249993199616
